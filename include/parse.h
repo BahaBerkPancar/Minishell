@@ -4,13 +4,15 @@
 #include <stdbool.h>
 
 typedef enum {
+    NONE,
     PIPE,
     COMMAND,
     FILE_INPUT,
     HEREDOC,
     REDIRECT_OUTPUT,
     REDIRECT_INPUT,
-    APPEND_OUTPUT
+    APPEND_OUTPUT,
+    TOKEN
 } InputType;
 
 
@@ -23,6 +25,13 @@ typedef struct s_input
 	struct s_input *next;
 }		t_input;
 
-t_input *parse(char *input);
+typedef struct s_parse
+{
+    char *token;
+	int len;
+	int x;
+}	t_parse;
+
+t_input **parse(char *input);
 
 #endif

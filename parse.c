@@ -1,139 +1,66 @@
 #include <minishell.h>
 
-char	*seperate_quotes(t_input **list, char *input, char *quoted)
+t_parse *start_parse(t_parse *parse)
 {
-	(void)list;
-	(void)input;
-	(void)quoted;
-	return (NULL);
+	parse = malloc(sizeof(t_parse));
+	parse->x = 1;
+	parse->len = 0;
+	parse->token = NULL;
+	return (parse);
 }
 
-t_input	*parse(char *input)
+char	*handle_quotes(char *input, t_input **list, char *token)
 {
-	t_input *list = NULL;
-	char *token;
-	int len;
-	int x;
+	if(ft_strchr(token, '\"'))
+	{
+		if(Doublequote_check(input) == NULL)
+			return (NULL);
+		input = seperate_Dquotes(list, input, Doublequote_check(input));
+	}
+	else if(ft_strchr(token, '\''))
+	{
+		if(Singlequote_check(input) == NULL)
+			return (NULL);
+		input = seperate_Squotes(list, input, Singlequote_check(input));
+	}
+	return(input);
+}
+t_input	**parse(char *input)
+{
+	t_input **list;
+	t_parse *parse;
 
-	x = 0;
+	list = malloc(sizeof(t_input *));
+	parse = NULL;
+	parse = start_parse(parse);
 	while (*input)
 	{
 		if (*input == ' ')
 			input++;
 		else if (*input == '>' || *input == '<' || *input == '|')
 		{
-			x = 1;
+			parse->x = 1;
 			if(input[1] == '>' || input[1] == '<')
-				x = 2;
-			token = ft_substr(input, 0, x);
-			last_node(&list, new_node(token));
-			input += x;
+				parse->x = 2;
+			parse->token = ft_substr(input, 0, parse->x);
+			last_node(list, new_node(parse->token));
+			input += parse->x;
 		}
 		else
 		{
-			len = 0;
-			while (input[len] && input[len] != ' ' && input[len] != '>' && input[len] != '<' && input[len] != '|')
-				len++;
-			token = ft_substr(input, 0, len);
-			if(ft_strchr(token, '\"'))
-			{
-				if(Doublequote_check(input) == NULL)
-					return (NULL);
-				input = seperate_quotes(&list, input, Doublequote_check(input));
-				// printf("input = %s\n", input);
-			}
+			parse->len = 0;
+			while (input[parse->len] && input[parse->len] != ' ' && input[parse->len] != '>'
+				&& input[parse->len] != '<' && input[parse->len] != '|')
+				parse->len++;
+			parse->token = ft_substr(input, 0, parse->len);
+			if(ft_strchr(parse->token, '\"') || ft_strchr(parse->token, '\''))
+				input = handle_quotes(input, list, parse->token);
 			else
 			{
-				last_node(&list, new_node(token));
-				input += len;
+				last_node(list, new_node(parse->token));
+				input += parse->len;
 			}
 		}
 	}
 	return (list);
 }
-
-int	quote_count(char *input)
-{
-	int i;
-	int count;
-
-	i = 0;
-	count = 0;
-	while (input[i])
-	{
-		if(input[i] == '\"' || input[i] == '\'')
-			count++;
-		i++;
-	}
-	return (count);
-}
-
-char	*Doublequote_check(char *input)
-{
-	int i;
-	int j;
-	char *doublequoted;
-	int x;
-	char *temp;
-	
-	x = 0;
-	i = 0;
-	temp = input;
-	while (quote_count(temp) > 2)
-		temp = ft_substr(temp, 0, ft_strlen(temp) - 1);
-	while (temp[i])
-	{
-		if(temp[i] == '\"')
-		{
-			while(ft_strchr(ft_substr(temp, 0, i), ' '))
-			{
-				i--;
-				temp++;
-			}
-			j = i + 1;
-			while(temp[j] != '\"' && temp[j])
-				j++;
-			if(temp[j] == '\"')
-			{
-				while(ft_strchr(ft_substr(temp, j, ft_strlen(temp) - x), ' '))
-					x++;
-				doublequoted = ft_substr(temp, 0, ft_strlen(temp) - x);
-				return (doublequoted);
-			}
-			else
-				return((void)printf("UNCLOSED DOUBLE QUOTE\n"),  NULL);
-		}
-		i++;
-	}
-	return (NULL);
-}
-
-void	Singlequote_check(char *input)
-{
-	int i;
-	int j;
-	char *singlequoted;
-	
-	i = 0;
-	printf("============\n");
-	while (input[i])
-	{
-		if (input[i] == '\'')
-		{
-			j = i + 1;
-			while (input[j] && input[i] != input[j])
-				j++;
-			if(input[j] == '\'')
-			{
-				singlequoted = ft_substr(input, i, j - i + 1);
-				printf("singlequoted = %s\n", singlequoted);
-				i = j + 1;
-			}
-			else
-				return((void)printf("UNCLOSED SINGLE QUOTE\n"));
-		}
-		i++;
-	}
-}
-
-

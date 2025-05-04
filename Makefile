@@ -3,13 +3,13 @@ GCC = cc
 CFLAGS = -Wall -Wextra -Werror -I/opt/homebrew/Cellar/readline/8.2.13/include -Ilibft
 
 READLINEFLAGS = -L/opt/homebrew/Cellar/readline/8.2.13/lib -lreadline -lhistory
-INCLUDES = -I$(shell echo ~/all_my_projects/minishell/include)
+INCLUDES = -I./include
 
 OBJDIR = .obj
 GITLIBFT = git@github.com:BahaBerkPancar/Libft-42.git
 LIBFT = libft/libft.a
 
-SRCS = operations.c minishell.c ext/new_node.c ext/ft_lstprint.c ext/find_char.c parse.c ext/last_node.c ext/type.c ext/checks.c ext/ft_strcmp.c built_ins/pwd.c temp.c
+SRCS = operations.c minishell.c ext/new_node.c ext/ft_lstprint.c ext/find_char.c parse.c ext/last_node.c ext/type.c ext/checks.c ext/ft_strcmp.c built_ins/pwd.c temp.c doubleqoute.c singlequote.c
 OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)
 
 #################################################### COLORS ####################################################
@@ -27,7 +27,7 @@ $(OBJDIR)/%.o: %.c | $(OBJDIR)
 	@mkdir -p $(dir $@)
 	@$(GCC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-all: $(NAME)
+all: clone $(NAME)
 
 $(NAME): $(OBJS)
 	@$(GCC) $(CFLAGS) $(OBJS) $(LIBFT) $(READLINEFLAGS) -o $(NAME)

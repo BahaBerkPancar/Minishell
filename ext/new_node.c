@@ -8,9 +8,9 @@ t_input	*new_node(char *content)
 	if (!str)
 		return (NULL);
 	str->value = content;
-	str->type = 0;
-	str->next = NULL;
+	str->type = NONE;
 	str->is_quoted = false;
 	str->is_doublequoted = false;
+	str->next = NULL;
 	return (str);
 }
