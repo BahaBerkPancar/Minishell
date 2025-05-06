@@ -23,8 +23,8 @@
 // t_input	*new_node(char *content);
 // void	last_node(t_input **lst, t_input *new);
 // void	set_types(t_input *lst);
-// void	Doublequote_check(char *input);
-// void	Singlequote_check(char *input);
+// void	doublequote_check(char *input);
+// void	singlequote_check(char *input);
 // char	**get_path(void);
 // bool	is_executable(char *string);
 // bool	is_flag(const char *arg);

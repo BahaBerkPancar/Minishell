@@ -13,15 +13,15 @@ char	*handle_quotes(char *input, t_input **list, char *token)
 {
 	if(ft_strchr(token, '\"'))
 	{
-		if(Doublequote_check(input) == NULL)
+		if(doublequote_check(input) == NULL)
 			return (NULL);
-		input = seperate_Dquotes(list, input, Doublequote_check(input));
+		input = seperate_dquotes(list, input, doublequote_check(input));
 	}
 	else if(ft_strchr(token, '\''))
 	{
-		if(Singlequote_check(input) == NULL)
+		if(singlequote_check(input) == NULL)
 			return (NULL);
-		input = seperate_Squotes(list, input, Singlequote_check(input));
+		input = seperate_squotes(list, input, singlequote_check(input));
 	}
 	return(input);
 }
@@ -62,5 +62,6 @@ t_input	**parse(char *input)
 			}
 		}
 	}
+	free(parse);
 	return (list);
 }

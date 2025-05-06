@@ -9,7 +9,7 @@ OBJDIR = .obj
 GITLIBFT = git@github.com:BahaBerkPancar/Libft-42.git
 LIBFT = libft/libft.a
 
-SRCS = operations.c minishell.c ext/new_node.c ext/ft_lstprint.c ext/find_char.c parse.c ext/last_node.c ext/type.c ext/checks.c ext/ft_strcmp.c built_ins/pwd.c temp.c doubleqoute.c singlequote.c
+SRCS = parse/parse.c parse/operations.c minishell.c ext/new_node.c ext/ft_lstprint.c ext/find_char.c ext/last_node.c ext/type.c ext/checks.c ext/ft_strcmp.c built_ins/pwd.c built_ins/tmp.c parse/doubleqoute.c parse/singlequote.c free.c parse/temp.c execute.c set_path.c
 OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)
 
 #################################################### COLORS ####################################################
@@ -20,6 +20,17 @@ COLOR_BLACK         = \033[0;30m
 COLOR_BOLD_RED      = \033[1;31m
 ################################################################################################################
 
+check_dir:
+	@if [ ! -d "libft" ]; then \
+		clear; \
+		echo "$(COLOR_RED)You need to clone libft! ❌"; \
+		echo "$(COLOR_YELLOW) Running 'make clone'"; \
+		$(MAKE) clone;\
+		$(MAKE) $(NAME);\
+	else \
+		$(MAKE) $(NAME); \
+	fi
+
 $(OBJDIR):
 	@mkdir -p $(OBJDIR)
 
@@ -27,7 +38,7 @@ $(OBJDIR)/%.o: %.c | $(OBJDIR)
 	@mkdir -p $(dir $@)
 	@$(GCC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-all: clone $(NAME)
+all: check_dir $(NAME)
 
 $(NAME): $(OBJS)
 	@$(GCC) $(CFLAGS) $(OBJS) $(LIBFT) $(READLINEFLAGS) -o $(NAME)

@@ -11,3 +11,20 @@ int	pwd(void)
 	free(path);
 	return (0);
 }
+
+int	cd(char *path, t_vault *vault)
+{
+	path = ft_strtrim(path, " ");
+	if (path == NULL || ft_strcmp(path, "~") == 0)
+		path = vault->home;
+	if (ft_strcmp(path, "-") == 0)
+		path = vault->oldpwd;
+	if (chdir(path) == -1)
+	{
+		printf("minishell: cd: %s: No such file or directory\n", path);
+		return (1);
+	}
+	vault->oldpwd = vault->pwd;
+	vault->pwd = getcwd(NULL, 0);
+	return (0);
+}

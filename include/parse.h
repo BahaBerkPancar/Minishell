@@ -12,6 +12,9 @@ typedef enum {
     REDIRECT_OUTPUT,
     REDIRECT_INPUT,
     APPEND_OUTPUT,
+    BUILTIN,
+    FLAG,
+    ARGUMANT,
     TOKEN
 } InputType;
 
@@ -31,6 +34,14 @@ typedef struct s_parse
 	int len;
 	int x;
 }	t_parse;
+
+typedef struct s_vault
+{
+    char **envp;
+    char *oldpwd;
+    char *pwd;
+    char *home;
+}	t_vault;
 
 t_input **parse(char *input);
 
