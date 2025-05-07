@@ -24,7 +24,8 @@ t_input *get_rid_of_dquotes(t_input **list)
 				final = ft_strjoin(final, ft_substr(remaining, 0, i));
 				remaining = ft_substr(remaining, i + 1, ft_strlen(remaining) - i);
 			}
-			tmp->value = final;
+			if(ft_strlen(final) > 0)//////////////
+				tmp->value = final;
 		}
 		tmp = tmp->next;
 	}

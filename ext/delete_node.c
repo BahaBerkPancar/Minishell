@@ -1,0 +1,20 @@
+#include <minishell.h>
+
+void delete_node(t_input **head, t_input *remove)
+{
+    if (!head || !*head || !remove)
+        return;
+    if (*head == remove)
+    {
+        *head = remove->next;
+        free(remove);
+        return;
+    }
+    t_input *prev = *head;
+    while (prev && prev->next != remove)
+        prev = prev->next;
+    if (!prev)
+        return;
+    prev->next = remove->next;
+    free(remove);
+}

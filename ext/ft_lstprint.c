@@ -8,7 +8,6 @@ void ft_lstprint(t_input *lst)
 	while (tmp != NULL)
 	{
 		printf("(%s)->", tmp->value);
-		// printf("is_doublequoted = %d\n", lst->is_doublequoted);
 		tmp = tmp->next;
 	}
 	printf("NULL\n");

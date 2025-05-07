@@ -38,10 +38,22 @@ int minishell(int ac, char **av, char *envp[])
 		else
 		{
 			final = parse(a);
+			if(!set_types(final))
+			{
+				printf("SYNTAX ERROR\n");
+				free_input(*final);
+				continue;
+			}
+			replace_variables(final, vault);
 			get_rid_of_dquotes(final);
 			get_rid_of_squotes(final);
-			set_types(final);// it doesnt set the last node type
-			// ft_lstprint((*final));
+			if(!set_quoted_types(final))
+			{
+				printf("SYNTAX ERROR\n");
+				free_input(*final);
+				continue;
+			}
+			// ft_lstprint(*final);
 			pid = fork();
 			if(pid == 0)
 				tmp_execute(final, vault);

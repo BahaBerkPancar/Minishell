@@ -11,7 +11,12 @@ void	execute(char *path, char **flags, t_vault *vault);
 char	*set_path(char *input);
 t_input *get_rid_of_dquotes(t_input **list);
 t_input *get_rid_of_squotes(t_input **list);
+int		set_variable_type(t_input **lst);
 
+void delete_node(t_input **head, t_input *to_delete);
+
+char *get_env_value(const char *name, char **envp);
+void replace_variables(t_input **final, t_vault *vault);
 int		cd(char *path, t_vault *vault);
 int		find_char(char *input, char c);
 char	operations_check(char *input);
@@ -19,7 +24,8 @@ void	ft_lstprint(t_input *lst);
 t_input	**parse(char *input);
 t_input	*new_node(char *content);
 void	last_node(t_input **lst, t_input *new);
-void	set_types(t_input **lst);
+int		set_types(t_input **lst);
+int		set_quoted_types(t_input **lst);
 char	**get_path(void);
 bool	is_executable(char *string);
 bool	is_flag(const char *arg);

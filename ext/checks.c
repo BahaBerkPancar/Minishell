@@ -67,14 +67,17 @@ bool is_executable(char *string)
 	i = 0;
 	paths = get_path();
 	temp = ft_strdup(string);
-	while (paths[i])
+	if(!ft_strchr(temp, '/'))
 	{
-		string = ft_strjoin("/", temp);
-		string = ft_strjoin(paths[i], string);
-		if (access(string, F_OK) == 0)
-			break;
-		free(string);
-		i++;
+		while (paths[i])
+		{
+			string = ft_strjoin("/", temp);
+			string = ft_strjoin(paths[i], string);
+			if (access(string, F_OK) == 0)
+				break;
+			free(string);
+			i++;
+		}
 	}
 	if (access(string, X_OK) == 0)
 		return (free(temp), free(paths), true);

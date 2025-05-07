@@ -4,43 +4,45 @@
 #include <stdbool.h>
 
 typedef enum {
-    NONE,
-    PIPE,
-    COMMAND,
-    FILE_INPUT,
-    HEREDOC,
-    REDIRECT_OUTPUT,
-    REDIRECT_INPUT,
-    APPEND_OUTPUT,
-    BUILTIN,
-    FLAG,
-    ARGUMANT,
-    TOKEN
+	NONE,
+	PIPE,
+	COMMAND,
+	FILE_INPUT,
+	HEREDOC,
+	REDIRECT_OUTPUT,
+	REDIRECT_INPUT,
+	APPEND_OUTPUT,
+	BUILTIN,
+	FLAG,
+	ARGUMANT,
+	TOKEN,
+	VARIABLE
 } InputType;
 
 
 typedef struct s_input
 {
-    bool is_quoted;
-    bool is_doublequoted;
+	bool is_quoted;
+	bool is_doublequoted;
+	bool is_variable;
 	InputType type;
-    char *value;
+	char *value;
 	struct s_input *next;
 }		t_input;
 
 typedef struct s_parse
 {
-    char *token;
+	char *token;
 	int len;
 	int x;
 }	t_parse;
 
 typedef struct s_vault
 {
-    char **envp;
-    char *oldpwd;
-    char *pwd;
-    char *home;
+	char **envp;
+	char *oldpwd;
+	char *pwd;
+	char *home;
 }	t_vault;
 
 t_input **parse(char *input);

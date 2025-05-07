@@ -19,7 +19,7 @@ char	**get_flags(t_input **input, char *command)
 	while(tmp->value != command)
 		tmp = tmp->next;
 	tmp1 = ft_strjoin(tmp->value, " ");
-	while(tmp->next && (tmp->next->type == FLAG || tmp->next->type == ARGUMANT))
+	while(tmp->next && (tmp->next->type != PIPE && tmp->next->type != TOKEN))
 	{
 		tmp1 = ft_strjoin(tmp1, " ");
 		tmp1 = ft_strjoin(tmp1, tmp->next->value);
@@ -34,10 +34,12 @@ void	tmp_execute(t_input **input, t_vault *vault)
 	t_input *tmp;
 	int fd;
 	int fd2;
+	int flag;
 	char **flags;
 	char *tmp1;
 
 	tmp =  *input;
+	flag = 1;
 	while(tmp)
 	{
 		if(tmp->type == TOKEN)
@@ -56,14 +58,15 @@ void	tmp_execute(t_input **input, t_vault *vault)
 		}
 		else if(tmp->type == APPEND_OUTPUT)///////////////////
 		{
-			fd2 = open(tmp->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			fd2 = open(tmp->value, O_WRONLY | O_CREAT | O_APPEND, 0777);
 			dup2(fd2, 1);
 			close(fd2);
 		}
-		else if(tmp->type == COMMAND)
+		else if(tmp->type == COMMAND && flag == 1)
 		{
 			flags = get_flags(input, tmp->value);
 			tmp1 = flags[0];
+			flag = 0;
 		}
 		tmp = tmp->next;
 	}

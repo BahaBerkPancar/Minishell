@@ -7,6 +7,8 @@ char	*set_path(char *input)
 	char **paths;
 	int i;
 
+	if(ft_strchr(input, '/'))
+		return (input);
 	path = getenv("PATH");
 	paths = ft_split(path, ':');
 	i = 0;

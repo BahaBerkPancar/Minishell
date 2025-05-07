@@ -9,7 +9,7 @@ OBJDIR = .obj
 GITLIBFT = git@github.com:BahaBerkPancar/Libft-42.git
 LIBFT = libft/libft.a
 
-SRCS = parse/parse.c parse/operations.c minishell.c ext/new_node.c ext/ft_lstprint.c ext/find_char.c ext/last_node.c ext/type.c ext/checks.c ext/ft_strcmp.c built_ins/pwd.c built_ins/tmp.c parse/doubleqoute.c parse/singlequote.c free.c parse/temp.c execute.c set_path.c
+SRCS = parse/parse.c parse/operations.c minishell.c ext/new_node.c ext/ft_lstprint.c ext/find_char.c ext/last_node.c ext/type.c ext/checks.c ext/ft_strcmp.c built_ins/pwd.c built_ins/tmp.c parse/doubleqoute.c parse/singlequote.c ext/free.c parse/temp.c execute.c env/set_path.c env/env.c ext/delete_node.c
 OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)
 
 #################################################### COLORS ####################################################

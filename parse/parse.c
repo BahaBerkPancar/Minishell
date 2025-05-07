@@ -37,7 +37,7 @@ t_input	**parse(char *input)
 	{
 		if (*input == ' ')
 			input++;
-		else if (*input == '>' || *input == '<' || *input == '|')
+		else if (*input == '>' || *input == '<' || *input == '|' || *input == '$')
 		{
 			parse->x = 1;
 			if(input[1] == '>' || input[1] == '<')
@@ -50,7 +50,7 @@ t_input	**parse(char *input)
 		{
 			parse->len = 0;
 			while (input[parse->len] && input[parse->len] != ' ' && input[parse->len] != '>'
-				&& input[parse->len] != '<' && input[parse->len] != '|')
+				&& input[parse->len] != '<' && input[parse->len] != '|' && input[parse->len] != '$')
 				parse->len++;
 			parse->token = ft_substr(input, 0, parse->len);
 			if(ft_strchr(parse->token, '\"') || ft_strchr(parse->token, '\''))
