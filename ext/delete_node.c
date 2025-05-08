@@ -18,3 +18,11 @@ void delete_node(t_input **head, t_input *remove)
     prev->next = remove->next;
     free(remove);
 }
+
+// void add_after(t_input *head, t_input *new)
+// {
+// 	if (!head || !new)
+// 		return;
+// 	new->next = head->next;
+// 	head->next = new;
+// }

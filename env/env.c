@@ -27,12 +27,12 @@ void replace_variables(t_input **final, t_vault *vault)
         {
             if(ft_strcmp(tmp->value, "$") == 0)
             {
-                    tmp->next->value = get_env_value(tmp->next->value, vault->envp);
-                    if (tmp->next->value == NULL)
-                        delete_node(final, tmp->next);
-					delete_node(final, tmp);
-                    tmp->type = ARGUMANT;
-                }
+                tmp->next->value = get_env_value(tmp->next->value, vault->envp);
+                if (tmp->next->value == NULL)
+                    delete_node(final, tmp->next);
+                delete_node(final, tmp);
+                tmp->type = ARGUMANT;
+            }
 		}
 		tmp = tmp->next;
 	}

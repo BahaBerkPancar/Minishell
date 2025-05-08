@@ -5,16 +5,21 @@
 # include <parse.h>
 
 int		tmp_builtin(char *input, t_vault *vault);
-
+void	add_after(t_input *head, t_input *new);
+int		real_execute(t_input **input, t_vault *vault);
 void	tmp_execute(t_input **input, t_vault *vault);
 void	execute(char *path, char **flags, t_vault *vault);
 char	*set_path(char *input);
 t_input *get_rid_of_dquotes(t_input **list);
 t_input *get_rid_of_squotes(t_input **list);
 int		set_variable_type(t_input **lst);
+int	dollar_count(t_input **input);
+
+t_input	*final_new_node(char *content, int type, bool is_quoted, bool is_doublequoted);
 
 void delete_node(t_input **head, t_input *to_delete);
 
+int	pipe_count(t_input **input);
 char *get_env_value(const char *name, char **envp);
 void replace_variables(t_input **final, t_vault *vault);
 int		cd(char *path, t_vault *vault);

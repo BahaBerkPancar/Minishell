@@ -76,3 +76,28 @@ void	tmp_execute(t_input **input, t_vault *vault)
 		printf("command not found\n");
 	exit(1);
 }
+
+int real_execute(t_input **input, t_vault *vault)
+{
+	int pid;
+	// t_input *tmp;
+
+	// tmp = final_new_node((*input)->value, (*input)->type, (*input)->is_quoted, (*input)->is_doublequoted);
+	// *input = (*input)->next;
+	if(pipe_count(input))
+	{
+		;
+	}
+	else
+	{
+		pid = fork();
+		if(pid == 0)
+			tmp_execute(input, vault);
+		else
+		{
+			waitpid(pid, NULL, 0);
+			// ft_lstprint(*input);
+		}
+	}
+	return (1);
+}

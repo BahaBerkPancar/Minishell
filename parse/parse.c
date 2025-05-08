@@ -15,7 +15,9 @@ char	*handle_quotes(char *input, t_input **list, char *token)
 	{
 		if(doublequote_check(input) == NULL)
 			return (NULL);
+		// printf("input : %s\n", input);
 		input = seperate_dquotes(list, input, doublequote_check(input));
+		// printf("input : %s\n", input);
 	}
 	else if(ft_strchr(token, '\''))
 	{
@@ -40,6 +42,8 @@ t_input	**parse(char *input)
 		else if (*input == '>' || *input == '<' || *input == '|' || *input == '$')
 		{
 			parse->x = 1;
+			if(*input == '$' && input[1] == ' ')
+				parse->x = 2;
 			if(input[1] == '>' || input[1] == '<')
 				parse->x = 2;
 			parse->token = ft_substr(input, 0, parse->x);

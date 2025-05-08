@@ -14,3 +14,18 @@ t_input	*new_node(char *content)
 	str->next = NULL;
 	return (str);
 }
+
+t_input	*final_new_node(char *content, int type, bool is_quoted, bool is_doublequoted)
+{
+	t_input	*str;
+
+	str = malloc(sizeof(t_input));
+	if (!str)
+		return (NULL);
+	str->value = content;
+	str->type = type;
+	str->is_quoted = is_quoted;
+	str->is_doublequoted = is_doublequoted;
+	str->next = NULL;
+	return (str);
+}

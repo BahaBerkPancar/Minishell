@@ -1,9 +1,9 @@
 #include <minishell.h>
 #include <sys/wait.h>
 
-t_vault *init_vault(char **envp)
+t_vault	*init_vault(char **envp)
 {
-	t_vault *vault;
+	t_vault	*vault;
 
 	vault = malloc(sizeof(t_vault));
 	vault->envp = envp;
@@ -13,56 +13,52 @@ t_vault *init_vault(char **envp)
 	return (vault);
 }
 
-int minishell(int ac, char **av, char *envp[])
+int	set_necesery_type(t_input **final, t_vault *vault)
 {
-	(void) av;
-	char *a;
-	t_input **final;
-	t_vault *vault;
-	int pid;
+	if (!set_types(final))
+		return ((void)printf("SYNTAX ERROR\n")
+			, free_input(*final), 0);
+	replace_variables(final, vault);
+	if (!*final)
+		return (0);
+	get_rid_of_dquotes(final);
+	get_rid_of_squotes(final);
+	if (!set_quoted_types(final))
+		return ((void)printf("SYNTAX ERROR\n")
+			, free_input(*final), 0);
+	if ((*final)->type == ARGUMANT)
+		return ((void)printf("command not found\n")
+			, free_input(*final), 0);
+	return (1);
+}
 
+int	minishell(int ac, char **av, char *envp[])
+{
+	char	*a;
+	t_input	**final;
+	t_vault	*vault;
+
+	(void) av;
+	if (ac != 1)
+		return ((void)printf("NO ARGUMENTS ALLOWED\n"), exit(0), 0);
 	vault = init_vault(envp);
-	if(ac != 1)
-	{
-		printf("NO ARGUMENTS ALLOWED\n");
-		exit(0);
-	}
 	while (1)
 	{
-		a = readline("MINISHELL > ");
+		a = readline("MINISHELL : ");
 		if (!a)
-			break;
+			break ;
 		add_history(a);
-		if(!tmp_builtin(a, vault))
-			continue;
+		if (!tmp_builtin(a, vault))
+			continue ;
 		else
 		{
 			final = parse(a);
-			if(!set_types(final))
-			{
-				printf("SYNTAX ERROR\n");
-				free_input(*final);
-				continue;
-			}
-			replace_variables(final, vault);
-			get_rid_of_dquotes(final);
-			get_rid_of_squotes(final);
-			if(!set_quoted_types(final))
-			{
-				printf("SYNTAX ERROR\n");
-				free_input(*final);
-				continue;
-			}
-			// ft_lstprint(*final);
-			pid = fork();
-			if(pid == 0)
-				tmp_execute(final, vault);
-			else
-				waitpid(pid, NULL, 0);
+			if (!set_necesery_type(final, vault))
+				continue ;
+			free(a);
+			real_execute(final, vault);
 		}
-		free(a);
 	}
-	// rl_clear_history();
 	free_input(*final);
 	free(vault);
 }

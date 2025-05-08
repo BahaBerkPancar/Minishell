@@ -10,8 +10,11 @@ static int set_token_type(t_input **lst, char *value, InputType type)
 		if(tmp->next && !ft_strcmp(tmp->next->value, value) && !ft_strcmp(tmp->value, "$"))
 		{
 			tmp->type = TOKEN;
+			// if(ft_strcmp(tmp->value, "$") != 0)
+			// {
 			tmp->next->type = VARIABLE;
 			tmp->next->is_variable = true;
+			// }
 		}
 		if(!ft_strcmp(tmp->value, value) && tmp->type == NONE)
 		{
@@ -75,13 +78,13 @@ int	set_types(t_input **lst)
 				if(!set_token_type(lst, tmp->value, REDIRECT_INPUT))
 					return (0);
 			}
-			else if (tmp->is_quoted == false && is_executable(tmp->value))
-				tmp->type = COMMAND;
-			else if(!ft_strcmp(tmp->value, "$"))
+			else if(tmp->next && !ft_strcmp(tmp->value, "$"))
 			{
 				if(!set_token_type(lst, tmp->next->value, VARIABLE))
 					return (0);
 			}
+			else if (tmp->is_quoted == false && is_executable(tmp->value))
+				tmp->type = COMMAND;
 			else
 				tmp->type = ARGUMANT;
 		}
