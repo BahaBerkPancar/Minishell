@@ -39,10 +39,12 @@ typedef struct s_parse
 
 typedef struct s_vault
 {
+	char **export;
 	char **envp;
 	char *oldpwd;
 	char *pwd;
 	char *home;
+	int exit_status;
 }	t_vault;
 
 t_input **parse(char *input);

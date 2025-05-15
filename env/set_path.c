@@ -2,10 +2,10 @@
 
 char	*set_path(char *input)
 {
-	char *path;
-	char *tmp;
-	char **paths;
-	int i;
+	char	*path;
+	char	*tmp;
+	char	**paths;
+	int		i;
 
 	if(ft_strchr(input, '/'))
 		return (input);

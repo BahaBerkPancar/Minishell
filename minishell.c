@@ -1,5 +1,4 @@
 #include <minishell.h>
-#include <sys/wait.h>
 
 t_vault	*init_vault(char **envp)
 {
@@ -7,6 +6,8 @@ t_vault	*init_vault(char **envp)
 
 	vault = malloc(sizeof(t_vault));
 	vault->envp = envp;
+	vault->export = NULL;
+	env_to_export(vault);
 	vault->oldpwd = getcwd(NULL, 0);
 	vault->pwd = getcwd(NULL, 0);
 	vault->home = getenv("HOME");
@@ -18,17 +19,17 @@ int	set_necesery_type(t_input **final, t_vault *vault)
 	if (!set_types(final))
 		return ((void)printf("SYNTAX ERROR\n")
 			, free_input(*final), 0);
-	replace_variables(final, vault);
 	if (!*final)
 		return (0);
 	get_rid_of_dquotes(final);
+	replace_variables(final, vault);
 	get_rid_of_squotes(final);
 	if (!set_quoted_types(final))
 		return ((void)printf("SYNTAX ERROR\n")
 			, free_input(*final), 0);
-	if ((*final)->type == ARGUMANT)
-		return ((void)printf("command not found\n")
-			, free_input(*final), 0);
+	// if ((*final)->type == ARGUMANT)
+	// 	return ((void)printf("command not found\n")
+			// , free_input(*final), 0);
 	return (1);
 }
 
@@ -45,8 +46,8 @@ int	minishell(int ac, char **av, char *envp[])
 	while (1)
 	{
 		a = readline("MINISHELL : ");
-		if (!a)
-			break ;
+		if (!a || !*a)
+			continue ;
 		add_history(a);
 		if (!tmp_builtin(a, vault))
 			continue ;
@@ -56,6 +57,7 @@ int	minishell(int ac, char **av, char *envp[])
 			if (!set_necesery_type(final, vault))
 				continue ;
 			free(a);
+			// ft_lstprint(*final);
 			real_execute(final, vault);
 		}
 	}

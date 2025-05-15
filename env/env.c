@@ -1,6 +1,6 @@
 #include <minishell.h>
 
-char *get_env_value(const char *name, char **envp)
+char    *get_env_value(const char *name, char **envp)
 {
     int len;
 	int i;
@@ -16,13 +16,20 @@ char *get_env_value(const char *name, char **envp)
     return (NULL);
 }
 
-void replace_variables(t_input **final, t_vault *vault)
+void    replace_variables(t_input **final, t_vault *vault)
 {
 	t_input *tmp;
 
 	tmp = *final;
 	while (tmp)
 	{
+        if(tmp->value[0] == '$' && ft_strcmp(tmp->value, "$") != 0)
+        {
+            add_after(tmp, new_node(tmp->value + 1));
+            tmp->next->type = VARIABLE;
+            tmp->next->is_variable = true;
+            tmp->value = "$";
+        }
         if(tmp->next)
         {
             if(ft_strcmp(tmp->value, "$") == 0)

@@ -26,6 +26,8 @@ t_input *get_rid_of_dquotes(t_input **list)
 			}
 			if(ft_strlen(final) > 0)//////////////
 				tmp->value = final;
+			else
+				tmp->value = ft_strdup("\0");
 		}
 		tmp = tmp->next;
 	}

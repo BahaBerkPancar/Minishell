@@ -15,6 +15,8 @@
 # include <libft.h>
 # include <parse.h>
 # include <functions.h>
+# include <sys/wait.h>
+
 
 // int		find_char(char *input, char c);
 // char	operations_check(char *input);

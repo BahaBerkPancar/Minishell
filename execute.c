@@ -31,14 +31,13 @@ char	**get_flags(t_input **input, char *command)
 
 void	tmp_execute(t_input **input, t_vault *vault)
 {
-	t_input *tmp;
-	int fd;
-	int fd2;
-	int flag;
-	char **flags;
-	char *tmp1;
+	t_input	*tmp;
+	int		fd[2];
+	int		flag;
+	char	**flags;
+	int		heredoc_fd;
 
-	tmp =  *input;
+	tmp = *input;
 	flag = 1;
 	while(tmp)
 	{
@@ -46,51 +45,89 @@ void	tmp_execute(t_input **input, t_vault *vault)
 			;
 		else if(tmp->type == REDIRECT_INPUT)
 		{
-			fd = open(tmp->value, O_RDONLY);
-			dup2(fd, 0);
-			close(fd);
+			fd[0] = open(tmp->value, O_RDONLY);
+			if(fd[0] == -1)
+			{
+				printf("minishell: %s: No such file or directory\n", tmp->value);
+				exit(1);
+			}
+			dup2(fd[0], 0);
+			close(fd[0]);
 		}
 		else if(tmp->type == REDIRECT_OUTPUT)
 		{
-			fd2 = open(tmp->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			dup2(fd2, 1);
-			close(fd2);
+			fd[1] = open(tmp->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			if(fd[1] == -1)
+			{
+				printf("minishell: %s: Permission denied\n", tmp->value);
+				exit_ms(vault, 1);
+			}
+			dup2(fd[1], 1);
+			close(fd[1]);
 		}
-		else if(tmp->type == APPEND_OUTPUT)///////////////////
+		else if(tmp->type == APPEND_OUTPUT)
 		{
-			fd2 = open(tmp->value, O_WRONLY | O_CREAT | O_APPEND, 0777);
-			dup2(fd2, 1);
-			close(fd2);
+			fd[1] = open(tmp->value, O_WRONLY | O_CREAT | O_APPEND, 0777);
+			if(fd[1] == -1)
+			{
+				printf("minishell: %s: Permission denied\n", tmp->value);
+				exit_ms(vault, 1);
+			}
+			dup2(fd[1], 1);
+			close(fd[1]);
+		}
+		else if(tmp->type == HEREDOC)
+		{
+			heredoc_fd = heredoc(tmp->value);
+			dup2(heredoc_fd, STDIN_FILENO);
+			close(heredoc_fd);
 		}
 		else if(tmp->type == COMMAND && flag == 1)
 		{
 			flags = get_flags(input, tmp->value);
-			tmp1 = flags[0];
 			flag = 0;
 		}
 		tmp = tmp->next;
 	}
-	if(is_executable(tmp1))
-		execute(set_path(tmp1), flags, vault);
+	if(is_executable(flags[0]))
+		execute(set_path(flags[0]), flags, vault);
 	else
 		printf("command not found\n");
-	exit(1);
+	exit_ms(vault, 1);
 }
 
-int real_execute(t_input **input, t_vault *vault)
+int	real_execute(t_input **input, t_vault *vault)
 {
-	int pid;
+	pid_t	pid;
+	pid_t	pid1;
+	int		fd[2];
 	// t_input *tmp;
 
-	// tmp = final_new_node((*input)->value, (*input)->type, (*input)->is_quoted, (*input)->is_doublequoted);
-	// *input = (*input)->next;
-	if(pipe_count(input))
+	pid = fork();
+	if(pipe_count(input) && pid == 0)
 	{
-		;
+		pipe(fd);
+		pid1 = fork();
+		if(pid1 == 0)
+		{
+			close(fd[1]);
+			dup2(fd[0], 0);
+			close(fd[0]);
+			while((*input)->type != PIPE)
+				delete_node(input, *input);
+			delete_node(input, *input);
+			tmp_execute(input, vault);
+		}
+		else
+		{
+			close(fd[0]);
+			dup2(fd[1], 1);
+			close(fd[1]);
+			tmp_execute(input, vault);
+		}
 	}
 	else
 	{
-		pid = fork();
 		if(pid == 0)
 			tmp_execute(input, vault);
 		else

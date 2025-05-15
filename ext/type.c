@@ -42,12 +42,12 @@ static int set_types_helper(t_input **lst)
 				tmp->type = BUILTIN;
 			else if(is_flag(tmp->value))
 				tmp->type = FLAG;
-			else if (!ft_strcmp( tmp->value, ">>"))
+			else if (!ft_strcmp(tmp->value, ">>"))
 			{
 				if(!set_token_type(lst, tmp->value, APPEND_OUTPUT))
 					return (0);
 			}
-			else if (!ft_strcmp(tmp->next->value, "<<"))
+			else if (!ft_strcmp(tmp->value, "<<"))
 			{
 				if(!set_token_type(lst, tmp->value, HEREDOC))
 					return (0);
@@ -70,12 +70,16 @@ int	set_types(t_input **lst)
 				tmp->type = PIPE;
 			else if (!ft_strcmp(tmp->value, ">") || !ft_strcmp(tmp->value, ">>"))
 			{
-				if(!set_token_type(lst, tmp->value, REDIRECT_OUTPUT))
+				if(ft_strcmp(tmp->value, ">"))
+					;
+				else if(!set_token_type(lst, tmp->value, REDIRECT_OUTPUT))
 					return (0);
 			}
 			else if (!ft_strcmp(tmp->value, "<") || !ft_strcmp(tmp->value, "<<"))
 			{
-				if(!set_token_type(lst, tmp->value, REDIRECT_INPUT))
+				if(ft_strcmp(tmp->value, "<"))
+					;
+				else if(!set_token_type(lst, tmp->value, REDIRECT_INPUT))
 					return (0);
 			}
 			else if(tmp->next && !ft_strcmp(tmp->value, "$"))

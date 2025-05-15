@@ -2,7 +2,7 @@
 
 int	clear(void)
 {
-	system("clear");
+	write(STDOUT_FILENO, "\033[H\033[2J\033[3J", 11);
 	return (0);
 }
 

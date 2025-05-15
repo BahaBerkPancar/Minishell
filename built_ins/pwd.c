@@ -18,7 +18,10 @@ int	cd(char *path, t_vault *vault)
 	if (path == NULL || ft_strcmp(path, "~") == 0)
 		path = vault->home;
 	if (ft_strcmp(path, "-") == 0)
+	{
+		printf("%s\n", vault->oldpwd);
 		path = vault->oldpwd;
+	}
 	if (chdir(path) == -1)
 	{
 		printf("minishell: cd: %s: No such file or directory\n", path);
