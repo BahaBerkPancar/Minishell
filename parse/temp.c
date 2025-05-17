@@ -8,8 +8,8 @@ int	clear(void)
 
 int	pipe_count(t_input **input)
 {
-	t_input *tmp;
-	int count;
+	t_input	*tmp;
+	int		count;
 
 	tmp = *input;
 	count = 0;
@@ -21,10 +21,11 @@ int	pipe_count(t_input **input)
 	}
 	return (count);
 }
+
 int	dollar_count(t_input **input)
 {
-	t_input *tmp;
-	int count;
+	t_input	*tmp;
+	int		count;
 
 	tmp = *input;
 	count = 0;

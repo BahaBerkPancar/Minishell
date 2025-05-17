@@ -1,8 +1,8 @@
 #include <minishell.h>
 
-void ft_lstprint(t_input *lst)
+void	ft_lstprint(t_input *lst)
 {
-	t_input *tmp;
+	t_input	*tmp;
 
 	tmp = lst;
 	while (tmp != NULL)

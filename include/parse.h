@@ -1,9 +1,9 @@
-# ifndef PARSE_H
+#ifndef PARSE_H
 # define PARSE_H
 
-#include <stdbool.h>
+# include <stdbool.h>
 
-typedef enum {
+typedef enum input_type{
 	NONE,
 	PIPE,
 	COMMAND,
@@ -17,36 +17,35 @@ typedef enum {
 	ARGUMANT,
 	TOKEN,
 	VARIABLE
-} InputType;
-
+}	t_InputType;
 
 typedef struct s_input
 {
-	bool is_quoted;
-	bool is_doublequoted;
-	bool is_variable;
-	InputType type;
-	char *value;
-	struct s_input *next;
+	bool			is_quoted;
+	bool			is_doublequoted;
+	bool			is_variable;
+	t_InputType		type;
+	char			*value;
+	struct s_input	*next;
 }		t_input;
 
 typedef struct s_parse
 {
-	char *token;
-	int len;
-	int x;
+	char	*token;
+	int		len;
+	int		x;
 }	t_parse;
 
 typedef struct s_vault
 {
-	char **export;
-	char **envp;
-	char *oldpwd;
-	char *pwd;
-	char *home;
-	int exit_status;
+	char	**export;
+	char	**envp;
+	char	*oldpwd;
+	char	*pwd;
+	char	*home;
+	int		exit_status;
 }	t_vault;
 
-t_input **parse(char *input);
+t_input	**parse(char *input);
 
 #endif

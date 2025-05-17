@@ -1,6 +1,6 @@
 #include <minishell.h>
 
-static void	print_to_env(t_vault *vault, char *var)
+void	print_to_env(t_vault *vault, char *var)
 {
 	char	*key;
 	char	*value;
@@ -17,9 +17,9 @@ static void	print_to_env(t_vault *vault, char *var)
 	{
 		while (vault->envp[i])
 		{
-			if(vault->envp[i] && ft_strncmp(vault->envp[i], var, ft_strlen(var) - ft_strlen(key)) == 0)
+			if (vault->envp[i] && ft_strncmp(vault->envp[i], var,
+					ft_strlen(var) - ft_strlen(key)) == 0)
 			{
-				// free(vault->envp[i]);
 				vault->envp[i] = ft_strdup(var);
 				return ;
 			}
@@ -119,7 +119,7 @@ static char	**add_to_export(char *var, t_vault *vault)
 	return (new_export);
 }
 
-static int	update_or_add_var(char *var, t_vault *vault)
+int	update_or_add_var(char *var, t_vault *vault)
 {
 	char	**new_export;
 	int		i;
@@ -127,7 +127,7 @@ static int	update_or_add_var(char *var, t_vault *vault)
 	i = 0;
 	while (vault->export && vault->export[i])
 	{
-		if (ft_strncmp(vault->export[i], var, ft_strchr(var, '=') - var + 1) == 0 
+		if (ft_strncmp(vault->export[i], var, ft_strchr(var, '=') - var + 1) == 0
 			|| ft_strncmp(vault->export[i], var, ft_strlen(vault->export[i])) == 0)
 		{
 			free(vault->export[i]);
@@ -151,7 +151,7 @@ int	export(t_input **final, t_vault *vault)
 {
 	t_input	*tmp;
 	int		status;
-	
+
 	tmp = *final;
 	if (!tmp->next)
 		return (print_export(vault), 0);
@@ -173,8 +173,8 @@ int	export(t_input **final, t_vault *vault)
 
 void	env_to_export(t_vault *vault)
 {
-	int	i;
-	char **new_export;
+	int		i;
+	char	**new_export;
 
 	i = 0;
 	while (vault->envp[i])

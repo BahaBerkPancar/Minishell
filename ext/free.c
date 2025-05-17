@@ -1,17 +1,18 @@
 #include <minishell.h>
 
-void free_input(t_input *input)
+void	free_input(t_input *input)
 {
-	while(input)
+	while (input)
 	{
 		free(input->value);
 		input = input->next;
 	}
 	free(input);
 }
-void free_pointer(char **pointer)
+
+void	free_pointer(char **pointer)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (pointer[i])
@@ -19,9 +20,9 @@ void free_pointer(char **pointer)
 	free(pointer);
 }
 
-void free_export(t_vault *vault)
+void	free_export(t_vault *vault)
 {
-	int i;
+	int	i;
 
 	if (!vault->export)
 		return ;
@@ -34,4 +35,13 @@ void free_export(t_vault *vault)
 	}
 	free(vault->export);
 	vault->export = NULL;
+}
+
+void	free_parse(t_parse *parse)
+{
+	if (parse)
+	{
+		free(parse->token);
+		free(parse);
+	}
 }

@@ -2,7 +2,7 @@
 
 int	pwd(void)
 {
-	char *path;
+	char	*path;
 
 	path = getcwd(NULL, 0);
 	if (path == NULL)
@@ -29,5 +29,7 @@ int	cd(char *path, t_vault *vault)
 	}
 	vault->oldpwd = vault->pwd;
 	vault->pwd = getcwd(NULL, 0);
+	update_or_add_var(ft_strjoin("OLDPWD=", vault->oldpwd), vault);
+	update_or_add_var(ft_strjoin("PWD=", vault->pwd), vault);
 	return (0);
 }

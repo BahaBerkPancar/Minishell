@@ -1,5 +1,5 @@
 #ifndef FUNCTIONS_H
-#define	FUNCTIONS_H
+# define FUNCTIONS_H
 
 # include <minishell.h>
 # include <parse.h>
@@ -8,24 +8,21 @@ char	*set_path(char *input);
 int		dollar_count(t_input **input);
 void	env_to_export(t_vault *vault);
 int		set_variable_type(t_input **lst);
-t_input *get_rid_of_dquotes(t_input **list);
-t_input *get_rid_of_squotes(t_input **list);
+t_input	*get_rid_of_dquotes(t_input **list);
+t_input	*get_rid_of_squotes(t_input **list);
 void	add_after(t_input *head, t_input *new);
+void	print_to_env(t_vault *vault, char *var);
 int		tmp_builtin(char *input, t_vault *vault);
 void	exit_ms(t_vault *vault, int exit_status);
+int		update_or_add_var(char *var, t_vault *vault);
 int		real_execute(t_input **input, t_vault *vault);
 void	tmp_execute(t_input **input, t_vault *vault);
 void	execute(char *path, char **flags, t_vault *vault);
-
-
-
 
 int		pipe_count(t_input **input);
 int		find_char(char *input, char c);
 char	*get_env_value(const char *name, char **envp);
 void	replace_variables(t_input **final, t_vault *vault);
-
-
 
 t_input	**parse(char *input);
 t_input	*lstlast(t_input *lst);
@@ -33,15 +30,12 @@ t_input	*new_node(char *content);
 void	ft_lstprint(t_input *lst);
 void	last_node(t_input **lst, t_input *new);
 void	delete_node(t_input **head, t_input *to_delete);
-t_input	*final_new_node(char *content, int type, bool is_quoted, bool is_doublequoted);
+t_input	*final_new_node(char *content, int type,
+			bool is_quoted, bool is_doublequoted);
 
-
-
-int		set_types(t_input **lst);
 char	**get_path(void);
+int		set_types(t_input **lst);
 int		set_quoted_types(t_input **lst);
-
-
 
 bool	is_token(char *string);
 bool	is_flag(const char *arg);
@@ -51,7 +45,8 @@ char	operations_check(char *input);
 
 int		ft_strcmp(const char *s1, const char *s2);
 int		heredoc(char *str);
-
+void	closed(int fd, int fd1);
+void	exit_code(t_vault *vault, int exit_status);
 
 int		pwd(void);
 int		clear(void);
@@ -59,18 +54,15 @@ int		cd(char *path, t_vault *vault);
 int		unset(t_input **final, t_vault *vault);
 int		export(t_input **final, t_vault *vault);
 
-
-
 int		dquote_count(char *input);
 int		squote_count(char *input);
 char	*doublequote_check(char *input);
 char	*singlequote_check(char *input);
 int		find_dquote_location(char *input);
 int		find_squote_location(char *input);
+void	replace_empty_dquotes(t_input **list);
 char	*seperate_dquotes(t_input **list, char *input, char *quoted);
 char	*seperate_squotes(t_input **list, char *input, char *quoted);
-
-
 
 void	free_parse(t_parse *parse);
 void	free_vault(t_vault *vault);

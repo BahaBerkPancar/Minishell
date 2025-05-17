@@ -11,36 +11,33 @@ t_vault	*init_vault(char **envp)
 	vault->oldpwd = getcwd(NULL, 0);
 	vault->pwd = getcwd(NULL, 0);
 	vault->home = getenv("HOME");
+	update_or_add_var(ft_strjoin("SHELL=", "minishell"), vault);
 	return (vault);
 }
 
 int	set_necesery_type(t_input **final, t_vault *vault)
 {
 	if (!set_types(final))
-		return ((void)printf("SYNTAX ERROR\n")
-			, free_input(*final), 0);
+		return ((void)printf("SYNTAX ERROR\n"), exit_code(vault, 258), 0);
 	if (!*final)
 		return (0);
 	get_rid_of_dquotes(final);
 	replace_variables(final, vault);
 	get_rid_of_squotes(final);
 	if (!set_quoted_types(final))
-		return ((void)printf("SYNTAX ERROR\n")
-			, free_input(*final), 0);
-	// if ((*final)->type == ARGUMANT)
-	// 	return ((void)printf("command not found\n")
-			// , free_input(*final), 0);
+		return ((void)printf("SYNTAX ERROR\n"), exit_code(vault, 258), 0);
+	if (*final && (*final)->type == ARGUMANT && (*final)->is_variable == false)
+		return ((void)printf("command not found\n"), exit_code(vault, 127), 0);///////////////////
 	return (1);
 }
 
-int	minishell(int ac, char **av, char *envp[])
+int	MINISHELL(int ac, char **av, char *envp[])
 {
 	char	*a;
 	t_input	**final;
 	t_vault	*vault;
 
-	(void) av;
-	if (ac != 1)
+	if (ac != 1 || !av)
 		return ((void)printf("NO ARGUMENTS ALLOWED\n"), exit(0), 0);
 	vault = init_vault(envp);
 	while (1)
@@ -61,6 +58,5 @@ int	minishell(int ac, char **av, char *envp[])
 			real_execute(final, vault);
 		}
 	}
-	free_input(*final);
-	free(vault);
+	return (free_input(*final), free(vault), 0);
 }
