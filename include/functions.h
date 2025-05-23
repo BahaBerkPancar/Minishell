@@ -51,8 +51,10 @@ void	exit_code(t_vault *vault, int exit_status);
 int		pwd(void);
 int		clear(void);
 int		cd(char *path, t_vault *vault);
+int		echo(char **flags);
 int		unset(t_input **final, t_vault *vault);
 int		export(t_input **final, t_vault *vault);
+void	builtin(t_input **input, char **flags, t_vault *vault);
 
 int		dquote_count(char *input);
 int		squote_count(char *input);

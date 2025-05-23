@@ -38,6 +38,8 @@ bool	is_builtin(char *string)
 {
 	if (ft_strcmp(string, "echo") == 0)
 		return (true);
+	if(ft_strcmp(string, "clear") == 0)
+		return (true);
 	if (ft_strcmp(string, "cd") == 0)
 		return (true);
 	if (ft_strcmp(string, "pwd") == 0)

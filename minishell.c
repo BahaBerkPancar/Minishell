@@ -46,17 +46,12 @@ int	MINISHELL(int ac, char **av, char *envp[])
 		if (!a || !*a)
 			continue ;
 		add_history(a);
-		if (!tmp_builtin(a, vault))
+		final = parse(a);
+		if (!set_necesery_type(final, vault))
 			continue ;
-		else
-		{
-			final = parse(a);
-			if (!set_necesery_type(final, vault))
-				continue ;
-			free(a);
-			// ft_lstprint(*final);
-			real_execute(final, vault);
-		}
+		free(a);
+		// ft_lstprint(*final);
+		real_execute(final, vault);
 	}
 	return (free_input(*final), free(vault), 0);
 }
