@@ -36,21 +36,21 @@ bool	is_flag(const char *arg)
 
 bool	is_builtin(char *string)
 {
-	if (ft_strcmp(string, "echo") == 0)
+	if (ft_strcmp(string, "echo") == 0 && ft_strlen(string) == 4)
 		return (true);
-	if(ft_strcmp(string, "clear") == 0)
+	if(ft_strcmp(string, "clear") == 0 && ft_strlen(string) == 5)
 		return (true);
-	if (ft_strcmp(string, "cd") == 0)
+	if (ft_strcmp(string, "cd") == 0 && ft_strlen(string) == 2)
 		return (true);
-	if (ft_strcmp(string, "pwd") == 0)
+	if (ft_strcmp(string, "pwd") == 0 && ft_strlen(string) == 3)
 		return (true);
-	if (ft_strcmp(string, "export") == 0)
+	if (ft_strcmp(string, "export") == 0 && ft_strlen(string) == 6)
 		return (true);
-	if (ft_strcmp(string, "unset") == 0)
+	if (ft_strcmp(string, "unset") == 0 && ft_strlen(string) == 5)
 		return (true);
-	if (ft_strcmp(string, "env") == 0)
+	if (ft_strcmp(string, "env") == 0 && ft_strlen(string) == 3)
 		return (true);
-	if (ft_strcmp(string, "exit") == 0)
+	if (ft_strcmp(string, "exit") == 0 && ft_strlen(string) == 4)
 		return (true);
 	return (false);
 }

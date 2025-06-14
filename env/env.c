@@ -44,4 +44,5 @@ void	replace_variables(t_input **final, t_vault *vault)
 		}
 		tmp = tmp->next;
 	}
+	// ft_lstprint(*final);
 }

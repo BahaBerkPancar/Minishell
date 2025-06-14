@@ -95,14 +95,14 @@ int	set_quoted_types(t_input **lst)
 		{
 			if(tmp->is_variable == true && !set_variable_type(lst))
 				return (0);
-			else if(tmp->is_quoted == true || tmp->is_doublequoted == true)
+			else if(tmp->is_quoted == true || tmp->is_doublequoted == true || tmp->is_variable == false)
 			{
 				if(is_executable(tmp->value))
 					tmp->type = COMMAND;
 				else
 					tmp->type = ARGUMANT;
 			}
-			else
+			else if(tmp->is_variable == false)
 				tmp->type = ARGUMANT;
 		}
 		tmp = tmp->next;

@@ -57,10 +57,12 @@ t_input	**parse(char *input)
 				input = handle_quotes(input, list, parse->token);
 			else
 			{
-				last_node(list, new_node(parse->token));
+				last_node(list, new_node(ft_strdup(parse->token)));
 				input += parse->len;
 			}
 		}
 	}
+	free_parse(parse);
+	// ft_lstprint(*list);
 	return (list);
 }

@@ -45,3 +45,13 @@ void	free_parse(t_parse *parse)
 		free(parse);
 	}
 }
+
+void free_vault(t_vault *vault)
+{
+	free_pointer(vault->envp);
+	free_pointer(vault->export);
+	free(vault->home);
+	free(vault->oldpwd);
+	free(vault->pwd);
+	free(vault);
+}
