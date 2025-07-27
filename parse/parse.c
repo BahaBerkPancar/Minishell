@@ -1,4 +1,4 @@
-#include <minishell.h>
+#include "../include/minishell.h"
 
 t_parse	*start_parse(t_parse *parse)
 {
@@ -9,22 +9,28 @@ t_parse	*start_parse(t_parse *parse)
 	return (parse);
 }
 
-char	*handle_quotes(char *input, t_input **list, char *token)
+char *handle_quotes(char *input, t_input **list, char *token)
 {
-	if (ft_strchr(token, '\"'))
-	{
-		if (doublequote_check(input) == NULL)
-			return (NULL);
-		input = seperate_dquotes(list, input, doublequote_check(input));
-	}
-	else if (ft_strchr(token, '\''))
-	{
-		if (singlequote_check(input) == NULL)
-			return (NULL);
-		input = seperate_squotes(list, input, singlequote_check(input));
-	}
-	return (input);
+    char *quoted;
+    char *new_input;
+
+    new_input = NULL;
+    if (ft_strchr(token, '\"'))
+    {
+        new_input = seperate_dquotes(list, input,  doublequote_check(input));
+    }
+    else if (ft_strchr(token, '\''))
+    {
+        quoted = singlequote_check(input);
+        if (quoted == NULL)
+            return NULL;
+        new_input = seperate_squotes(list, input, quoted);
+        free(quoted);
+    }
+    free(input);
+    return new_input;
 }
+
 
 t_input	**parse(char *input)
 {
@@ -33,6 +39,7 @@ t_input	**parse(char *input)
 
 	list = malloc(sizeof(t_input *));
 	parse = start_parse(NULL);
+	*list = NULL;
 	while (*input)
 	{
 		if (*input == ' ')
@@ -43,7 +50,7 @@ t_input	**parse(char *input)
 			if ((*input == '$' && input[1] == ' ') || (input[1] == '>' || input[1] == '<'))
 				parse->x = 2;
 			parse->token = ft_substr(input, 0, parse->x);
-			last_node(list, new_node(parse->token));
+			last_node(list, new_node(ft_strdup(parse->token)));
 			input += parse->x;
 		}
 		else
@@ -61,8 +68,8 @@ t_input	**parse(char *input)
 				input += parse->len;
 			}
 		}
+		free(parse->token);
+		parse->token = NULL;
 	}
-	free_parse(parse);
-	// ft_lstprint(*list);
-	return (list);
+	return (free_parse(parse), list);
 }

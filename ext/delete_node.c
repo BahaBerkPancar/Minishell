@@ -1,4 +1,4 @@
-#include <minishell.h>
+#include "../include/minishell.h"
 
 void	delete_node(t_input **head, t_input *remove)
 {

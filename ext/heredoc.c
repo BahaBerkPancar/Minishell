@@ -1,4 +1,5 @@
-#include <minishell.h>
+#include "../include/minishell.h"
+
 
 int	heredoc(char *str)
 {

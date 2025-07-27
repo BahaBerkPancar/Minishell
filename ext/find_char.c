@@ -1,4 +1,4 @@
-#include <minishell.h>
+#include "../include/minishell.h"
 
 int	find_char(char *input, char c)
 {

@@ -1,4 +1,4 @@
-#include <minishell.h>
+#include "../include/minishell.h"
 
 void	builtin(t_input **input, char **flags, t_vault *vault)
 {
@@ -10,7 +10,7 @@ void	builtin(t_input **input, char **flags, t_vault *vault)
 		echo(flags);
 	else if(ft_strcmp(flags[0], "cd") == 0 && ft_strlen(flags[0]) == 2)
 	{
-		if(flags[1] || !flags[2])
+		if (flags[1] && !flags[2])
 			cd(flags[1], vault);
 		else if(!flags[1])
 			cd("", vault);
@@ -36,7 +36,7 @@ void	builtin(t_input **input, char **flags, t_vault *vault)
 			printf("%s\n", vault->envp[i++]);
 	}
 	else if (ft_strcmp(flags[0], "exit") == 0 && ft_strlen(flags[0]) == 4)
-		exit_ms(vault, 0);
+		exit_ms(vault, 0);	
 	// exit_ms(vault, 1);
-	return(free_pointer(flags));
+	return ;
 }

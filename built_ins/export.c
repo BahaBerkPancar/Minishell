@@ -1,38 +1,53 @@
-#include <minishell.h>
+#include "../include/minishell.h"
 
-void	print_to_env(t_vault *vault, char *var)
+
+int	add_env_var(char *var, t_vault *vault)
 {
-	char	*key;
-	char	*value;
-	int		i;
+	int count = 0;
+	while (vault->envp && vault->envp[count])
+		count++;
 
-	i = 0;
-	key = ft_strchr(var, '=');
-	if (!key)
-		return ;
-	value = ft_strdup(key + 1);
-	if (!value)
-		return ;
-	if (vault->envp)
-	{
-		while (vault->envp[i])
-		{
-			if (vault->envp[i] && ft_strncmp(vault->envp[i], var,
-					ft_strlen(var) - ft_strlen(key)) == 0)
-			{
-				vault->envp[i] = ft_strdup(var);
-				return ;
-			}
-			i++;
-		}
-	}
-	else
-		vault->envp = malloc(sizeof(char *) * 2);
-	if (!vault->envp)
-		return ;
-	vault->envp[i] = ft_strdup(var);
-	vault->envp[i + 1] = NULL;
+	char **new_envp = malloc(sizeof(char *) * (count + 2));
+	if (!new_envp)
+		return (1);
+
+	for (int i = 0; i < count; i++)
+		new_envp[i] = vault->envp[i];
+
+	new_envp[count] = ft_strdup(var);
+	new_envp[count + 1] = NULL;
+	free(vault->envp);
+	vault->envp = new_envp;
+	return (0);
 }
+
+
+void print_to_env(t_vault *vault, char *var)
+{
+    char *key;
+    int i = 0;
+
+    key = ft_strchr(var, '=');
+    if (!key)
+        return;
+
+    if (vault->envp)
+    {
+        while (vault->envp[i])
+        {
+            if (ft_strncmp(vault->envp[i], var, ft_strlen(var) - ft_strlen(key)) == 0)
+            {
+                free(vault->envp[i]);
+                vault->envp[i] = ft_strdup(var);
+                return;
+            }
+            i++;
+        }
+    }
+    add_env_var(var, vault);
+}
+
+
 
 static int	is_valid_identifier(char *str)
 {

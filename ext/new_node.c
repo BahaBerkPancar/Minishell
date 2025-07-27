@@ -1,4 +1,5 @@
-#include <minishell.h>
+#include "../include/minishell.h"
+
 
 t_input	*new_node(char *content)
 {
@@ -11,6 +12,7 @@ t_input	*new_node(char *content)
 	str->type = NONE;
 	str->is_quoted = false;
 	str->is_doublequoted = false;
+	str->is_variable = false;
 	str->next = NULL;
 	return (str);
 }
@@ -26,6 +28,7 @@ t_input	*final_new_node(char *content, int type, bool is_quoted, bool is_doubleq
 	str->type = type;
 	str->is_quoted = is_quoted;
 	str->is_doublequoted = is_doublequoted;
+	str->is_variable = false;
 	str->next = NULL;
 	return (str);
 }

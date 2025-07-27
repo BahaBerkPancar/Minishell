@@ -1,4 +1,5 @@
-#include <minishell.h>
+#include "../include/minishell.h"
+
 
 int	strcmp(const char *s1, const char *s2)
 {

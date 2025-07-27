@@ -1,8 +1,8 @@
 #ifndef FUNCTIONS_H
 # define FUNCTIONS_H
 
-# include <minishell.h>
-# include <parse.h>
+# include "minishell.h"
+# include "parse.h"
 
 char	*set_path(char *input);
 int		dollar_count(t_input **input);
@@ -38,6 +38,8 @@ t_input	*final_new_node(char *content, int type,
 char	**get_path(void);
 int		set_types(t_input **lst);
 int		set_quoted_types(t_input **lst);
+void	free_input_list(t_input **list);
+
 
 bool	is_token(char *string);
 bool	is_flag(const char *arg);

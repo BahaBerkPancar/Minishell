@@ -1,4 +1,4 @@
-#include <minishell.h>
+#include "../include/minishell.h"
 
 static int	set_token_type(t_input **lst, char *value, t_InputType type)
 {

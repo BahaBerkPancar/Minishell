@@ -1,4 +1,4 @@
-#include <minishell.h>
+#include "../include/minishell.h"
 
 bool	is_token(char *string)
 {
@@ -62,29 +62,44 @@ char	**get_path(void)
 	path_env = getenv("PATH");
 	return (ft_split(path_env, ':'));
 }
+char *ft_strjoin_free(char *s1, const char *s2)
+{
+	char *joined = ft_strjoin(s1, s2);
+	free(s1);
+	return joined;
+}
+void free_split(char **arr)
+{
+	int i = 0;
+	while (arr && arr[i])
+		free(arr[i++]);
+	free(arr);
+}
 
-bool	is_executable(char *string)
+bool is_executable(char *string)
 {
 	char	**paths;
+	char	*full_path;
 	int		i;
-	char	*temp;
 
 	i = 0;
+	if (!string || !*string)
+		return (false);
+	if (ft_strchr(string, '/'))
+		return (access(string, X_OK) == 0);
 	paths = get_path();
-	temp = ft_strdup(string);
-	if (!ft_strchr(temp, '/'))
+	if (!paths)
+		return (false);
+	while (paths[i])
 	{
-		while (paths[i])
-		{
-			string = ft_strjoin("/", temp);
-			string = ft_strjoin(paths[i], string);
-			if (access(string, F_OK) == 0)
-				break ;
-			free(string);
-			i++;
-		}
+		full_path = ft_strjoin(paths[i], "/");
+		full_path = ft_strjoin_free(full_path, string);
+		if (!full_path)
+			return (free_split(paths), false);
+		if (access(full_path, X_OK) == 0)
+			return (free(full_path), free_split(paths), true);
+		free(full_path);
+		i++;
 	}
-	if (access(string, X_OK) == 0)
-		return (free(temp), free(paths), true);
-	return (free(temp), free(paths), false);
+	return (free_split(paths), false);
 }

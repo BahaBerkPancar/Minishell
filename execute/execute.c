@@ -1,4 +1,4 @@
-#include <minishell.h>
+#include "../include/minishell.h"
 
 void	execute(char *path, char **flags, t_vault *vault)
 {			//bin/ls ls  la infile
@@ -76,6 +76,7 @@ int execute_pipe(t_input **input, t_vault *vault)
 	int		pipe_fds[2];
 	int		prev_read_end = -1;
 	int		status;
+	char **flags;
 
 	while (tmp)
 	{
@@ -89,7 +90,9 @@ int execute_pipe(t_input **input, t_vault *vault)
 			close(pipe_fds[0]);
 			close(pipe_fds[1]);
 			tmp_execute(input, vault, 0);
-			execute_command(input, build_argv_until_pipe(&tmp), vault);
+			flags = build_argv_until_pipe(&tmp);
+			execute_command(input, flags, vault);
+			free_pointer(flags);
 		}
 		else if (pid > 0)
 		{
@@ -126,6 +129,6 @@ int	real_execute(t_input **input, t_vault *vault)
 		else
 			waitpid(pid, NULL, 0);
 	}
-	return (1);
+	return (free_input(*input), free(input), 1);
 }
 

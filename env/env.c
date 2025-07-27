@@ -1,4 +1,4 @@
-#include <minishell.h>
+#include "../include/minishell.h"
 
 char	*get_env_value(const char *name, char **envp)
 {

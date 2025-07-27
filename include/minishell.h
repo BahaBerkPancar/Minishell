@@ -11,9 +11,9 @@
 # include <readline/readline.h>   // Include readline after the define
 # include <readline/history.h>    // history.h comes after readline.h
 # include <dirent.h>
-# include <libft.h>
-# include <parse.h>
-# include <functions.h>
+# include "../libft/libft.h"
+# include "parse.h"
+# include "functions.h"
 # include <sys/wait.h>
 
 #endif

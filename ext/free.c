@@ -1,13 +1,24 @@
-#include <minishell.h>
+#include "../include/minishell.h"
 
 void	free_input(t_input *input)
 {
+	t_input *tmp;
+
 	while (input)
 	{
+		tmp = input->next;
 		free(input->value);
-		input = input->next;
+		free(input);
+		input = tmp;
 	}
-	free(input);
+}
+
+void	free_input_list(t_input **list)
+{
+	if (!list)
+		return;
+	free_input(*list);
+	free(list);
 }
 
 void	free_pointer(char **pointer)
@@ -41,7 +52,11 @@ void	free_parse(t_parse *parse)
 {
 	if (parse)
 	{
-		free(parse->token);
+		if(parse->token)
+		{
+			free(parse->token);
+			parse->token = NULL;
+		}
 		free(parse);
 	}
 }
@@ -49,7 +64,7 @@ void	free_parse(t_parse *parse)
 void free_vault(t_vault *vault)
 {
 	free_pointer(vault->envp);
-	free_pointer(vault->export);
+	free_export(vault);
 	free(vault->home);
 	free(vault->oldpwd);
 	free(vault->pwd);

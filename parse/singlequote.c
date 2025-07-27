@@ -1,4 +1,4 @@
-#include <minishell.h>
+#include "../include/minishell.h"
 
 t_input	*get_rid_of_squotes(t_input **list)
 {
@@ -27,6 +27,7 @@ t_input	*get_rid_of_squotes(t_input **list)
 			tmp->value = final;
 		}
 		tmp = tmp->next;
+		free(final);
 	}
 	return (*list);
 }
@@ -35,7 +36,7 @@ char	*seperate_squotes(t_input **list, char *input, char *quoted)
 {
 	if (quoted == NULL)
 		return (input);
-	last_node(list, new_node(quoted));
+	last_node(list, new_node(ft_strdup(quoted)));
 	if (lstlast(*list))
 		lstlast(*list)->is_quoted = true;
 	if (ft_strncmp(input, quoted, ft_strlen(quoted)) == 0)
@@ -79,6 +80,7 @@ char	*singlequote_check(char *input)
 	int		i;
 	int		j;
 	char	*temp;
+	char 	*tmp;
 
 	i = 0;
 	temp = input;
@@ -86,7 +88,9 @@ char	*singlequote_check(char *input)
 		temp = ft_substr(temp, 0, ft_strlen(temp) - 1);
 	i = find_squote_location(temp);
 	j = find_squote_location(temp + i + 1) + i + 1;
-	while (ft_strchr(ft_substr(temp, j, ft_strlen(temp) - j), ' '))
+	tmp = ft_substr(temp, j, ft_strlen(temp) - j);
+	while (ft_strchr(tmp, ' '))
 		temp = ft_substr(temp, 0, ft_strlen(temp) - 1);
+	free(tmp);
 	return (temp);
 }

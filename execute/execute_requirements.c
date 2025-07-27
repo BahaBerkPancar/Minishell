@@ -1,18 +1,22 @@
-#include <minishell.h>
+#include "../include/minishell.h"
 
 
 void	execute_command(t_input **input, char **flags, t_vault *vault)
 {
 	// printf("%s\n", flags[0]);
 	if (flags && is_builtin(flags[0]))
+	{
 		builtin(input, flags, vault);
+
+	}
 	else if (flags && is_executable(flags[0]) && !is_builtin(flags[0]))
 		execute(set_path(flags[0]), flags, vault);
 	else
-	{
+	{ 
 		printf("Command not found\n");
 		exit_ms(vault, 127);
 	}
+	// free_pointer(flags);
 }
 
 static char	**get_flags(t_input **input, char *cmd)
@@ -87,6 +91,7 @@ void	tmp_execute(t_input **input, t_vault *vault, int execute)
 
 	tmp = *input;
 	flag = 1;
+	flags = NULL;
 	while (tmp)
 	{
 		if (tmp->type == TOKEN)
@@ -98,12 +103,15 @@ void	tmp_execute(t_input **input, t_vault *vault, int execute)
 			return ;
 		else if (tmp->type == HEREDOC)
 			closed(heredoc(tmp->value), STDIN_FILENO);
-		else if (tmp->type == COMMAND && flag--)
-			flags = get_flags(input, tmp->value);
-		else if (tmp->type == BUILTIN && flag--)
+		else if ((tmp->type == COMMAND  || tmp->type == BUILTIN) && flag--)
 			flags = get_flags(input, tmp->value);
 		tmp = tmp->next;
 	}
 	if(execute)
 		execute_command(input, flags, vault);
+	if (flags)
+	{
+		free_pointer(flags);
+		flags = NULL;
+	}
 }

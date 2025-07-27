@@ -1,4 +1,4 @@
-#include <minishell.h>
+#include "../include/minishell.h"
 
 t_input	*get_rid_of_dquotes(t_input **list)
 {
@@ -30,21 +30,27 @@ t_input	*get_rid_of_dquotes(t_input **list)
 				tmp->value = ft_strdup("\0");
 		}
 		tmp = tmp->next;
+		free(final);
 	}
 	return (*list);
 }
 
 char	*seperate_dquotes(t_input **list, char *input, char *quoted)
 {
+	char *result;
+
 	if (quoted == NULL)
 		return (input);
-	last_node(list, new_node(quoted));
+	result = ft_strdup(quoted);
+	last_node(list, new_node(ft_strdup(result)));
+	free(result);
 	if (lstlast(*list))
 		lstlast(*list)->is_doublequoted = true;
 	if (ft_strncmp(input, quoted, ft_strlen(quoted)) == 0)
-		return (ft_substr(input, ft_strlen(quoted) + 1, ft_strlen(input) - ft_strlen(quoted) - 1));
+		result = ft_substr(input, ft_strlen(quoted) + 1, ft_strlen(input) - ft_strlen(quoted) - 1);
 	else
-		return (input);
+		result = ft_strdup(input);
+	return (free(quoted), result);
 }
 
 int	dquote_count(char *input)
@@ -82,6 +88,7 @@ char	*doublequote_check(char *input)
 	int		i;
 	int		j;
 	char	*temp;
+	char 	*tmp;
 
 	i = 0;
 	temp = input;
@@ -89,8 +96,10 @@ char	*doublequote_check(char *input)
 		temp = ft_substr(temp, 0, ft_strlen(temp) - 1);
 	i = find_dquote_location(temp);
 	j = find_dquote_location(temp + i + 1) + i + 1;
-	while (ft_strchr(ft_substr(temp, j, ft_strlen(temp) - j), ' '))
+	tmp = ft_substr(temp, j, ft_strlen(temp) - j);
+	while (ft_strchr(tmp, ' '))
 		temp = ft_substr(temp, 0, ft_strlen(temp) - 1);
+	free(tmp);
 	return (temp);
 }
 
