@@ -3,6 +3,8 @@
 
 # include <stdbool.h>
 
+extern int	g_signal_exit;
+
 typedef enum input_type{
 	NONE,
 	PIPE,

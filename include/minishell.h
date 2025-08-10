@@ -15,5 +15,6 @@
 # include "parse.h"
 # include "functions.h"
 # include <sys/wait.h>
+#include <signal.h>
 
 #endif

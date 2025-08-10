@@ -30,13 +30,13 @@ void	builtin(t_input **input, char **flags, t_vault *vault)
 		unset(input, vault);
 	else if(ft_strcmp(flags[0], "clear") == 0 && ft_strlen(flags[0]) == 5)
 		clear();
-	else if (ft_strcmp(flags[0], "env") == 0 && ft_strlen(flags[0]) == 3)
-	{
-		while (vault->envp[i])
-			printf("%s\n", vault->envp[i++]);
-	}
+	// else if (ft_strcmp(flags[0], "env") == 0 && ft_strlen(flags[0]) == 3)
+	// {
+	// 	while (vault->envp[i])
+	// 		printf("%s\n", vault->envp[i++]);
+	// }
 	else if (ft_strcmp(flags[0], "exit") == 0 && ft_strlen(flags[0]) == 4)
 		exit_ms(vault, 0);	
-	// exit_ms(vault, 1);
+	exit_ms(vault, 1);
 	return ;
 }

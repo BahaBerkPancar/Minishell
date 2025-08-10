@@ -5,10 +5,7 @@ void	execute_command(t_input **input, char **flags, t_vault *vault)
 {
 	// printf("%s\n", flags[0]);
 	if (flags && is_builtin(flags[0]))
-	{
 		builtin(input, flags, vault);
-
-	}
 	else if (flags && is_executable(flags[0]) && !is_builtin(flags[0]))
 		execute(set_path(flags[0]), flags, vault);
 	else

@@ -62,7 +62,7 @@ int	set_types(t_input **lst)
 	{
 		if (tmp->type == NONE)
 		{
-			if (!ft_strcmp(tmp->value, "|"))
+			if (!ft_strcmp(tmp->value, "|") && ft_strcmp(tmp->next->value, "|"))
 				tmp->type = PIPE;
 			else if (!ft_strcmp(tmp->value, ">")
 				&& !set_token_type(lst, tmp->value, REDIRECT_OUTPUT))

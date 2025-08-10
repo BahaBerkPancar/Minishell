@@ -50,7 +50,7 @@ char	*seperate_dquotes(t_input **list, char *input, char *quoted)
 		result = ft_substr(input, ft_strlen(quoted) + 1, ft_strlen(input) - ft_strlen(quoted) - 1);
 	else
 		result = ft_strdup(input);
-	return (free(quoted), result);
+	return (result);
 }
 
 int	dquote_count(char *input)

@@ -29,6 +29,7 @@ t_vault *init_vault(char **envp)
     vault->envp[count] = NULL;
     update_or_add_var("SHELL=minishell", vault);
 	env_to_export(vault);
+    vault->exit_status = -1;
     return (vault);
 }
 
@@ -45,7 +46,7 @@ int	set_necesery_type(t_input **final, t_vault *vault)
 	if (!set_quoted_types(final))
 		return ((void)printf("SYNTAX ERROR\n"), exit_code(vault, 258), 0);
 	if (*final && (*final)->type == ARGUMANT && (*final)->is_variable == false)
-		return ((void)printf("command not found\n"), free_input_list(final), exit_code(vault, 127), 0);
+		return ((void)printf("command not found\n"),  exit_code(vault, 127), 0);
 	// ft_lstprint(*final);
 	return (1);
 }
@@ -59,25 +60,24 @@ int main(int ac, char **av, char *envp[])
     if (ac != 1 || !av)
         return ((void)printf("NO ARGUMENTS ALLOWED\n"), exit(0), 0);
     vault = init_vault(envp);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, handle_sigint);
     while (1)
     {
+        g_signal_exit = 0;
         a = readline("MINISHELL : ");
         if (!a || !*a)
-        {
-            free(a);
-            continue;
-        }
+            return(free(a), free_vault(vault),exit(0), 0);
         add_history(a);
-        final = parse(a);  // parse takes ownership of a and frees it internally
-        if (!final)
-            continue;
+        final = parse(a);
+        if (!final || !*final)
+            continue;;
         if (!set_necesery_type(final, vault)) 
             continue;
         real_execute(final, vault);
-
-        // free final list here as needed
+        // if(vault->exit_status != -1)
+        //     exit(vault->exit_status);
     }
     rl_clear_history();
-    // free vault and final here if needed
     return 0;
 }

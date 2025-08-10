@@ -9,26 +9,21 @@ t_parse	*start_parse(t_parse *parse)
 	return (parse);
 }
 
-char *handle_quotes(char *input, t_input **list, char *token)
+char	*handle_quotes(char *input, t_input **list, char *token)
 {
-    char *quoted;
-    char *new_input;
-
-    new_input = NULL;
-    if (ft_strchr(token, '\"'))
-    {
-        new_input = seperate_dquotes(list, input,  doublequote_check(input));
-    }
-    else if (ft_strchr(token, '\''))
-    {
-        quoted = singlequote_check(input);
-        if (quoted == NULL)
-            return NULL;
-        new_input = seperate_squotes(list, input, quoted);
-        free(quoted);
-    }
-    free(input);
-    return new_input;
+	if (ft_strchr(token, '\"'))
+	{
+		if (doublequote_check(input) == NULL)
+			return (NULL);
+		input = seperate_dquotes(list, input, doublequote_check(input));
+	}
+	else if (ft_strchr(token, '\''))
+	{
+		if (singlequote_check(input) == NULL)
+			return (NULL);
+		input = seperate_squotes(list, input, singlequote_check(input));
+	}
+	return (input);
 }
 
 

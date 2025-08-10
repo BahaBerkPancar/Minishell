@@ -76,4 +76,9 @@ void	free_input(t_input *input);
 void	free_export(t_vault *vault);
 void	free_pointer(char **pointer);
 
+int		signal_handler(int sig);
+void	handle_sigint(int sig);
+
+
+
 #endif

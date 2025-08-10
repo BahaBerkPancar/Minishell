@@ -63,10 +63,16 @@ void	free_parse(t_parse *parse)
 
 void free_vault(t_vault *vault)
 {
-	free_pointer(vault->envp);
-	free_export(vault);
-	free(vault->home);
-	free(vault->oldpwd);
-	free(vault->pwd);
-	free(vault);
+	if(vault->envp)
+		free_pointer(vault->envp);
+	if(vault)
+		free_export(vault);
+	// if(vault->home)
+	// free(vault->home);
+	if(vault->oldpwd)
+		free(vault->oldpwd);
+	if(vault->pwd)
+		free(vault->pwd);
+	if(vault)
+		free(vault);
 }

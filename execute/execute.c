@@ -76,8 +76,8 @@ int execute_pipe(t_input **input, t_vault *vault)
 	int		pipe_fds[2];
 	int		prev_read_end = -1;
 	int		status;
-	char **flags;
-
+	char	**flags;
+ 
 	while (tmp)
 	{
 		pipe(pipe_fds);
