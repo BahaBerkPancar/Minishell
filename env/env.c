@@ -33,7 +33,7 @@ void	replace_variables(t_input **final, t_vault *vault)
 		}
 		if (tmp->next)
 		{
-			if (ft_strcmp(tmp->value, "$") == 0)
+			if (ft_strcmp(tmp->value, "$") == 0 && ft_strlen(tmp->value) == 1)
 			{
 				tmp->next->value = get_env_value(tmp->next->value, vault->envp);
 				if (tmp->next->value == NULL)

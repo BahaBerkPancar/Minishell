@@ -1,6 +1,6 @@
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -Ilibft
+CFLAGS =  -g -Wall -Wextra -Werror -Ilibft
 
 OS := $(shell uname)
 
@@ -17,7 +17,7 @@ GITLIBFT = git@github.com:BahaBerkPancar/Libft-42.git
 LIBFT = libft/libft.a
 
 SRCS = parse/parse.c parse/operations.c minishell.c ext/new_node.c ext/ft_lstprint.c ext/find_char.c \
-	ext/last_node.c ext/type.c ext/checks.c ext/ft_strcmp.c built_ins/pwd.c built_ins/tmp.c \
+	ext/last_node.c ext/type.c ext/checks.c ext/ft_strcmp.c built_ins/pwd.c \
 	parse/doubleqoute.c parse/singlequote.c ext/free.c parse/temp.c execute/execute.c env/set_path.c \
 	env/env.c ext/delete_node.c built_ins/export.c built_ins/unset.c ext/exit.c ext/heredoc.c \
 	built_ins/builtin.c built_ins/echo.c execute/execute_requirements.c ext/count_args.c signals.c
@@ -53,7 +53,7 @@ $(LIBFT):
 	@$(MAKE) -C libft
 
 $(NAME): $(OBJS) $(LIBFT)
-	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(READLINEFLAGS) -g -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(READLINEFLAGS) -o $(NAME)
 	@echo "$(COLOR_BLACK)@ DONE $(NAME) ✅$(COLOR_RESET)"
 
 clean:
@@ -63,7 +63,7 @@ clean:
 
 clone:
 	@echo "$(COLOR_GREEN)@ Cloning libft...$(COLOR_RESET)"
-	@git clone $(GITLIBFT) libft
+	@git clone $(GITLIBFT) libftq
 	@$(MAKE) -C libft > /dev/null 2>&1
 	@$(MAKE) bonus -C libft > /dev/null 2>&1
 	@echo "$(COLOR_GREEN)@ Cloned libft ✅$(COLOR_RESET)"

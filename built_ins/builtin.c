@@ -36,7 +36,8 @@ void	builtin(t_input **input, char **flags, t_vault *vault)
 	// 		printf("%s\n", vault->envp[i++]);
 	// }
 	else if (ft_strcmp(flags[0], "exit") == 0 && ft_strlen(flags[0]) == 4)
-		exit_ms(vault, 0);	
+		exit_ms(vault, 0);
+	free_pointer(flags);
 	exit_ms(vault, 1);
 	return ;
 }

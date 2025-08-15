@@ -33,6 +33,14 @@ t_vault *init_vault(char **envp)
     return (vault);
 }
 
+t_parse	*start_parse(t_parse *parse)
+{
+	parse = malloc(sizeof(t_parse));
+	parse->x = 1;
+	parse->len = 0;
+	parse->token = NULL;
+	return (parse);
+}
 
 int	set_necesery_type(t_input **final, t_vault *vault)
 {						 
@@ -42,6 +50,7 @@ int	set_necesery_type(t_input **final, t_vault *vault)
 		return (0);
 	get_rid_of_dquotes(final);
 	replace_variables(final, vault);
+    ft_lstprint(*final);
 	get_rid_of_squotes(final);
 	if (!set_quoted_types(final))
 		return ((void)printf("SYNTAX ERROR\n"), exit_code(vault, 258), 0);
@@ -69,7 +78,7 @@ int main(int ac, char **av, char *envp[])
         if (!a || !*a)
             return(free(a), free_vault(vault),exit(0), 0);
         add_history(a);
-        final = parse(a);
+        final = parse(a, start_parse(NULL));
         if (!final || !*final)
             continue;;
         if (!set_necesery_type(final, vault)) 

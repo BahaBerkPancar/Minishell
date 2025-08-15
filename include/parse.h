@@ -48,6 +48,6 @@ typedef struct s_vault
 	int		exit_status;
 }	t_vault;
 
-t_input	**parse(char *input);
+
 
 #endif

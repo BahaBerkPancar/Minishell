@@ -1,13 +1,6 @@
 #include "../include/minishell.h"
 
-t_parse	*start_parse(t_parse *parse)
-{
-	parse = malloc(sizeof(t_parse));
-	parse->x = 1;
-	parse->len = 0;
-	parse->token = NULL;
-	return (parse);
-}
+
 
 char	*handle_quotes(char *input, t_input **list, char *token)
 {
@@ -27,34 +20,53 @@ char	*handle_quotes(char *input, t_input **list, char *token)
 }
 
 
-t_input	**parse(char *input)
+int handle_tokens(char *input, t_input **list, t_parse *parse)
+{
+	int x;
+
+	x = 0;
+	
+	if (*input == '>' || *input == '<' || *input == '|' || *input == '$')
+	{
+		x = 1;
+		if ((*input == '>' && input[1] == '>') || (*input == '<' && input[1] == '<'))
+			x = 2;
+		else if (*input == '$' && input[1] == ' ')
+			x = 2;
+		parse->token = ft_substr(input, 0, x);
+		last_node(list, new_node(ft_strdup(parse->token)));
+	}
+	else
+		return (0);
+	return (x);
+}
+int get_input(char *input,  t_parse *parse)
+{
+	int len;
+
+	len = 0;
+	while (input[len] && input[len] != ' ' && input[len] != '>'
+		&& input[len] != '<' && input[len] != '|' && input[len] != '$')
+		len++;
+	parse->token = ft_substr(input, 0, len);
+	return (len);
+}
+
+t_input	**parse(char *input, t_parse *parse)
 {
 	t_input	**list;
-	t_parse	*parse;
 
 	list = malloc(sizeof(t_input *));
-	parse = start_parse(NULL);
 	*list = NULL;
 	while (*input)
 	{
 		if (*input == ' ')
 			input++;
 		else if (*input == '>' || *input == '<' || *input == '|' || *input == '$')
-		{
-			parse->x = 1;
-			if ((*input == '$' && input[1] == ' ') || (input[1] == '>' || input[1] == '<'))
-				parse->x = 2;
-			parse->token = ft_substr(input, 0, parse->x);
-			last_node(list, new_node(ft_strdup(parse->token)));
-			input += parse->x;
-		}
+			input += handle_tokens(input, list, parse);
 		else
 		{
-			parse->len = 0;
-			while (input[parse->len] && input[parse->len] != ' ' && input[parse->len] != '>'
-				&& input[parse->len] != '<' && input[parse->len] != '|' && input[parse->len] != '$')
-				parse->len++;
-			parse->token = ft_substr(input, 0, parse->len);
+			parse->len = get_input(input, parse);
 			if (ft_strchr(parse->token, '\"') || ft_strchr(parse->token, '\''))
 				input = handle_quotes(input, list, parse->token);
 			else
@@ -63,6 +75,11 @@ t_input	**parse(char *input)
 				input += parse->len;
 			}
 		}
+		free(parse->token);
+		parse->token = NULL;
+	}
+	if(parse->token)
+	{
 		free(parse->token);
 		parse->token = NULL;
 	}

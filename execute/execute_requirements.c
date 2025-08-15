@@ -3,7 +3,10 @@
 
 void	execute_command(t_input **input, char **flags, t_vault *vault)
 {
-	// printf("%s\n", flags[0]);
+
+	// printf("ab%s\n", flags[0]);
+	// printf("ab%s\n", flags[1]);
+	// printf("ab%s\n", flags[2]);
 	if (flags && is_builtin(flags[0]))
 		builtin(input, flags, vault);
 	else if (flags && is_executable(flags[0]) && !is_builtin(flags[0]))
@@ -25,17 +28,24 @@ static char	**get_flags(t_input **input, char *cmd)
 
 	i = 0;
 	tmp = *input;
+
+	// Find the command node
 	while (tmp && ft_strcmp(tmp->value, cmd) != 0)
 		tmp = tmp->next;
 	if (!tmp)
 		return (NULL);
-	argc = count_args(tmp);
+
+	argc = count_args(tmp); // assumes this counts args correctly
 	flags = malloc((argc + 2) * sizeof(char *));
 	if (!flags)
 		return (NULL);
+
+	// Add command as first flag
 	flags[i++] = ft_strdup(cmd);
+
 	tmp = tmp->next;
-	while (tmp && tmp->type != PIPE && tmp->type != TOKEN)
+	while (tmp && tmp->type != PIPE && tmp->type != COMMAND
+		&& tmp->type != BUILTIN && tmp->type != TOKEN)
 	{
 		flags[i++] = ft_strdup(tmp->value);
 		tmp = tmp->next;
@@ -43,6 +53,7 @@ static char	**get_flags(t_input **input, char *cmd)
 	flags[i] = NULL;
 	return (flags);
 }
+
 
 static int	handle_input_redirect(t_input *tmp, t_vault *vault)
 {

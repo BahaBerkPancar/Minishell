@@ -103,3 +103,31 @@ bool is_executable(char *string)
 	}
 	return (free_split(paths), false);
 }
+bool is_executable2(char *string)
+{
+	char	**paths;
+	char	*full_path;
+	int		i;
+
+	i = 0;
+	if (!string || !*string)
+		return (false);
+	if (ft_strchr(string, '/'))
+		return (access(string, X_OK) == 0);
+	paths = get_path();
+	if (!paths)
+		return (false);
+	while (paths[i])
+	{
+		full_path = ft_strjoin(paths[i], "/");
+		full_path = ft_strjoin_free(full_path, string);
+		printf("Checking path: %s\n", full_path);
+		if (!full_path)
+			return (free_split(paths), false);
+		if (access(full_path, X_OK) == 0)
+			return (free(full_path), free_split(paths), true);
+		free(full_path);
+		i++;
+	}
+	return (free_split(paths), false);
+}

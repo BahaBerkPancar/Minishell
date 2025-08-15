@@ -39,6 +39,12 @@ char	*seperate_dquotes(t_input **list, char *input, char *quoted)
 {
 	char *result;
 
+	if (!quoted || ft_strlen(quoted) == 0)
+	{
+		last_node(list, new_node(ft_strdup("\"\"")));
+		return (ft_strdup(input + 2));
+	}
+
 	if (quoted == NULL)
 		return (input);
 	result = ft_strdup(quoted);
@@ -89,6 +95,7 @@ char	*doublequote_check(char *input)
 	int		j;
 	char	*temp;
 	char 	*tmp;
+	char *old_tmp;
 
 	i = 0;
 	temp = input;
@@ -97,24 +104,17 @@ char	*doublequote_check(char *input)
 	i = find_dquote_location(temp);
 	j = find_dquote_location(temp + i + 1) + i + 1;
 	tmp = ft_substr(temp, j, ft_strlen(temp) - j);
+	j = 0;
 	while (ft_strchr(tmp, ' '))
+	{
+		old_tmp = tmp;
 		temp = ft_substr(temp, 0, ft_strlen(temp) - 1);
+		free(old_tmp);
+		tmp = ft_substr(temp, j, ft_strlen(temp) - j);
+	}
 	free(tmp);
+	if(!temp || !*temp)
+		return (ft_strdup(""));
 	return (temp);
 }
 
-// void	replace_empty_dquotes(t_input **list)
-// {
-// 	t_input *tmp;
-
-// 	tmp = *list;
-// 	while (tmp)
-// 	{
-// 		if (!tmp->value || !tmp->value[0])
-// 		{
-// 			printf("here\n");
-// 			tmp->value = ft_strdup("");
-// 		}
-// 		tmp = tmp->next;
-// 	}
-// }

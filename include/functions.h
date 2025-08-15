@@ -26,7 +26,7 @@ int		find_char(char *input, char c);
 char	*get_env_value(const char *name, char **envp);
 void	replace_variables(t_input **final, t_vault *vault);
 
-t_input	**parse(char *input);
+t_input	**parse(char *input , t_parse *parse);
 t_input	*lstlast(t_input *lst);
 t_input	*new_node(char *content);
 void	ft_lstprint(t_input *lst);
@@ -44,6 +44,7 @@ void	free_input_list(t_input **list);
 bool	is_token(char *string);
 bool	is_flag(const char *arg);
 bool	is_builtin(char *string);
+bool is_executable2(char *string);
 bool	is_executable(char *string);
 char	operations_check(char *input);
 
