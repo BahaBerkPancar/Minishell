@@ -2,11 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-t_vault *init_vault(char **envp)
+t_vault *init_vault(char **envp, int count, int i)
 {
     t_vault *vault;
-    int count = 0;
-    int i = -1;
 
     vault = malloc(sizeof(t_vault));
     if (!vault)
@@ -68,7 +66,7 @@ int main(int ac, char **av, char *envp[])
 
     if (ac != 1 || !av)
         return ((void)printf("NO ARGUMENTS ALLOWED\n"), exit(0), 0);
-    vault = init_vault(envp);
+    vault = init_vault(envp, 0, -1);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, handle_sigint);
     while (1)

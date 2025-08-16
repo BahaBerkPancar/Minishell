@@ -63,8 +63,8 @@ void	builtin(t_input **input, char **flags, t_vault *vault);
 
 int		dquote_count(char *input);
 int		squote_count(char *input);
-char	*doublequote_check(char *input);
-char	*singlequote_check(char *input);
+char	*doublequote_check(char *temp);
+char	*singlequote_check(char *temp);
 int		find_dquote_location(char *input);
 int		find_squote_location(char *input);
 void	replace_empty_dquotes(t_input **list);

@@ -1,5 +1,53 @@
 #include "../include/minishell.h"
 
+// static char	*remove_single_quotes(char *str)
+// {
+// 	char	*final;
+// 	char	*remaining;
+// 	char	*temp;
+// 	char	*joined;
+// 	int		i;
+
+// 	final = ft_strdup("");
+// 	remaining = str;
+// 	while (*remaining)
+// 	{
+// 		i = 0;
+// 		while (remaining[i] != '\'' && remaining[i])
+// 			i++;
+// 		temp = ft_substr(remaining, 0, i);
+// 		joined = ft_strjoin(final, temp);
+// 		free(temp);
+// 		free(final);
+// 		final = joined;
+// 		if (remaining[i])
+// 			i++;
+// 		temp = remaining;
+// 		remaining = ft_strdup(remaining + i);
+// 		free(temp);
+// 	}
+// 	return (final);
+// }
+
+// t_input	*get_rid_of_squotes(t_input **list)
+// {
+// 	t_input	*tmp;
+// 	char	*new_value;
+
+// 	tmp = *list;
+// 	while (tmp)
+// 	{
+// 		if (ft_strchr(tmp->value, '\''))
+// 		{
+// 			new_value = remove_single_quotes(tmp->value);
+// 			// free(tmp->value);
+// 			tmp->value = new_value;
+// 		}
+// 		tmp = tmp->next;
+// 	}
+// 	return (*list);
+// }
+
 t_input	*get_rid_of_squotes(t_input **list)
 {
 	t_input	*tmp;
@@ -89,15 +137,13 @@ int	find_squote_location(char *input)
 	return (0);
 }
 
-char	*singlequote_check(char *input)
+char	*singlequote_check(char *temp)
 {
-	int		i, j;
-	char	*temp = ft_strdup(input);
+	int		i;
+	int 	j;
 	char 	*tmp;
 	char	*old_tmp;
 
-	if (!temp)
-		return (NULL);
 	while (squote_count(temp) > 2)
 	{
 		old_tmp = temp;
@@ -115,11 +161,7 @@ char	*singlequote_check(char *input)
 		free(old_tmp);
 		tmp = ft_substr(temp, j, ft_strlen(temp) - j);
 	}
-	free(tmp);
 	if (!temp || !*temp)
-	{
-		free(temp);
-		return (ft_strdup(""));
-	}
-	return (temp);
+		return (free(tmp), free(temp), ft_strdup(""));
+	return (free(tmp), temp);
 }

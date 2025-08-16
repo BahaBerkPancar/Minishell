@@ -88,15 +88,13 @@ int	find_dquote_location(char *input)
 	}
 	return (0);
 }
-char	*doublequote_check(char *input)
+char	*doublequote_check(char *temp)
 {
-	int		i, j;
-	char	*temp = ft_strdup(input);
+	int		i;
+	int		j;
 	char 	*tmp;
 	char	*old_tmp;
 
-	if (!temp)
-		return (NULL);
 	while (dquote_count(temp) > 2)
 	{
 		old_tmp = temp;
@@ -114,11 +112,7 @@ char	*doublequote_check(char *input)
 		free(old_tmp);
 		tmp = ft_substr(temp, j, ft_strlen(temp) - j);
 	}
-	free(tmp);
 	if (!temp || !*temp)
-	{
-		free(temp);
-		return (ft_strdup(""));
-	}
-	return (temp);
+		return (free(tmp), free(temp), ft_strdup(""));
+	return (free(tmp), temp);
 }

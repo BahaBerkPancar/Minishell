@@ -26,21 +26,15 @@ static char	**get_flags(t_input **input, char *cmd)
 
 	i = 0;
 	tmp = *input;
-
-	// Find the command node
 	while (tmp && ft_strcmp(tmp->value, cmd) != 0)
 		tmp = tmp->next;
 	if (!tmp)
 		return (NULL);
-
-	argc = count_args(tmp); // assumes this counts args correctly
+	argc = count_args(tmp);
 	flags = malloc((argc + 2) * sizeof(char *));
 	if (!flags)
 		return (NULL);
-
-	// Add command as first flag
 	flags[i++] = ft_strdup(cmd);
-
 	tmp = tmp->next;
 	while (tmp && tmp->type != PIPE && tmp->type != COMMAND
 		&& tmp->type != BUILTIN && tmp->type != TOKEN)

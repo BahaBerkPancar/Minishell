@@ -8,7 +8,7 @@ char	*handle_quotes(char *input, t_input **list, char *token)
 	result = NULL;
 	if (ft_strchr(token, '\"'))
 	{
-		quoted = doublequote_check(input);
+		quoted = doublequote_check(ft_strdup(input));
 		if (quoted == NULL)
 			return (NULL);
 		result = seperate_dquotes(list, input, quoted);
@@ -16,9 +16,10 @@ char	*handle_quotes(char *input, t_input **list, char *token)
 	}
 	else if (ft_strchr(token, '\''))
 	{
-		if (singlequote_check(input) == NULL)
+		quoted = singlequote_check(ft_strdup(input));
+		if (quoted == NULL)
 			return (NULL);
-		result = seperate_squotes(list, input, singlequote_check(input));
+		result = seperate_squotes(list, input, quoted);
 	}
 	return (result);
 }

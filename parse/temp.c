@@ -1,11 +1,5 @@
 #include "../include/minishell.h"
 
-int	clear(void)
-{
-	write(STDOUT_FILENO, "\033[H\033[2J\033[3J", 11);
-	return (0);
-}
-
 int	pipe_count(t_input **input)
 {
 	t_input	*tmp;
