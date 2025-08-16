@@ -4,10 +4,10 @@
 # include "minishell.h"
 # include "parse.h"
 
-char	*set_path(char *input);
+char	*set_path(t_vault *vault, char *input);
 int		dollar_count(t_input **input);
 void	env_to_export(t_vault *vault);
-int		set_variable_type(t_input **lst);
+int		set_variable_type(t_vault *vault, t_input **lst);
 t_input	*get_rid_of_dquotes(t_input **list);
 t_input	*get_rid_of_squotes(t_input **list);
 void	add_after(t_input *head, t_input *new);
@@ -35,23 +35,23 @@ void	delete_node(t_input **head, t_input *to_delete);
 t_input	*final_new_node(char *content, int type,
 			bool is_quoted, bool is_doublequoted);
 
-char	**get_path(void);
-int		set_types(t_input **lst);
-int		set_quoted_types(t_input **lst);
+char	**get_path(t_vault *vault);
+int		set_types(t_vault *vault, t_input **lst);
+int		set_quoted_types(t_vault *vault, t_input **lst);
 void	free_input_list(t_input **list);
 
+char *vault_getenv(t_vault *vault, const char *name);
 
 bool	is_token(char *string);
 bool	is_flag(const char *arg);
 bool	is_builtin(char *string);
-bool is_executable2(char *string);
-bool	is_executable(char *string);
+bool	is_executable(t_vault *vault, char *string);
 char	operations_check(char *input);
 
 int		ft_strcmp(const char *s1, const char *s2);
 int		heredoc(char *str);
 void	closed(int fd, int fd1);
-void	exit_code(t_vault *vault, int exit_status);
+void	set_exit_status(t_vault *vault, int exit_status);
 
 int		pwd(void);
 int		clear(void);

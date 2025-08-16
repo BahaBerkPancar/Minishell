@@ -35,7 +35,7 @@ t_vault *init_vault(char **envp)
 
 t_parse	*start_parse(t_parse *parse)
 {
-	parse = malloc(sizeof(t_parse));
+    parse = malloc(sizeof(t_parse));
 	parse->x = 1;
 	parse->len = 0;
 	parse->token = NULL;
@@ -43,19 +43,19 @@ t_parse	*start_parse(t_parse *parse)
 }
 
 int	set_necesery_type(t_input **final, t_vault *vault)
-{						 
-	if (!set_types(final))
-		return ((void)printf("SYNTAX ERROR\n"), free_input(*final), free(final), exit_code(vault, 258), 0);
+{
+	if (!set_types(vault, final))
+		return ((void)printf("SYNTAX ERROR\n"), free_input(*final), free(final), set_exit_status(vault, 258), 0);
 	if (!*final)
 		return (0);
 	get_rid_of_dquotes(final);
 	replace_variables(final, vault);
-    ft_lstprint(*final);
+    // ft_lstprint(*final);
 	get_rid_of_squotes(final);
-	if (!set_quoted_types(final))
-		return ((void)printf("SYNTAX ERROR\n"), exit_code(vault, 258), 0);
+	if (!set_quoted_types(vault, final))
+        return ((void)printf("SYNTAX ERROR\n"), set_exit_status(vault, 258), 0);
 	if (*final && (*final)->type == ARGUMANT && (*final)->is_variable == false)
-		return ((void)printf("command not found\n"),  exit_code(vault, 127), 0);
+		return ((void)printf("command not found\n"),  free_input_list(final), set_exit_status(vault, 127), 0);
 	// ft_lstprint(*final);
 	return (1);
 }
@@ -75,18 +75,21 @@ int main(int ac, char **av, char *envp[])
     {
         g_signal_exit = 0;
         a = readline("MINISHELL : ");
-        if (!a || !*a)
-            return(free(a), free_vault(vault),exit(0), 0);
+        if (!a)
+            return(free(a), free_vault(vault), exit(0), 0);
         add_history(a);
         final = parse(a, start_parse(NULL));
         if (!final || !*final)
-            continue;;
-        if (!set_necesery_type(final, vault)) 
+            continue;
+
+        if (!set_necesery_type(final, vault))
             continue;
         real_execute(final, vault);
+        if(final)
+            free_input_list(final);
         // if(vault->exit_status != -1)
         //     exit(vault->exit_status);
     }
-    rl_clear_history();
+    // rl_clear_history();
     return 0;
 }

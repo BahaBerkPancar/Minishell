@@ -6,7 +6,7 @@
 /*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 01:14:10 by bpancar           #+#    #+#             */
-/*   Updated: 2024/10/19 17:56:37 by bpancar          ###   ########.fr       */
+/*   Updated: 2025/08/16 12:45:08 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	**ft_split(char const *s, char c)
 		while (*s == c)
 			s++;
 		j = 0;
-		while (s[j] != c && s[j])
+		while (s[j] && s[j] != c)
 			j++;
 		final[i] = ft_substr(s, 0, j);
 		if (!final[i])

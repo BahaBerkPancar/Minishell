@@ -1,22 +1,26 @@
 #include "../include/minishell.h"
 
-
-
 char	*handle_quotes(char *input, t_input **list, char *token)
 {
+	char	*quoted;
+	char	*result;
+	
+	result = NULL;
 	if (ft_strchr(token, '\"'))
 	{
-		if (doublequote_check(input) == NULL)
+		quoted = doublequote_check(input);
+		if (quoted == NULL)
 			return (NULL);
-		input = seperate_dquotes(list, input, doublequote_check(input));
+		result = seperate_dquotes(list, input, quoted);
+		free(quoted);
 	}
 	else if (ft_strchr(token, '\''))
 	{
 		if (singlequote_check(input) == NULL)
 			return (NULL);
-		input = seperate_squotes(list, input, singlequote_check(input));
+		result = seperate_squotes(list, input, singlequote_check(input));
 	}
-	return (input);
+	return (result);
 }
 
 
@@ -25,7 +29,7 @@ int handle_tokens(char *input, t_input **list, t_parse *parse)
 	int x;
 
 	x = 0;
-	
+
 	if (*input == '>' || *input == '<' || *input == '|' || *input == '$')
 	{
 		x = 1;
@@ -75,11 +79,6 @@ t_input	**parse(char *input, t_parse *parse)
 				input += parse->len;
 			}
 		}
-		free(parse->token);
-		parse->token = NULL;
-	}
-	if(parse->token)
-	{
 		free(parse->token);
 		parse->token = NULL;
 	}

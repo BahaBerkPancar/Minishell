@@ -1,6 +1,6 @@
 NAME = minishell
 CC = cc
-CFLAGS =  -g -Wall -Wextra -Werror -Ilibft
+CFLAGS =  -Wall -Wextra -Werror -Ilibft
 
 OS := $(shell uname)
 
@@ -79,7 +79,7 @@ full-clean: fclean
 	@echo "$(COLOR_BOLD_RED)🌀 You Have Cleared Everything$(COLOR_RESET)"
 
 run: all
-	@valgrind  --leak-check=full --show-leak-kinds=definite --suppressions=readline.supp ./minishell
+	@valgrind --leak-check=full --show-leak-kinds=definite --suppressions=readline.supp ./minishell
 
 rule: 
 	@valgrind --leak-check=full --show-leak-kinds=all --suppressions=readline.supp  ./minishell

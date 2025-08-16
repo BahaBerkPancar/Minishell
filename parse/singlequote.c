@@ -24,7 +24,10 @@ t_input	*get_rid_of_squotes(t_input **list)
 				final = ft_strjoin(final, ft_substr(remaining, 0, i));
 				remaining = ft_substr(remaining, i + 1, ft_strlen(remaining) - i);
 			}
-			tmp->value = final;
+			if (ft_strlen(final) > 0)
+				tmp->value = final;
+			else
+				tmp->value = ft_strdup("\0");
 		}
 		tmp = tmp->next;
 		free(final);
@@ -34,15 +37,26 @@ t_input	*get_rid_of_squotes(t_input **list)
 
 char	*seperate_squotes(t_input **list, char *input, char *quoted)
 {
+	char *result;
+
+	if (!quoted || ft_strlen(quoted) == 0)
+	{
+		last_node(list, new_node(ft_strdup("''")));
+		return (ft_strdup(input + 2));
+	}
+
 	if (quoted == NULL)
 		return (input);
-	last_node(list, new_node(ft_strdup(quoted)));
+	result = ft_strdup(quoted);
+	last_node(list, new_node(ft_strdup(result)));
+	free(result);
 	if (lstlast(*list))
 		lstlast(*list)->is_quoted = true;
 	if (ft_strncmp(input, quoted, ft_strlen(quoted)) == 0)
-		return (ft_substr(input, ft_strlen(quoted) + 1, ft_strlen(input) - ft_strlen(quoted) - 1));
+		result = ft_substr(input, ft_strlen(quoted) + 1, ft_strlen(input) - ft_strlen(quoted) - 1);
 	else
-		return (input);
+		result = ft_strdup(input);
+	return (result);
 }
 
 int	squote_count(char *input)
@@ -77,20 +91,35 @@ int	find_squote_location(char *input)
 
 char	*singlequote_check(char *input)
 {
-	int		i;
-	int		j;
-	char	*temp;
+	int		i, j;
+	char	*temp = ft_strdup(input);
 	char 	*tmp;
+	char	*old_tmp;
 
-	i = 0;
-	temp = input;
+	if (!temp)
+		return (NULL);
 	while (squote_count(temp) > 2)
-		temp = ft_substr(temp, 0, ft_strlen(temp) - 1);
+	{
+		old_tmp = temp;
+		temp = ft_substr(old_tmp, 0, ft_strlen(old_tmp) - 1);
+		free(old_tmp);
+	}
 	i = find_squote_location(temp);
 	j = find_squote_location(temp + i + 1) + i + 1;
 	tmp = ft_substr(temp, j, ft_strlen(temp) - j);
 	while (ft_strchr(tmp, ' '))
-		temp = ft_substr(temp, 0, ft_strlen(temp) - 1);
+	{
+		free(tmp);
+		old_tmp = temp;
+		temp = ft_substr(old_tmp, 0, ft_strlen(old_tmp) - 1);
+		free(old_tmp);
+		tmp = ft_substr(temp, j, ft_strlen(temp) - j);
+	}
 	free(tmp);
+	if (!temp || !*temp)
+	{
+		free(temp);
+		return (ft_strdup(""));
+	}
 	return (temp);
 }

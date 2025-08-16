@@ -1,16 +1,14 @@
 #include "../include/minishell.h"
 
-void	exit_code(t_vault *vault, int exit_status)
+void	set_exit_status(t_vault *vault, int exit_status)
 {
 	vault->exit_status = exit_status;
 }
 
 void	exit_ms(t_vault *vault, int exit_status)
 {
-	if (exit_status == 0)
-		exit(vault->exit_status);
-	else
-		exit(0);
+	set_exit_status(vault, exit_status);
+	exit(exit_status);
 }
 
 void	closed(int fd, int fd1)

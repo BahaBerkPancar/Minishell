@@ -53,7 +53,7 @@ static int	set_types_helper(t_input **lst)
 	return (1);
 }
 
-int	set_types(t_input **lst)
+int	set_types(t_vault *vault, t_input **lst)
 {
 	t_input	*tmp;
 
@@ -73,7 +73,7 @@ int	set_types(t_input **lst)
 			else if (tmp->next && !ft_strcmp(tmp->value, "$")
 				&& !set_token_type(lst, tmp->next->value, VARIABLE))
 				return (0);
-			else if (tmp->is_quoted == false && is_executable(tmp->value))
+			else if (tmp->is_quoted == false && is_executable(vault, tmp->value))
 				tmp->type = COMMAND;
 			else if (!is_builtin(tmp->value) && ft_strcmp(tmp->value, "<<")
 				&& ft_strcmp(tmp->value, ">>"))
@@ -84,7 +84,7 @@ int	set_types(t_input **lst)
 	return (set_types_helper(lst));
 }
 
-int	set_quoted_types(t_input **lst)
+int	set_quoted_types(t_vault *vault, t_input **lst) //////// $a a=ls
 {
 	t_input	*tmp;
 
@@ -93,11 +93,11 @@ int	set_quoted_types(t_input **lst)
 	{
 		if(tmp->type == ARGUMANT || tmp->type == VARIABLE)
 		{
-			if(tmp->is_variable == true && !set_variable_type(lst))
+			if(tmp->is_variable == true && !set_variable_type(vault, lst))
 				return (0);
 			else if(tmp->is_quoted == true || tmp->is_doublequoted == true || tmp->is_variable == false)
 			{
-				if(is_executable(tmp->value))
+				if(is_executable(vault, tmp->value))
 					tmp->type = COMMAND;
 				else
 					tmp->type = ARGUMANT;
@@ -110,7 +110,7 @@ int	set_quoted_types(t_input **lst)
 	return (1);
 }
 
-int	set_variable_type(t_input **lst)
+int	set_variable_type(t_vault *vault, t_input **lst)
 {
 	t_input	*tmp;
 
@@ -126,7 +126,7 @@ int	set_variable_type(t_input **lst)
 		}
 		else if (tmp->is_variable == true && tmp->type == VARIABLE)
 		{
-			if (is_executable(tmp->value) && tmp->is_quoted == false)
+			if (is_executable(vault, tmp->value) && tmp->is_quoted == false)
 				tmp->type = COMMAND;
 			else
 				tmp->type = ARGUMANT;

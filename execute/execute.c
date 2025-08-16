@@ -1,10 +1,12 @@
 #include "../include/minishell.h"
 
 void	execute(char *path, char **flags, t_vault *vault)
-{			//bin/ls ls  la infile
+{
+	// printf("Executing: %s\n", path);
 	if(execve(path, flags, vault->envp) == -1)
 	{
-		perror("execve");
+		printf("Command not fou1nd\n");
+		// free_pointer(flags);
 		exit_ms(vault, 127);
 	}
 	exit(1);
@@ -35,15 +37,12 @@ bool has_next_pipe(t_input *node)
 }
 
 
-char **build_argv_until_pipe(t_input **node)
+char **build_argv_until_pipe(t_input **node, int i, int count)
 {
-	t_input *tmp;
-	int count = 0;
-	t_input *tmp1;
-	char **argv;
-	int i;
+	t_input	*tmp;
+	t_input	*tmp1;
+	char	**argv;
 
-	i = 0;
 	tmp = *node;
 	tmp1 = tmp;
 	while (tmp1 && tmp1->type != PIPE)
@@ -69,12 +68,10 @@ char **build_argv_until_pipe(t_input **node)
 }
 
 
-int execute_pipe(t_input **input, t_vault *vault)
+int execute_pipe(t_input **input, t_vault *vault, t_input *tmp, int	prev_read_end)
 {
-	t_input *tmp = *input;
 	pid_t	pid;
 	int		pipe_fds[2];
-	int		prev_read_end = -1;
 	int		status;
 	char	**flags;
  
@@ -90,7 +87,7 @@ int execute_pipe(t_input **input, t_vault *vault)
 			close(pipe_fds[0]);
 			close(pipe_fds[1]);
 			tmp_execute(input, vault, 0);
-			flags = build_argv_until_pipe(&tmp);
+			flags = build_argv_until_pipe(&tmp, 0, 0);
 			execute_command(input, flags, vault);
 			free_pointer(flags);
 		}
@@ -117,7 +114,7 @@ int	real_execute(t_input **input, t_vault *vault)
 	{
 		pid = fork();
 		if(pid == 0)
-			execute_pipe(input, vault);
+			execute_pipe(input, vault, *input, -1);
 		else
 			waitpid(pid, NULL, 0);
 	}
@@ -129,6 +126,6 @@ int	real_execute(t_input **input, t_vault *vault)
 		else
 			waitpid(pid, NULL, 0);
 	}
-	return (free_input(*input), free(input), 1);
+	return (1);
 }
 

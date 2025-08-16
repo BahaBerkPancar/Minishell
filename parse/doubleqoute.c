@@ -88,33 +88,37 @@ int	find_dquote_location(char *input)
 	}
 	return (0);
 }
-
 char	*doublequote_check(char *input)
 {
-	int		i;
-	int		j;
-	char	*temp;
+	int		i, j;
+	char	*temp = ft_strdup(input);
 	char 	*tmp;
-	char *old_tmp;
+	char	*old_tmp;
 
-	i = 0;
-	temp = input;
+	if (!temp)
+		return (NULL);
 	while (dquote_count(temp) > 2)
-		temp = ft_substr(temp, 0, ft_strlen(temp) - 1);
+	{
+		old_tmp = temp;
+		temp = ft_substr(old_tmp, 0, ft_strlen(old_tmp) - 1);
+		free(old_tmp);
+	}
 	i = find_dquote_location(temp);
 	j = find_dquote_location(temp + i + 1) + i + 1;
 	tmp = ft_substr(temp, j, ft_strlen(temp) - j);
-	j = 0;
 	while (ft_strchr(tmp, ' '))
 	{
-		old_tmp = tmp;
-		temp = ft_substr(temp, 0, ft_strlen(temp) - 1);
+		free(tmp);
+		old_tmp = temp;
+		temp = ft_substr(old_tmp, 0, ft_strlen(old_tmp) - 1);
 		free(old_tmp);
 		tmp = ft_substr(temp, j, ft_strlen(temp) - j);
 	}
 	free(tmp);
-	if(!temp || !*temp)
+	if (!temp || !*temp)
+	{
+		free(temp);
 		return (ft_strdup(""));
+	}
 	return (temp);
 }
-

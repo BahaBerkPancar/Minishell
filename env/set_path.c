@@ -1,6 +1,6 @@
 #include "../include/minishell.h"
 
-char	*set_path(char *input)
+char	*set_path(t_vault *vault, char *input)
 {
 	char	*path;
 	char	*tmp;
@@ -9,7 +9,7 @@ char	*set_path(char *input)
 
 	if (ft_strchr(input, '/'))
 		return (input);
-	path = getenv("PATH");
+	path = vault_getenv(vault, "PATH");
 	paths = ft_split(path, ':');
 	i = 0;
 	while (paths[i])

@@ -8,8 +8,12 @@ void	delete_node(t_input **head, t_input *remove)
 		return ;
 	if (*head == remove)
 	{
-		*head = remove->next;
-		free(remove);
+		if(remove->next)
+		{
+			*head = remove->next;
+			// free(remove);
+		}
+		ft_lstprint(remove);
 		return ;
 	}
 	prev = *head;

@@ -5,7 +5,7 @@ int		g_signal_exit = 0;
 int	*get_exit_status_code(void)
 {
 	static int	exit_status_code = 0;
-
+	
 	return (&exit_status_code);
 }
 void	handle_sigint(int sig)
@@ -30,14 +30,4 @@ void	handle_sigint(int sig)
 	}
 	// set_exit_status_code(130);
 	g_signal_exit = 130;
-}
-
-
-int signal_handler(int sig)
-{
-
-	(void)sig;
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, handle_sigint);
-	return sig;
 }

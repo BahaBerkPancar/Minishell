@@ -3,7 +3,7 @@ SRCS = ft_strlen.c ft_isalnum.c ft_atoi.c ft_isalpha.c ft_isascii.c ft_isprint.c
 BONUS = ft_lstnew_bonus.c ft_lstadd_front_bonus.c ft_lstsize_bonus.c ft_lstlast_bonus.c ft_lstadd_back_bonus.c ft_lstdelone_bonus.c ft_lstclear_bonus.c  ft_lstiter_bonus.c ft_lstmap_bonus.c
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -g -Wall -Wextra -Werror 
 
 OBJS = $(SRCS:.c=.o)
 BOBJS = $(BONUS:.c=.o)
