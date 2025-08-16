@@ -13,7 +13,6 @@ void	delete_node(t_input **head, t_input *remove)
 			*head = remove->next;
 			// free(remove);
 		}
-		ft_lstprint(remove);
 		return ;
 	}
 	prev = *head;
