@@ -85,14 +85,13 @@ t_input	*get_rid_of_squotes(t_input **list)
 
 char	*seperate_squotes(t_input **list, char *input, char *quoted)
 {
-	char *result;
+	char	*result;
 
 	if (!quoted || ft_strlen(quoted) == 0)
 	{
 		last_node(list, new_node(ft_strdup("''")));
 		return (ft_strdup(input + 2));
 	}
-
 	if (quoted == NULL)
 		return (input);
 	result = ft_strdup(quoted);
@@ -101,7 +100,8 @@ char	*seperate_squotes(t_input **list, char *input, char *quoted)
 	if (lstlast(*list))
 		lstlast(*list)->is_quoted = true;
 	if (ft_strncmp(input, quoted, ft_strlen(quoted)) == 0)
-		result = ft_substr(input, ft_strlen(quoted) + 1, ft_strlen(input) - ft_strlen(quoted) - 1);
+		result = ft_substr(input, ft_strlen(quoted) + 1,
+				ft_strlen(input) - ft_strlen(quoted) - 1);
 	else
 		result = ft_strdup(input);
 	return (result);
@@ -140,8 +140,8 @@ int	find_squote_location(char *input)
 char	*singlequote_check(char *temp)
 {
 	int		i;
-	int 	j;
-	char 	*tmp;
+	int		j;
+	char	*tmp;
 	char	*old_tmp;
 
 	while (squote_count(temp) > 2)

@@ -1,6 +1,5 @@
 #include "../include/minishell.h"
 
-
 int	heredoc(char *str)
 {
 	int		fd[2];
@@ -16,7 +15,7 @@ int	heredoc(char *str)
 		{
 			line = readline("> ");
 			if (!line || ft_strcmp(line, str) == 0)
-				break;
+				break ;
 			write(fd[1], line, ft_strlen(line));
 			write(fd[1], "\n", 1);
 			free(line);

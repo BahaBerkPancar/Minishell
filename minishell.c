@@ -52,7 +52,7 @@ int	set_necesery_type(t_input **final, t_vault *vault)
 	get_rid_of_squotes(final);
 	if (!set_quoted_types(vault, final))
         return ((void)printf("SYNTAX ERROR\n"), set_exit_status(vault, 258), 0);
-	if (*final && (*final)->type == ARGUMANT && (*final)->is_variable == false)
+	if (*final && (*final)->type == ARGUMENT && (*final)->is_variable == false)
 		return ((void)printf("command not found\n"),  free_input_list(final), set_exit_status(vault, 127), 0);
 	// ft_lstprint(*final);
 	return (1);

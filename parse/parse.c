@@ -4,7 +4,7 @@ char	*handle_quotes(char *input, t_input **list, char *token)
 {
 	char	*quoted;
 	char	*result;
-	
+
 	result = NULL;
 	if (ft_strchr(token, '\"'))
 	{
@@ -24,17 +24,16 @@ char	*handle_quotes(char *input, t_input **list, char *token)
 	return (result);
 }
 
-
-int handle_tokens(char *input, t_input **list, t_parse *parse)
+int	handle_tokens(char *input, t_input **list, t_parse *parse)
 {
-	int x;
+	int	x;
 
 	x = 0;
-
 	if (*input == '>' || *input == '<' || *input == '|' || *input == '$')
 	{
 		x = 1;
-		if ((*input == '>' && input[1] == '>') || (*input == '<' && input[1] == '<'))
+		if ((*input == '>' && input[1] == '>')
+			|| (*input == '<' && input[1] == '<'))
 			x = 2;
 		else if (*input == '$' && input[1] == ' ')
 			x = 2;
@@ -45,9 +44,10 @@ int handle_tokens(char *input, t_input **list, t_parse *parse)
 		return (0);
 	return (x);
 }
-int get_input(char *input,  t_parse *parse)
+
+int	get_input(char *input, t_parse *parse)
 {
-	int len;
+	int	len;
 
 	len = 0;
 	while (input[len] && input[len] != ' ' && input[len] != '>'

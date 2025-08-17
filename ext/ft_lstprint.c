@@ -1,6 +1,5 @@
 #include "../include/minishell.h"
 
-
 void	ft_lstprint(t_input *lst)
 {
 	t_input	*tmp;

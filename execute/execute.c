@@ -36,7 +36,6 @@ bool has_next_pipe(t_input *node)
 	return (false);
 }
 
-
 char **build_argv_until_pipe(t_input **node, int i, int count)
 {
 	t_input	*tmp;
@@ -47,7 +46,7 @@ char **build_argv_until_pipe(t_input **node, int i, int count)
 	tmp1 = tmp;
 	while (tmp1 && tmp1->type != PIPE)
 	{
-		if (tmp1->type == COMMAND || tmp1->type == ARGUMANT ||
+		if (tmp1->type == COMMAND || tmp1->type == ARGUMENT ||
 			tmp1->type == FLAG || tmp1->type == VARIABLE || tmp1->type == BUILTIN)
 			count++;
 		tmp1 = tmp1->next;
@@ -55,7 +54,7 @@ char **build_argv_until_pipe(t_input **node, int i, int count)
 	argv = malloc(sizeof(char *) * (count + 1));
 	while (tmp && tmp->type != PIPE)
 	{
-		if (tmp->type == COMMAND || tmp->type == ARGUMANT ||
+		if (tmp->type == COMMAND || tmp->type == ARGUMENT ||
 			tmp->type == FLAG || tmp->type == VARIABLE || tmp->type == BUILTIN)
 			argv[i++] = ft_strdup(tmp->value);
 		tmp = tmp->next;

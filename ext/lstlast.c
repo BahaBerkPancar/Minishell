@@ -1,6 +1,5 @@
 #include "../include/minishell.h"
 
-
 t_input	*lstlast(t_input *lst)
 {
 	if (!lst)

@@ -12,7 +12,6 @@ t_input	*get_rid_of_dquotes(t_input **list);
 t_input	*get_rid_of_squotes(t_input **list);
 void	add_after(t_input *head, t_input *new);
 void	print_to_env(t_vault *vault, char *var);
-int		tmp_builtin(char *input, t_vault *vault);
 void	exit_ms(t_vault *vault, int exit_status);
 int		update_or_add_var(char *var, t_vault *vault);
 int		real_execute(t_input **input, t_vault *vault);
@@ -23,30 +22,26 @@ void	execute_command(t_input **input, char **flags, t_vault *vault);
 int		count_args(t_input *input);
 int		pipe_count(t_input **input);
 int		find_char(char *input, char c);
-char	*get_env_value(const char *name, char **envp);
 void	replace_variables(t_input **final, t_vault *vault);
 
-t_input	**parse(char *input , t_parse *parse);
+t_input	**parse(char *input, t_parse *parse);
 t_input	*lstlast(t_input *lst);
 t_input	*new_node(char *content);
 void	ft_lstprint(t_input *lst);
 void	last_node(t_input **lst, t_input *new);
 void	delete_node(t_input **head, t_input *to_delete);
-t_input	*final_new_node(char *content, int type,
-			bool is_quoted, bool is_doublequoted);
 
 char	**get_path(t_vault *vault);
 int		set_types(t_vault *vault, t_input **lst);
 int		set_quoted_types(t_vault *vault, t_input **lst);
 void	free_input_list(t_input **list);
 
-char *vault_getenv(t_vault *vault, const char *name);
+char	*vault_getenv(t_vault *vault, const char *name);
 
 bool	is_token(char *string);
 bool	is_flag(const char *arg);
 bool	is_builtin(char *string);
 bool	is_executable(t_vault *vault, char *string);
-char	operations_check(char *input);
 
 int		ft_strcmp(const char *s1, const char *s2);
 int		heredoc(char *str);
@@ -54,7 +49,6 @@ void	closed(int fd, int fd1);
 void	set_exit_status(t_vault *vault, int exit_status);
 
 int		pwd(void);
-int		clear(void);
 int		cd(char *path, t_vault *vault);
 void	echo(char **flags);
 int		unset(t_input **final, t_vault *vault);
@@ -67,7 +61,6 @@ char	*doublequote_check(char *temp);
 char	*singlequote_check(char *temp);
 int		find_dquote_location(char *input);
 int		find_squote_location(char *input);
-void	replace_empty_dquotes(t_input **list);
 char	*seperate_dquotes(t_input **list, char *input, char *quoted);
 char	*seperate_squotes(t_input **list, char *input, char *quoted);
 
@@ -79,7 +72,5 @@ void	free_pointer(char **pointer);
 
 int		signal_handler(int sig);
 void	handle_sigint(int sig);
-
-
 
 #endif

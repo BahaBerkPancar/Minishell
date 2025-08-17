@@ -1,6 +1,5 @@
 #include "../include/minishell.h"
 
-
 void	execute_command(t_input **input, char **flags, t_vault *vault)
 {
 	if (flags && is_builtin(flags[0]))
@@ -46,7 +45,6 @@ static char	**get_flags(t_input **input, char *cmd)
 	return (flags);
 }
 
-
 static int	handle_input_redirect(t_input *tmp, t_vault *vault)
 {
 	int	fd;
@@ -83,7 +81,7 @@ static int	handle_output_redirect(t_input *tmp, t_vault *vault)
 	return (1);
 }
 
-void	tmp_execute(t_input **input, t_vault *vault, int execute)
+void	tmp_execute(t_input **input, t_vault *vault, int x)
 {
 	t_input	*tmp;
 	int		flag;
@@ -94,20 +92,18 @@ void	tmp_execute(t_input **input, t_vault *vault, int execute)
 	flags = NULL;
 	while (tmp)
 	{
-		if (tmp->type == TOKEN)
-			;
-		else if (tmp->type == REDIRECT_INPUT && !handle_input_redirect(tmp, vault))
+		if (tmp->type == REDIRECT_INPUT && !handle_input_redirect(tmp, vault))
 			return ;
 		else if ((tmp->type == REDIRECT_OUTPUT || tmp->type == APPEND_OUTPUT)
 			&& !handle_output_redirect(tmp, vault))
 			return ;
 		else if (tmp->type == HEREDOC)
 			closed(heredoc(tmp->value), STDIN_FILENO);
-		else if ((tmp->type == COMMAND  || tmp->type == BUILTIN) && flag-- && execute)
+		else if ((tmp->type == COMMAND || tmp->type == BUILTIN) && flag-- && x)
 			flags = get_flags(input, tmp->value);
 		tmp = tmp->next;
 	}
-	if(execute)
+	if (x)
 		execute_command(input, flags, vault);
 	if (flags)
 	{

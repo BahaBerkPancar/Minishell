@@ -41,12 +41,16 @@ static int	set_types_helper(t_input **lst)
 				tmp->type = BUILTIN;
 			else if (is_flag(tmp->value))
 				tmp->type = FLAG;
-			else if (!ft_strcmp(tmp->value, ">>")
-				&& !set_token_type(lst, tmp->value, APPEND_OUTPUT))
-				return (0);
-			else if (!ft_strcmp(tmp->value, "<<")
-				&& !set_token_type(lst, tmp->value, HEREDOC))
-				return (0);
+			else if (!ft_strcmp(tmp->value, ">>"))
+			{
+				if (!set_token_type(lst, tmp->value, APPEND_OUTPUT))
+					return (0);
+			}
+			else if (!ft_strcmp(tmp->value, "<<"))
+			{
+				if (!set_token_type(lst, tmp->value, HEREDOC))
+					return (0);
+			}
 		}
 		tmp = tmp->next;
 	}
@@ -62,48 +66,55 @@ int	set_types(t_vault *vault, t_input **lst)
 	{
 		if (tmp->type == NONE)
 		{
-			if (!ft_strcmp(tmp->value, "|") && ft_strcmp(tmp->next->value, "|"))
+			if (!ft_strcmp(tmp->value, "|") && tmp->next
+				&& ft_strcmp(tmp->next->value, "|"))
 				tmp->type = PIPE;
-			else if (!ft_strcmp(tmp->value, ">")
-				&& !set_token_type(lst, tmp->value, REDIRECT_OUTPUT))
-				return (0);
-			else if (!ft_strcmp(tmp->value, "<")
-				&& !set_token_type(lst, tmp->value, REDIRECT_INPUT))
-				return (0);
-			else if (tmp->next && !ft_strcmp(tmp->value, "$")
-				&& !set_token_type(lst, tmp->next->value, VARIABLE))
-				return (0);
+			else if (!ft_strcmp(tmp->value, ">"))
+			{
+				if (!set_token_type(lst, tmp->value, REDIRECT_OUTPUT))
+					return (0);
+			}
+			else if (!ft_strcmp(tmp->value, "<"))
+			{
+				if (!set_token_type(lst, tmp->value, REDIRECT_INPUT))
+					return (0);
+			}
+			else if (tmp->next && !ft_strcmp(tmp->value, "$"))
+			{
+				if (!set_token_type(lst, tmp->next->value, VARIABLE))
+					return (0);
+			}
 			else if (tmp->is_quoted == false && is_executable(vault, tmp->value))
 				tmp->type = COMMAND;
 			else if (!is_builtin(tmp->value) && ft_strcmp(tmp->value, "<<")
 				&& ft_strcmp(tmp->value, ">>"))
-				tmp->type = ARGUMANT;
+				tmp->type = ARGUMENT;
 		}
 		tmp = tmp->next;
 	}
 	return (set_types_helper(lst));
 }
 
-int	set_quoted_types(t_vault *vault, t_input **lst) //////// $a a=ls
+int	set_quoted_types(t_vault *vault, t_input **lst)
 {
 	t_input	*tmp;
 
 	tmp = *lst;
-	while(tmp)
+	while (tmp)
 	{
-		if(tmp->type == ARGUMANT || tmp->type == VARIABLE)
+		if (tmp->type == ARGUMENT || tmp->type == VARIABLE)
 		{
-			if(tmp->is_variable == true && !set_variable_type(vault, lst))
+			if (tmp->is_variable && !set_variable_type(vault, lst))
 				return (0);
-			else if(tmp->is_quoted == true || tmp->is_doublequoted == true || tmp->is_variable == false)
+			else if (tmp->is_quoted || tmp->is_doublequoted || !tmp->is_variable)
 			{
-				if(is_executable(vault, tmp->value))
+				if (is_executable(vault, tmp->value))
 					tmp->type = COMMAND;
 				else
-					tmp->type = ARGUMANT;
+					tmp->type = ARGUMENT;
 			}
-			else if(tmp->is_variable == false)
-				tmp->type = ARGUMANT;
+			else if (!tmp->is_variable)
+				tmp->type = ARGUMENT;
 		}
 		tmp = tmp->next;
 	}
@@ -117,19 +128,19 @@ int	set_variable_type(t_vault *vault, t_input **lst)
 	tmp = *lst;
 	while (tmp)
 	{
-		if (tmp->type == TOKEN && tmp->next->is_variable == true)
+		if (tmp->type == TOKEN && tmp->next && tmp->next->is_variable)
 		{
 			if (!ft_strcmp(tmp->value, ">") || !ft_strcmp(tmp->value, ">>"))
 				tmp->next->type = REDIRECT_OUTPUT;
 			else if (!ft_strcmp(tmp->value, "<") || !ft_strcmp(tmp->value, "<<"))
 				tmp->next->type = REDIRECT_INPUT;
 		}
-		else if (tmp->is_variable == true && tmp->type == VARIABLE)
+		else if (tmp->is_variable && tmp->type == VARIABLE)
 		{
-			if (is_executable(vault, tmp->value) && tmp->is_quoted == false)
+			if (is_executable(vault, tmp->value) && !tmp->is_quoted)
 				tmp->type = COMMAND;
 			else
-				tmp->type = ARGUMANT;
+				tmp->type = ARGUMENT;
 		}
 		tmp = tmp->next;
 	}

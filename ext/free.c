@@ -2,7 +2,7 @@
 
 void	free_input(t_input *input)
 {
-	t_input *tmp;
+	t_input	*tmp;
 
 	while (input)
 	{
@@ -16,7 +16,7 @@ void	free_input(t_input *input)
 void	free_input_list(t_input **list)
 {
 	if (!list)
-		return;
+		return ;
 	free_input(*list);
 	free(list);
 }
@@ -26,8 +26,11 @@ void	free_pointer(char **pointer)
 	int	i;
 
 	i = 0;
-	while (pointer[i])
-		free(pointer[i++]);
+	while (pointer && pointer[i])
+	{
+		free(pointer[i]);
+		i++;
+	}
 	free(pointer);
 }
 
@@ -35,7 +38,7 @@ void	free_export(t_vault *vault)
 {
 	int	i;
 
-	if (!vault->export)
+	if (!vault || !vault->export)
 		return ;
 	i = 0;
 	while (vault->export[i])
@@ -52,7 +55,7 @@ void	free_parse(t_parse *parse)
 {
 	if (parse)
 	{
-		if(parse->token)
+		if (parse->token)
 		{
 			free(parse->token);
 			parse->token = NULL;
@@ -61,18 +64,18 @@ void	free_parse(t_parse *parse)
 	}
 }
 
-void free_vault(t_vault *vault)
+void	free_vault(t_vault *vault)
 {
-	if(vault->envp)
+	if (!vault)
+		return ;
+	if (vault->envp)
 		free_pointer(vault->envp);
-	if(vault)
-		free_export(vault);
-	// if(vault->home)
-	// free(vault->home);
-	if(vault->oldpwd)
+	free_export(vault);
+	// if (vault->home)
+	// 	free(vault->home);
+	if (vault->oldpwd)
 		free(vault->oldpwd);
-	if(vault->pwd)
+	if (vault->pwd)
 		free(vault->pwd);
-	if(vault)
-		free(vault);
+	free(vault);
 }

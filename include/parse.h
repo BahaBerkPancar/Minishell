@@ -16,7 +16,7 @@ typedef enum input_type{
 	APPEND_OUTPUT,
 	BUILTIN,
 	FLAG,
-	ARGUMANT,
+	ARGUMENT,
 	TOKEN,
 	VARIABLE
 }	t_InputType;
@@ -47,7 +47,5 @@ typedef struct s_vault
 	char	*home;
 	int		exit_status;
 }	t_vault;
-
-
 
 #endif

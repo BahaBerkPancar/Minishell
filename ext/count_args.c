@@ -2,8 +2,8 @@
 
 int	count_args(t_input *input)
 {
-	int count;
-	t_input *tmp;
+	int		count;
+	t_input	*tmp;
 
 	count = 0;
 	tmp = input->next;
@@ -12,5 +12,5 @@ int	count_args(t_input *input)
 		count++;
 		tmp = tmp->next;
 	}
-	return count;
+	return (count);
 }

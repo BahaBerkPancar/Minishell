@@ -24,7 +24,7 @@ t_input	*get_rid_of_dquotes(t_input **list)
 				final = ft_strjoin(final, ft_substr(remaining, 0, i));
 				remaining = ft_substr(remaining, i + 1, ft_strlen(remaining) - i);
 			}
-			if (ft_strlen(final) > 0)//////////////
+			if (ft_strlen(final) > 0)
 				tmp->value = final;
 			else
 				tmp->value = ft_strdup("\0");
@@ -37,14 +37,13 @@ t_input	*get_rid_of_dquotes(t_input **list)
 
 char	*seperate_dquotes(t_input **list, char *input, char *quoted)
 {
-	char *result;
+	char	*result;
 
 	if (!quoted || ft_strlen(quoted) == 0)
 	{
 		last_node(list, new_node(ft_strdup("\"\"")));
 		return (ft_strdup(input + 2));
 	}
-
 	if (quoted == NULL)
 		return (input);
 	result = ft_strdup(quoted);
@@ -53,7 +52,8 @@ char	*seperate_dquotes(t_input **list, char *input, char *quoted)
 	if (lstlast(*list))
 		lstlast(*list)->is_doublequoted = true;
 	if (ft_strncmp(input, quoted, ft_strlen(quoted)) == 0)
-		result = ft_substr(input, ft_strlen(quoted) + 1, ft_strlen(input) - ft_strlen(quoted) - 1);
+		result = ft_substr(input, ft_strlen(quoted) + 1,
+				ft_strlen(input) - ft_strlen(quoted) - 1);
 	else
 		result = ft_strdup(input);
 	return (result);
@@ -88,11 +88,12 @@ int	find_dquote_location(char *input)
 	}
 	return (0);
 }
+
 char	*doublequote_check(char *temp)
 {
 	int		i;
 	int		j;
-	char 	*tmp;
+	char	*tmp;
 	char	*old_tmp;
 
 	while (dquote_count(temp) > 2)

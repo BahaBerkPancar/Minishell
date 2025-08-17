@@ -8,10 +8,10 @@ void	delete_node(t_input **head, t_input *remove)
 		return ;
 	if (*head == remove)
 	{
-		if(remove->next)
+		if (remove->next)
 		{
 			*head = remove->next;
-			// free(remove);
+			free(remove);
 		}
 		return ;
 	}
