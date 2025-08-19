@@ -52,7 +52,7 @@ void	replace_variables(t_input **final, t_vault *vault)
 	{
 		if (tmp->value[0] == '$' && ft_strcmp(tmp->value, "$") != 0)
 		{
-			add_after(tmp, new_node(tmp->value + 1));
+			add_after(tmp, new_node(ft_strdup(tmp->value + 1)));
 			tmp->next->type = VARIABLE;
 			tmp->next->is_variable = true;
 			free(tmp->value);

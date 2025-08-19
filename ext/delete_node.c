@@ -8,12 +8,10 @@ void	delete_node(t_input **head, t_input *remove)
 		return ;
 	if (*head == remove)
 	{
-		if (remove->next)
-		{
-			*head = remove->next;
-			free(remove);
-		}
-		return ;
+		*head = remove->next;
+		free(remove->value);
+		free(remove);
+		return;
 	}
 	prev = *head;
 	while (prev && prev->next != remove)
@@ -21,8 +19,10 @@ void	delete_node(t_input **head, t_input *remove)
 	if (!prev)
 		return ;
 	prev->next = remove->next;
+	free(remove->value);
 	free(remove);
 }
+
 
 void	add_after(t_input *head, t_input *new)
 {

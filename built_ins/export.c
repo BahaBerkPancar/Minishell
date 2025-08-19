@@ -168,13 +168,13 @@ int	export(t_input **final, t_vault *vault)
 	int		status;
 
 	tmp = *final;
-	if (!tmp->next)
+	if ((tmp->next && (tmp->next->type == PIPE || tmp->next->type == TOKEN)) || !tmp->next)
 		return (print_export(vault), 0);
 	tmp = tmp->next;
 	status = 0;
 	while (tmp)
 	{
-		if (!is_valid_identifier(tmp->value))
+		if (tmp->type != PIPE && tmp->type != TOKEN && !is_valid_identifier(tmp->value))
 		{
 			printf("minishell: export: '%s': not a valid identifier\n", tmp->value);
 			status = 1;

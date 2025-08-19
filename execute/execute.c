@@ -5,8 +5,8 @@ void	execute(char *path, char **flags, t_vault *vault)
 	// printf("Executing: %s\n", path);
 	if(execve(path, flags, vault->envp) == -1)
 	{
+		free_pointer(flags);
 		printf("Command not fou1nd\n");
-		// free_pointer(flags);
 		exit_ms(vault, 127);
 	}
 	exit(1);
@@ -109,10 +109,12 @@ int	real_execute(t_input **input, t_vault *vault)
 {
 	pid_t	pid;
 
+	if (!pipe_count(input) && execute_builtin_in_main(input, vault))
+		return (1);
 	if (pipe_count(input))
 	{
 		pid = fork();
-		if(pid == 0)
+		if (pid == 0)
 			execute_pipe(input, vault, *input, -1);
 		else
 			waitpid(pid, NULL, 0);
@@ -127,4 +129,3 @@ int	real_execute(t_input **input, t_vault *vault)
 	}
 	return (1);
 }
-

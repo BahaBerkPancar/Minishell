@@ -1,6 +1,6 @@
 #include "../include/minishell.h"
 
-void	builtin(t_input **input, char **flags, t_vault *vault)
+void	builtin(t_input **input, char **flags, t_vault *vault, int x)
 {
 	int		i;
 
@@ -34,12 +34,12 @@ void	builtin(t_input **input, char **flags, t_vault *vault)
 	}
 	else if (ft_strcmp(flags[0], "exit") == 0 && ft_strlen(flags[0]) == 4)
 		exit_ms(vault, 0);
-	
-	// if(ft_strcmp(flags[0], "cd") != 0)
-	// {
-	// 	free_pointer(flags);
-	// 	exit_ms(vault, 1);	
-	// }
-	// free_pointer(flags);
+	if(x)
+	{
+		free_pointer(flags);
+		free_input_list(input);
+		free_vault(vault);
+		exit_ms(vault, 0);
+	}
 	return ;
 }

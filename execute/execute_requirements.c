@@ -3,15 +3,15 @@
 void	execute_command(t_input **input, char **flags, t_vault *vault)
 {
 	if (flags && is_builtin(flags[0]))
-		builtin(input, flags, vault);
+		builtin(input, flags, vault, 1);
 	else if (flags && is_executable(vault, flags[0]) && !is_builtin(flags[0]))
 		execute(set_path(vault, flags[0]), flags, vault);
 	else
 	{
-		// free_pointer(flags);
-		// free_input_list(input);
-		// free_vault(vault);
-		printf("Command not found\n");
+		free_pointer(flags);
+		free_input_list(input);
+		free_vault(vault);
+		printf("Command not fo1und\n");
 		exit_ms(vault, 127);
 	}
 }
@@ -79,6 +79,43 @@ static int	handle_output_redirect(t_input *tmp, t_vault *vault)
 	}
 	closed(fd, STDOUT_FILENO);
 	return (1);
+}
+
+bool is_main_builtin(const char *cmd)
+{
+	return (ft_strcmp(cmd, "cd") == 0
+		|| ft_strcmp(cmd, "export") == 0
+		|| ft_strcmp(cmd, "unset") == 0
+		|| ft_strcmp(cmd, "exit") == 0);
+}
+
+bool execute_builtin_in_main(t_input **input, t_vault *vault)
+{
+	t_input	*tmp;
+	char	**flags;
+	int		stdin_copy;
+	int		stdout_copy;
+
+	if (!input || !*input)
+		return (false);
+	tmp = *input;
+	while (tmp && tmp->type != COMMAND && tmp->type != BUILTIN)
+		tmp = tmp->next;
+	if (!tmp || !is_main_builtin(tmp->value))
+		return (false);
+	flags = get_flags(input, tmp->value);
+	if (!flags)
+		return (false);
+	stdin_copy = dup(STDIN_FILENO);
+	stdout_copy = dup(STDOUT_FILENO);
+	tmp_execute(input, vault, 0);
+	builtin(input, flags, vault, 0);
+	dup2(stdin_copy, STDIN_FILENO);
+	dup2(stdout_copy, STDOUT_FILENO);
+	close(stdin_copy);
+	close(stdout_copy);
+	free_pointer(flags);
+	return (true);
 }
 
 void	tmp_execute(t_input **input, t_vault *vault, int x)

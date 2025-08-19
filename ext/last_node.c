@@ -13,6 +13,8 @@ void	last_node(t_input **lst, t_input *new)
 {
 	t_input	*temp;
 
+	if (!new) // Prevent passing NULL node
+		return ;
 	if (!(*lst))
 	{
 		*lst = new;

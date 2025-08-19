@@ -18,6 +18,7 @@ int		real_execute(t_input **input, t_vault *vault);
 void	tmp_execute(t_input **input, t_vault *vault, int execute);
 void	execute(char *path, char **flags, t_vault *vault);
 void	execute_command(t_input **input, char **flags, t_vault *vault);
+bool	execute_builtin_in_main(t_input **input, t_vault *vault);
 
 int		count_args(t_input *input);
 int		pipe_count(t_input **input);
@@ -38,6 +39,7 @@ void	free_input_list(t_input **list);
 
 char	*vault_getenv(t_vault *vault, const char *name);
 
+bool	is_main_builtin(const char *cmd);
 bool	is_token(char *string);
 bool	is_flag(const char *arg);
 bool	is_builtin(char *string);
@@ -53,7 +55,7 @@ int		cd(char *path, t_vault *vault);
 void	echo(char **flags);
 int		unset(t_input **final, t_vault *vault);
 int		export(t_input **final, t_vault *vault);
-void	builtin(t_input **input, char **flags, t_vault *vault);
+void	builtin(t_input **input, char **flags, t_vault *vault, int x);
 
 int		dquote_count(char *input);
 int		squote_count(char *input);

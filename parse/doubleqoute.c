@@ -46,9 +46,7 @@ char	*seperate_dquotes(t_input **list, char *input, char *quoted)
 	}
 	if (quoted == NULL)
 		return (input);
-	result = ft_strdup(quoted);
-	last_node(list, new_node(ft_strdup(result)));
-	free(result);
+	last_node(list, new_node(ft_strdup(quoted)));
 	if (lstlast(*list))
 		lstlast(*list)->is_doublequoted = true;
 	if (ft_strncmp(input, quoted, ft_strlen(quoted)) == 0)

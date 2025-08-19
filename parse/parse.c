@@ -26,7 +26,8 @@ char	*handle_quotes(char *input, t_input **list, char *token)
 
 int	handle_tokens(char *input, t_input **list, t_parse *parse)
 {
-	int	x;
+	int		x;
+	t_input	*node;
 
 	x = 0;
 	if (*input == '>' || *input == '<' || *input == '|' || *input == '$')
@@ -38,7 +39,12 @@ int	handle_tokens(char *input, t_input **list, t_parse *parse)
 		else if (*input == '$' && input[1] == ' ')
 			x = 2;
 		parse->token = ft_substr(input, 0, x);
-		last_node(list, new_node(ft_strdup(parse->token)));
+		if (!parse->token)
+			return (x);
+		node = new_node(ft_strdup(parse->token));
+		if (!node)
+			return (free(parse->token), x);
+		last_node(list, node);
 	}
 	else
 		return (0);

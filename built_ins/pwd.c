@@ -48,9 +48,11 @@ int cd(char *path, t_vault *vault)
     free(vault->pwd);
     vault->pwd = getcwd(NULL, 0);
     tmp = ft_strjoin("OLDPWD=", vault->oldpwd);
+    printf("OLDPWD=%s\n", vault->oldpwd);
     update_or_add_var(tmp, vault);
     free(tmp);
     tmp = ft_strjoin("PWD=", vault->pwd);
+    printf("PWD=%s\n", vault->pwd);
     update_or_add_var(tmp, vault);
     free(tmp);
     if (owns_path)
