@@ -83,5 +83,7 @@ char	**get_path(t_vault *vault)
 	char	*path_env;
 
 	path_env = vault_getenv(vault, "PATH");
+	if (!path_env || !*path_env)
+		return (NULL);
 	return (ft_split(path_env, ':'));
 }

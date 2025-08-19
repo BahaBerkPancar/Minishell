@@ -28,7 +28,7 @@ void	builtin(t_input **input, char **flags, t_vault *vault, int x)
 		export(input, vault);
 	else if(ft_strcmp(flags[0], "unset") == 0 && ft_strlen(flags[0]) == 5)
 		unset(input, vault);
-	else if (ft_strcmp(flags[0], "env") == 0 && ft_strlen(flags[0]) == 3)
+	else if (ft_strcmp(flags[0], "env") == 0 && ft_strlen(flags[0]) == 3 && !flags[1])
 	{
 		while (vault->envp[i])
 			printf("%s\n", vault->envp[i++]);

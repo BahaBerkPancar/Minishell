@@ -1,39 +1,52 @@
 #include "../include/minishell.h"
 
+static char	*remove_double_quotes(char *str)
+{
+	char	*final;
+	char	*remaining;
+	char	*temp;
+	char	*joined;
+	int		i;
+
+	final = ft_strdup("");
+	remaining = str;
+	while (*remaining)
+	{
+		i = 0;
+		while (remaining[i] != '\"' && remaining[i])
+			i++;
+		temp = ft_substr(remaining, 0, i);
+		joined = ft_strjoin(final, temp);
+		free(temp);
+		free(final);
+		final = joined;
+		if (remaining[i])
+			i++;  // Skip the quote
+		temp = remaining;
+		remaining = ft_strdup(remaining + i);
+		free(temp);
+	}
+	return (final);
+}
 t_input	*get_rid_of_dquotes(t_input **list)
 {
 	t_input	*tmp;
-	char	*final;
-	char	*remaining;
-	int		i;
+	char	*new_value;
 
 	tmp = *list;
 	while (tmp)
 	{
-		final = ft_strdup("");
-		if (ft_strchr(tmp->value, '\"'))
-			tmp->value = ft_strtrim(tmp->value, "\"");
-		if (ft_strchr(tmp->value, '\"'))
+		if (ft_strchr(tmp->value, '\"') && tmp->is_doublequoted && !tmp->is_quoted)
 		{
-			remaining = tmp->value;
-			while (*remaining)
-			{
-				i = 0;
-				while (remaining[i] != '\"' && remaining[i])
-					i++;
-				final = ft_strjoin(final, ft_substr(remaining, 0, i));
-				remaining = ft_substr(remaining, i + 1, ft_strlen(remaining) - i);
-			}
-			if (ft_strlen(final) > 0)
-				tmp->value = final;
-			else
-				tmp->value = ft_strdup("\0");
+			new_value = remove_double_quotes(tmp->value);
+			// free(tmp->value); // Uncomment if you're sure value needs freeing
+			tmp->value = new_value;
 		}
 		tmp = tmp->next;
-		free(final);
 	}
 	return (*list);
 }
+
 
 char	*seperate_dquotes(t_input **list, char *input, char *quoted)
 {

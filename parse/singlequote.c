@@ -1,87 +1,87 @@
 #include "../include/minishell.h"
 
-// static char	*remove_single_quotes(char *str)
-// {
-// 	char	*final;
-// 	char	*remaining;
-// 	char	*temp;
-// 	char	*joined;
-// 	int		i;
+static char	*remove_single_quotes(char *str)
+{
+	char	*final;
+	char	*remaining;
+	char	*temp;
+	char	*joined;
+	int		i;
 
-// 	final = ft_strdup("");
-// 	remaining = str;
-// 	while (*remaining)
-// 	{
-// 		i = 0;
-// 		while (remaining[i] != '\'' && remaining[i])
-// 			i++;
-// 		temp = ft_substr(remaining, 0, i);
-// 		joined = ft_strjoin(final, temp);
-// 		free(temp);
-// 		free(final);
-// 		final = joined;
-// 		if (remaining[i])
-// 			i++;
-// 		temp = remaining;
-// 		remaining = ft_strdup(remaining + i);
-// 		free(temp);
-// 	}
-// 	return (final);
-// }
-
-// t_input	*get_rid_of_squotes(t_input **list)
-// {
-// 	t_input	*tmp;
-// 	char	*new_value;
-
-// 	tmp = *list;
-// 	while (tmp)
-// 	{
-// 		if (ft_strchr(tmp->value, '\''))
-// 		{
-// 			new_value = remove_single_quotes(tmp->value);
-// 			// free(tmp->value);
-// 			tmp->value = new_value;
-// 		}
-// 		tmp = tmp->next;
-// 	}
-// 	return (*list);
-// }
+	final = ft_strdup("");
+	remaining = str;
+	while (*remaining)
+	{
+		i = 0;
+		while (remaining[i] != '\'' && remaining[i])
+			i++;
+		temp = ft_substr(remaining, 0, i);
+		joined = ft_strjoin(final, temp);
+		free(temp);
+		free(final);
+		final = joined;
+		if (remaining[i])
+			i++;
+		temp = remaining;
+		remaining = ft_strdup(remaining + i);
+		free(temp);
+	}
+	return (final);
+}
 
 t_input	*get_rid_of_squotes(t_input **list)
 {
 	t_input	*tmp;
-	char	*final;
-	char	*remaining;
-	int		i;
+	char	*new_value;
 
 	tmp = *list;
 	while (tmp)
 	{
-		final = ft_strdup("");
-		if (ft_strchr(tmp->value, '\''))
-			tmp->value = ft_strtrim(tmp->value, "'");
-		if (ft_strchr(tmp->value, '\''))
+		if (ft_strchr(tmp->value, '\'') && tmp->is_quoted && !tmp->is_doublequoted)
 		{
-			remaining = tmp->value;
-			while (*remaining)
-			{
-				i = 0;
-				while (remaining[i] != '\'' && remaining[i])
-					i++;
-				final = ft_strjoin(final, ft_substr(remaining, 0, i));
-				remaining = ft_substr(remaining, i + 1, ft_strlen(remaining) - i);
-			}
-			if (ft_strlen(final) > 0)
-				tmp->value = final;
-			else
-				tmp->value = ft_strdup("\0");
+			new_value = remove_single_quotes(tmp->value);
+			// free(tmp->value);
+			tmp->value = new_value;
 		}
 		tmp = tmp->next;
-		free(final);
 	}
 	return (*list);
 }
+
+// t_input	*get_rid_of_squotes(t_input **list)
+// {
+// 	t_input	*tmp;
+// 	char	*final;
+// 	char	*remaining;
+// 	int		i;
+
+// 	tmp = *list;
+// 	while (tmp)
+// 	{
+// 		final = ft_strdup("");
+// 		if (ft_strchr(tmp->value, '\''))
+// 			tmp->value = ft_strtrim(tmp->value, "'");
+// 		if (ft_strchr(tmp->value, '\''))
+// 		{
+// 			remaining = tmp->value;
+// 			while (*remaining)
+// 			{
+// 				i = 0;
+// 				while (remaining[i] != '\'' && remaining[i])
+// 					i++;
+// 				final = ft_strjoin(final, ft_substr(remaining, 0, i));
+// 				remaining = ft_substr(remaining, i + 1, ft_strlen(remaining) - i);
+// 			}
+// 			if (ft_strlen(final) > 0)
+// 				tmp->value = final;
+// 			else
+// 				tmp->value = ft_strdup("\0");
+// 		}
+// 		tmp = tmp->next;
+// 		free(final);
+// 	}
+// 	return (*list);
+// }
 
 char	*seperate_squotes(t_input **list, char *input, char *quoted)
 {

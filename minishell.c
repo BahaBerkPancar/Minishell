@@ -49,6 +49,7 @@ int	set_necesery_type(t_input **final, t_vault *vault)
 	get_rid_of_dquotes(final);
 	replace_variables(final, vault);
 	get_rid_of_squotes(final);
+	ft_lstprint(*final);
 	if (!set_quoted_types(vault, final))
 		return ((void)printf("SYNTAX ERROR\n"), set_exit_status(vault, 1), 0);
 	if (*final && (*final)->type == ARGUMENT && (*final)->is_variable == false)
@@ -75,11 +76,11 @@ int main(int ac, char **av, char *envp[])
 			return(free(a), free_vault(vault), exit(0), 0);
 		add_history(a);
 		final = parse(a, start_parse(NULL));
+		ft_lstprint(*final);
 		if (!final || !*final)
 			continue;
 		if (!set_necesery_type(final, vault))
 			continue;
-		// ft_lstprint(*final);
 		real_execute(final, vault);
 		if(final)
 			free_input_list(final);
