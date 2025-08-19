@@ -21,7 +21,15 @@ static void	handle_variable(t_input **final, t_input **tmp, t_vault *vault)
 	char		*env_value;
 	t_input		*to_delete;
 
-	if (ft_strcmp((*tmp)->value, "$") == 0 && ft_strlen((*tmp)->value) == 1)
+	if (ft_strcmp((*tmp)->value, "$") == 0 && ft_strlen((*tmp)->value) == 1 && ft_strcmp((*tmp)->next->value, "?") == 0 && ft_strlen((*tmp)->next->value) == 1)
+	{
+		free((*tmp)->next->value);
+		(*tmp)->next->value = ft_itoa(vault->exit_status);
+		to_delete = *tmp;
+		*tmp = (*tmp)->next;
+		delete_node(final, to_delete);
+	}
+	else if (ft_strcmp((*tmp)->value, "$") == 0 && ft_strlen((*tmp)->value) == 1)
 	{
 		env_value = get_env_value((*tmp)->next->value, vault->envp);
 		if (env_value)

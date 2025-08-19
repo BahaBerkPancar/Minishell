@@ -19,30 +19,50 @@ void	free_split(char **arr)
 	free(arr);
 }
 
-bool	is_executable(t_vault *vault, char *string)
+char *remove_slash(const char *path)
+{
+	int		len;
+	char	*copy;
+
+	if (!path)
+		return (NULL);
+	copy = ft_strdup(path);
+	if (!copy)
+		return (NULL);
+	len = ft_strlen(copy);
+	if (len > 1 && copy[len - 1] == '/')
+		copy[len - 1] = '\0';
+	return (copy);
+}
+
+
+bool is_executable(t_vault *vault, char *string)
 {
 	char	**paths;
 	char	*full_path;
+	char	*tmp;
 	int		i;
 
-	i = 0;
+	i = -1;
 	if (!string || !*string)
 		return (false);
-	if (ft_strchr(string, '/') && access(string, X_OK) == 0)
-		return (true);
+	tmp = remove_slash(string);
+	if (!tmp)
+		return (false);
+	if (ft_strchr(tmp, '/') && access(tmp, X_OK) == 0)
+		return (free(tmp), true);
 	paths = get_path(vault);
 	if (!paths)
-		return (false);
-	while (paths[i])
+		return (free(tmp), false);
+	while (paths[++i])
 	{
 		full_path = ft_strjoin(paths[i], "/");
-		full_path = ft_strjoin_free(full_path, string);
+		full_path = ft_strjoin_free(full_path, tmp);
 		if (!full_path)
-			return (free_split(paths), false);
+			return (free_split(paths), free(tmp), false);
 		if (access(full_path, X_OK) == 0)
-			return (free(full_path), free_split(paths), true);
+			return (free(full_path), free_split(paths), free(tmp), true);
 		free(full_path);
-		i++;
 	}
-	return (free_split(paths), false);
+	return (free_split(paths), free(tmp), false);
 }
