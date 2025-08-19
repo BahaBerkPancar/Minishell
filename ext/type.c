@@ -132,8 +132,10 @@ int	set_variable_type(t_vault *vault, t_input **lst)
 		{
 			if (!ft_strcmp(tmp->value, ">") || !ft_strcmp(tmp->value, ">>"))
 				tmp->next->type = REDIRECT_OUTPUT;
-			else if (!ft_strcmp(tmp->value, "<") || !ft_strcmp(tmp->value, "<<"))
+			else if (!ft_strcmp(tmp->value, "<") && ft_strlen(tmp->value) == 1)
 				tmp->next->type = REDIRECT_INPUT;
+			else if (!ft_strcmp(tmp->value, "<< ") && ft_strlen(tmp->value) == 2)
+				tmp->next->type = HEREDOC;
 		}
 		else if (tmp->is_variable && tmp->type == VARIABLE)
 		{

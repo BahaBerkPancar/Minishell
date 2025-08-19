@@ -9,6 +9,7 @@ void	builtin(t_input **input, char **flags, t_vault *vault, int x)
 		echo(flags);
 	else if(ft_strcmp(flags[0], "cd") == 0 && ft_strlen(flags[0]) == 2)
 	{
+		// printf("Executing cd with flags: %s\n", flags[1]);
 		if (flags[1] && !flags[2])
 			cd(flags[1], vault);
 		else if(!flags[1])

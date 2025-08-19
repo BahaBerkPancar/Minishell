@@ -11,7 +11,7 @@ void	execute_command(t_input **input, char **flags, t_vault *vault)
 		free_pointer(flags);
 		free_input_list(input);
 		free_vault(vault);
-		printf("Command not fo1und\n");
+		printf("Command not found\n");
 		exit_ms(vault, 127);
 	}
 }
@@ -134,8 +134,14 @@ void	tmp_execute(t_input **input, t_vault *vault, int x)
 		else if ((tmp->type == REDIRECT_OUTPUT || tmp->type == APPEND_OUTPUT)
 			&& !handle_output_redirect(tmp, vault))
 			return ;
-		else if (tmp->type == HEREDOC)
-			closed(heredoc(tmp->value), STDIN_FILENO);
+		else if (tmp->type == TOKEN && ft_strcmp(tmp->value, "<<") == 0)
+		{
+			if (tmp->next && tmp->next->type == HEREDOC)
+			{
+				heredoc(tmp->next->value, 1, input, vault);
+				tmp = tmp->next;
+			}
+		}
 		else if ((tmp->type == COMMAND || tmp->type == BUILTIN) && flag-- && x)
 			flags = get_flags(input, tmp->value);
 		tmp = tmp->next;

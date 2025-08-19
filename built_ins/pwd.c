@@ -17,6 +17,7 @@ int cd(char *path, t_vault *vault)
     char *tmp;
     bool owns_path = false;      
 
+    // printf("Changing directory to: %s\n", path);
     tmp = ft_strdup(path);               
     path = ft_strtrim(tmp, " /");
     free(tmp);
