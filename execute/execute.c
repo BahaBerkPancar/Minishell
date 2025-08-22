@@ -66,30 +66,57 @@ char **build_argv_until_pipe(t_input **node, int i, int count)
 	return (argv);
 }
 
+bool	has_command_until_pipe(t_input *node)
+{
+	while (node)
+	{
+		if (node->value && node->value[0] == '|')
+			break;
+		if (node->value && node->type == COMMAND)
+			return true;
+		node = node->next;
+	}
+	return false;
+}
+
+void	child_process(t_input **input, t_input *tmp, t_vault *vault, int prev_read_end, int pipe_fds[2])
+{
+	char	**flags;
+ 
+	flags = NULL;
+	if(!has_command_until_pipe(tmp))
+	{
+		printf("command not found\n");
+		tmp_execute(&tmp, vault, 0);
+		free_input_list(input);
+		free_vault(vault);
+		close(pipe_fds[0]);
+		close(pipe_fds[1]);
+		exit(127);
+	}
+	closed(prev_read_end, 0);
+	if (has_next_pipe(tmp))
+		dup2(pipe_fds[1], 1);
+	close(pipe_fds[0]);
+	close(pipe_fds[1]);
+	tmp_execute(&tmp, vault, 0);
+	flags = build_argv_until_pipe(&tmp, 0, 0);
+	execute_command(input, flags, vault);
+	free_pointer(flags);
+}
 
 int execute_pipe(t_input **input, t_vault *vault, t_input *tmp, int	prev_read_end)
 {
 	pid_t	pid;
 	int		pipe_fds[2];
 	int		status;
-	char	**flags;
- 
+
 	while (tmp)
 	{
 		pipe(pipe_fds);
 		pid = fork();
 		if (pid == 0)
-		{
-			closed(prev_read_end, 0);
-			if (has_next_pipe(tmp))
-				dup2(pipe_fds[1], 1);
-			close(pipe_fds[0]);
-			close(pipe_fds[1]);
-			tmp_execute(input, vault, 0);
-			flags = build_argv_until_pipe(&tmp, 0, 0);
-			execute_command(input, flags, vault);
-			free_pointer(flags);
-		}
+			child_process(input, tmp, vault, prev_read_end, pipe_fds);
 		else if (pid > 0)
 		{
 			close(pipe_fds[1]);
@@ -115,9 +142,15 @@ int	real_execute(t_input **input, t_vault *vault)
 	{
 		pid = fork();
 		if (pid == 0)
+		{
 			execute_pipe(input, vault, *input, -1);
+			free_input_list(input);
+			free_vault(vault);
+			exit(127);
+		}
 		else
 			waitpid(pid, NULL, 0);
+	
 	}
 	else if (pipe_count(input) == 0)
 	{
@@ -127,5 +160,6 @@ int	real_execute(t_input **input, t_vault *vault)
 		else
 			waitpid(pid, NULL, 0);
 	}
+
 	return (1);
 }

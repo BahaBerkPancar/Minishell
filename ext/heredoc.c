@@ -53,7 +53,7 @@ int	wait_child(pid_t pid, t_vault *vault)
 	return (0);
 }
 
-void	heredoc(char *delimiter, int built_in, t_input **final, t_vault *vault)
+void	heredoc(char *delimiter, t_input **final, t_vault *vault, char **flags)
 {
 	int		fd[2];
 	pid_t	pid;
@@ -67,16 +67,18 @@ void	heredoc(char *delimiter, int built_in, t_input **final, t_vault *vault)
 		g_signal_exit = 1;
 		close(fd[0]);
 		if(heredoc_read_write(&fd[1], str, 0) == -1)
+		{
+			free_pointer(flags);
 			exit(0);
+		}
 		close(fd[1]);
+		free_pointer(flags);
 		exit(0);
 	}
 	else
 	{
 		close(fd[1]);
 		if (wait_child(pid, vault) == 130)
-			return ;
-		if (built_in == 0)
-			dup2(fd[0], 0);
+			return (free_pointer(flags));
 	}
 }

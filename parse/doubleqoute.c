@@ -21,13 +21,15 @@ static char	*remove_double_quotes(char *str)
 		free(final);
 		final = joined;
 		if (remaining[i])
-			i++;  // Skip the quote
+			i++;
 		temp = remaining;
 		remaining = ft_strdup(remaining + i);
 		free(temp);
 	}
+	free(remaining);
 	return (final);
 }
+
 t_input	*get_rid_of_dquotes(t_input **list)
 {
 	t_input	*tmp;
@@ -39,8 +41,8 @@ t_input	*get_rid_of_dquotes(t_input **list)
 		if (ft_strchr(tmp->value, '\"') && tmp->is_doublequoted && !tmp->is_quoted)
 		{
 			new_value = remove_double_quotes(tmp->value);
-			// free(tmp->value); // Uncomment if you're sure value needs freeing
-			tmp->value = new_value;
+			tmp->value = ft_strdup(new_value);
+			free(new_value);
 		}
 		tmp = tmp->next;
 	}
@@ -52,6 +54,7 @@ char	*seperate_dquotes(t_input **list, char *input, char *quoted)
 {
 	char	*result;
 
+	result = NULL;
 	if (!quoted || ft_strlen(quoted) == 0)
 	{
 		last_node(list, new_node(ft_strdup("\"\"")));
@@ -63,8 +66,7 @@ char	*seperate_dquotes(t_input **list, char *input, char *quoted)
 	if (lstlast(*list))
 		lstlast(*list)->is_doublequoted = true;
 	if (ft_strncmp(input, quoted, ft_strlen(quoted)) == 0)
-		result = ft_substr(input, ft_strlen(quoted) + 1,
-				ft_strlen(input) - ft_strlen(quoted) - 1);
+		result = ft_substr(input, ft_strlen(quoted) + 1, ft_strlen(input) - ft_strlen(quoted) - 1);
 	else
 		result = ft_strdup(input);
 	return (result);
@@ -107,6 +109,7 @@ char	*doublequote_check(char *temp)
 	char	*tmp;
 	char	*old_tmp;
 
+	
 	while (dquote_count(temp) > 2)
 	{
 		old_tmp = temp;

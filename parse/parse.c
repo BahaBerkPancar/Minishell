@@ -20,7 +20,10 @@ char	*handle_quotes(char *input, t_input **list, char *token)
 		if (quoted == NULL)
 			return (NULL);
 		result = seperate_squotes(list, input, quoted);
+		free(quoted);
 	}
+	if(!result)
+		return (free(input), NULL);
 	return (result);
 }
 
@@ -89,5 +92,7 @@ t_input	**parse(char *input, t_parse *parse)
 		free(parse->token);
 		parse->token = NULL;
 	}
+	// if(input && !*input)
+	// 	free(input);//
 	return (free_parse(parse), list);
 }

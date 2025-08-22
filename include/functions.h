@@ -46,7 +46,7 @@ bool	is_builtin(char *string);
 bool	is_executable(t_vault *vault, char *string);
 
 int		ft_strcmp(const char *s1, const char *s2);
-void	heredoc(char *delimiter, int built_in, t_input **final, t_vault *vault);
+void	heredoc(char *delimiter, t_input **final, t_vault *vault, char **flags);
 
 void	closed(int fd, int fd1);
 void	set_exit_status(t_vault *vault, int exit_status);

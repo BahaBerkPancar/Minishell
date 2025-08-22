@@ -12,7 +12,7 @@ void	execute_command(t_input **input, char **flags, t_vault *vault)
 		free_input_list(input);
 		free_vault(vault);
 		printf("Command not found\n");
-		exit_ms(vault, 127);
+		exit(127);
 	}
 }
 
@@ -35,8 +35,7 @@ static char	**get_flags(t_input **input, char *cmd)
 		return (NULL);
 	flags[i++] = ft_strdup(cmd);
 	tmp = tmp->next;
-	while (tmp && tmp->type != PIPE && tmp->type != COMMAND
-		&& tmp->type != BUILTIN && tmp->type != TOKEN)
+	while (tmp && tmp->type != PIPE && tmp->type != TOKEN)
 	{
 		flags[i++] = ft_strdup(tmp->value);
 		tmp = tmp->next;
@@ -127,7 +126,7 @@ void	tmp_execute(t_input **input, t_vault *vault, int x)
 	tmp = *input;
 	flag = 1;
 	flags = NULL;
-	while (tmp)
+	while (tmp && tmp->type != PIPE)
 	{
 		if (tmp->type == REDIRECT_INPUT && !handle_input_redirect(tmp, vault))
 			return ;
@@ -136,11 +135,8 @@ void	tmp_execute(t_input **input, t_vault *vault, int x)
 			return ;
 		else if (tmp->type == TOKEN && ft_strcmp(tmp->value, "<<") == 0)
 		{
-			if (tmp->next && tmp->next->type == HEREDOC)
-			{
-				heredoc(tmp->next->value, 1, input, vault);
-				tmp = tmp->next;
-			}
+			heredoc(tmp->next->value, input, vault, flags);
+			tmp = tmp->next;
 		}
 		else if ((tmp->type == COMMAND || tmp->type == BUILTIN) && flag-- && x)
 			flags = get_flags(input, tmp->value);
@@ -148,9 +144,4 @@ void	tmp_execute(t_input **input, t_vault *vault, int x)
 	}
 	if (x)
 		execute_command(input, flags, vault);
-	if (flags)
-	{
-		free_pointer(flags);
-		flags = NULL;
-	}
 }

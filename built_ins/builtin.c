@@ -40,7 +40,7 @@ void	builtin(t_input **input, char **flags, t_vault *vault, int x)
 		free_pointer(flags);
 		free_input_list(input);
 		free_vault(vault);
-		exit_ms(vault, 0);
+		exit(0);
 	}
 	return ;
 }
