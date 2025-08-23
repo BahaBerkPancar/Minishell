@@ -6,7 +6,7 @@
 /*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:52:56 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/24 00:42:39 by bpancar          ###   ########.fr       */
+/*   Updated: 2025/08/24 01:51:14 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	heredoc_read_write(int *fd, char *delimiter, int heredoc_status)
 
 	while (1)
 	{
-		input = readline("> ");
+		input = readline("> burdayim");
 		if (!input)
 		{
 			heredoc_status = -1;

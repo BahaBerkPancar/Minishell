@@ -6,7 +6,7 @@
 /*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:30:48 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/24 01:09:57 by bpancar          ###   ########.fr       */
+/*   Updated: 2025/08/24 02:20:38 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ int	main(int ac, char **av, char *envp[])
 		}
 		if (!set_necesery_type(final, vault))
 			continue ;
+		ft_lstprint(*final);
 		real_execute(final, vault);
 		if (final)
 			free_input_list(final);

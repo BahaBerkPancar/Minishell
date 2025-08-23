@@ -6,7 +6,7 @@
 /*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:59:31 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/24 01:16:13 by bpancar          ###   ########.fr       */
+/*   Updated: 2025/08/24 02:47:21 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,28 +15,29 @@
 char	*handle_quotes(char *input, t_input **list, char *token)
 {
 	char	*quoted;
-	char	*result;
+	char	*next;
 
-	result = NULL;
-	if (ft_strchr(token, '\"'))
+	quoted = (NULL);
+	next = (NULL);
+	if ((token[0] == '\"' && token[ft_strlen(token)-1] == '\"'))
 	{
 		quoted = doublequote_check(ft_strdup(input));
-		if (quoted == NULL)
+		if (!quoted)
 			return (NULL);
-		result = seperate_dquotes(list, input, quoted);
+		next = seperate_dquotes(list, input, quoted);
 		free(quoted);
 	}
-	else if (ft_strchr(token, '\''))
+	else if ((token[0] == '\'' && token[ft_strlen(token)-1] == '\''))
 	{
 		quoted = singlequote_check(ft_strdup(input));
-		if (quoted == NULL)
+		if (!quoted)
 			return (NULL);
-		result = seperate_squotes(list, input, quoted);
+		next = seperate_squotes(list, input, quoted);
 		free(quoted);
 	}
-	if (!result)
-		return (free(input), NULL);
-	return (result);
+	else
+		return (input);
+	return (next);
 }
 
 int	handle_tokens(char *input, t_input **list, t_parse *parse)
@@ -96,7 +97,7 @@ t_input	**parse(char *input, t_parse *parse)
 	list = init_input_list();
 	while (*input)
 	{
-		if (*input == ' ')
+		if (*input == ' ' || *input == '\t')
 			input++;
 		else if (*input == '>' || *input == '<'
 			|| *input == '|' || *input == '$')

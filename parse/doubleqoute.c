@@ -6,7 +6,7 @@
 /*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:56:57 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/24 01:12:44 by bpancar          ###   ########.fr       */
+/*   Updated: 2025/08/24 02:47:06 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,25 +63,27 @@ t_input	*get_rid_of_dquotes(t_input **list)
 
 char	*seperate_dquotes(t_input **list, char *input, char *quoted)
 {
-	char	*result;
+	size_t	qlen;
+	size_t	ilen;
 
-	result = NULL;
-	if (!quoted || ft_strlen(quoted) == 0)
+	qlen = ft_strlen(quoted);
+	ilen = ft_strlen(input);
+	if (!quoted || qlen == 0)
 	{
 		last_node(list, new_node(ft_strdup("\"\"")));
-		return (ft_strdup(input + 2));
+		return (input + 2);
 	}
-	if (quoted == NULL)
-		return (input);
 	last_node(list, new_node(ft_strdup(quoted)));
 	if (lstlast(*list))
 		lstlast(*list)->is_doublequoted = true;
-	if (ft_strncmp(input, quoted, ft_strlen(quoted)) == 0)
-		result = ft_substr(input, ft_strlen(quoted) + 1,
-				ft_strlen(input) - ft_strlen(quoted) - 1);
-	else
-		result = ft_strdup(input);
-	return (result);
+	if (ft_strncmp(input, quoted, qlen) == 0)
+	{
+		if (ilen > qlen + 1)
+			return (input + qlen + 1);
+		else
+			return (input + ilen);
+	}
+	return (input);
 }
 
 int	find_dquote_location(char *input)

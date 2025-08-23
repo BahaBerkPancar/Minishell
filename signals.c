@@ -6,7 +6,7 @@
 /*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:37:25 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/24 00:43:09 by bpancar          ###   ########.fr       */
+/*   Updated: 2025/08/24 01:45:07 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ void	handle_sigint(int sig)
 	if (g_signal_exit == 0 || g_signal_exit == 130)
 	{
 		write(1, "\n", 1);
-		rl_on_new_line();
 		rl_replace_line("", 0);
+		rl_on_new_line();
 		rl_redisplay();
 	}
 	else if (g_signal_exit == 2)

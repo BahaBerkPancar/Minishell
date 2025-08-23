@@ -6,7 +6,7 @@
 /*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:49:21 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/24 01:02:14 by bpancar          ###   ########.fr       */
+/*   Updated: 2025/08/24 01:55:08 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void	redir_execute(t_input **input, t_vault *vault, int x)
 		else if ((tmp->type == REDIRECT_OUTPUT || tmp->type == APPEND_OUTPUT)
 			&& !handle_output_redirect(input, tmp, vault, flags))
 			return ;
-		else if (tmp->type == TOKEN && ft_strcmp(tmp->value, "<<") == 0)
+		else if (tmp->type == TOKEN && ft_strcmp(tmp->value, "<<") == 0 && ft_strlen(tmp->value) == 2)
 		{
 			heredoc(tmp->next->value, input, vault, flags);
 			tmp = tmp->next;

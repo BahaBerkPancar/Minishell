@@ -6,7 +6,7 @@
 /*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 00:00:44 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/24 01:13:59 by bpancar          ###   ########.fr       */
+/*   Updated: 2025/08/24 02:47:41 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,12 @@ t_input	*get_rid_of_squotes(t_input **list)
 	tmp = *list;
 	while (tmp)
 	{
-		if (ft_strchr(tmp->value, '\'')
-			&& tmp->is_quoted && !tmp->is_doublequoted)
+		if (ft_strchr(tmp->value, '\'') && tmp->is_quoted
+			&& !tmp->is_doublequoted)
 		{
 			new_value = remove_single_quotes(tmp->value, 0);
-			tmp->value = ft_strdup(new_value);
-			free(new_value);
+			free(tmp->value);
+			tmp->value = new_value;
 		}
 		tmp = tmp->next;
 	}
@@ -63,26 +63,26 @@ t_input	*get_rid_of_squotes(t_input **list)
 
 char	*seperate_squotes(t_input **list, char *input, char *quoted)
 {
-	char	*result;
+	size_t	qlen;
+	size_t	ilen;
 
-	if (!quoted || ft_strlen(quoted) == 0)
+	qlen = ft_strlen(quoted);
+	ilen = ft_strlen(input);
+	if (!quoted || qlen == 0)
 	{
 		last_node(list, new_node(ft_strdup("''")));
-		return (ft_strdup(input + 2));
+		return (input + 2);
 	}
-	if (quoted == NULL)
-		return (input);
-	result = ft_strdup(quoted);
-	last_node(list, new_node(ft_strdup(result)));
-	free(result);
+	last_node(list, new_node(ft_strdup(quoted)));
 	if (lstlast(*list))
 		lstlast(*list)->is_quoted = true;
-	if (ft_strncmp(input, quoted, ft_strlen(quoted)) == 0)
-		result = ft_substr(input, ft_strlen(quoted) + 1,
-				ft_strlen(input) - ft_strlen(quoted) - 1);
-	else
-		result = ft_strdup(input);
-	return (result);
+	if (ft_strncmp(input, quoted, qlen) == 0)
+	{
+		if (ilen > qlen + 1)
+			return (input + qlen + 1);
+		return (input + ilen);
+	}
+	return (input);
 }
 
 int	find_squote_location(char *input)
