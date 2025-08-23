@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: skalkan <skalkan@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/23 23:39:06 by skalkan           #+#    #+#             */
+/*   Updated: 2025/08/23 23:41:56 by skalkan          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 static void	handle_cd(char **flags, t_vault *vault)
@@ -30,15 +42,7 @@ static void	handle_env(t_vault *vault)
 	}
 }
 
-static void	cleanup_and_exit(t_input **input, char **flags, t_vault *vault)
-{
-	free_pointer(flags);
-	free_input_list(input);
-	free_vault(vault);
-	exit(0);
-}
-
-int is_number(const char *str)
+int	is_number(const char *str)
 {
 	if (*str == '-' || *str == '+')
 		str++;
@@ -52,7 +56,6 @@ int is_number(const char *str)
 	}
 	return (1);
 }
-
 
 void	builtin(t_input **input, char **flags, t_vault *vault, int x)
 {
@@ -71,7 +74,7 @@ void	builtin(t_input **input, char **flags, t_vault *vault, int x)
 		handle_env(vault);
 	else if (ft_strcmp(flags[0], "exit") == 0 && ft_strlen(flags[0]) == 4)
 	{
-		if(flags[1] && flags[2])
+		if (flags[1] && flags[2])
 			printf("minishell: exit: too many arguments\n");
 		else if (flags[1] && !flags[2])
 		{
@@ -83,7 +86,6 @@ void	builtin(t_input **input, char **flags, t_vault *vault, int x)
 				cleanup_and_exit(input, flags, vault);
 			}
 		}
-
 	}
 	if (x)
 		cleanup_and_exit(input, flags, vault);

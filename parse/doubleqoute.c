@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   doubleqoute.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: skalkan <skalkan@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/23 23:56:57 by skalkan           #+#    #+#             */
+/*   Updated: 2025/08/24 00:16:10 by skalkan          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 static char	*remove_double_quotes(char *str)
@@ -38,7 +50,8 @@ t_input	*get_rid_of_dquotes(t_input **list)
 	tmp = *list;
 	while (tmp)
 	{
-		if (ft_strchr(tmp->value, '\"') && tmp->is_doublequoted && !tmp->is_quoted)
+		if (ft_strchr(tmp->value, '\"')
+			&& tmp->is_doublequoted && !tmp->is_quoted)
 		{
 			new_value = remove_double_quotes(tmp->value);
 			tmp->value = ft_strdup(new_value);
@@ -48,7 +61,6 @@ t_input	*get_rid_of_dquotes(t_input **list)
 	}
 	return (*list);
 }
-
 
 char	*seperate_dquotes(t_input **list, char *input, char *quoted)
 {
@@ -66,7 +78,8 @@ char	*seperate_dquotes(t_input **list, char *input, char *quoted)
 	if (lstlast(*list))
 		lstlast(*list)->is_doublequoted = true;
 	if (ft_strncmp(input, quoted, ft_strlen(quoted)) == 0)
-		result = ft_substr(input, ft_strlen(quoted) + 1, ft_strlen(input) - ft_strlen(quoted) - 1);
+		result = ft_substr(input, ft_strlen(quoted) + 1,
+				ft_strlen(input) - ft_strlen(quoted) - 1);
 	else
 		result = ft_strdup(input);
 	return (result);
@@ -109,7 +122,6 @@ char	*doublequote_check(char *temp)
 	char	*tmp;
 	char	*old_tmp;
 
-	
 	while (dquote_count(temp) > 2)
 	{
 		old_tmp = temp;

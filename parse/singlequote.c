@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   singlequote.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: skalkan <skalkan@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/24 00:00:44 by skalkan           #+#    #+#             */
+/*   Updated: 2025/08/24 00:01:05 by skalkan          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 static char	*remove_single_quotes(char *str)
@@ -38,7 +50,8 @@ t_input	*get_rid_of_squotes(t_input **list)
 	tmp = *list;
 	while (tmp)
 	{
-		if (ft_strchr(tmp->value, '\'') && tmp->is_quoted && !tmp->is_doublequoted)
+		if (ft_strchr(tmp->value, '\'')
+			&& tmp->is_quoted && !tmp->is_doublequoted)
 		{
 			new_value = remove_single_quotes(tmp->value);
 			tmp->value = ft_strdup(new_value);

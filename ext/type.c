@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   type.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: skalkan <skalkan@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/23 23:54:15 by skalkan           #+#    #+#             */
+/*   Updated: 2025/08/23 23:55:49 by skalkan          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 static int	set_token_type(t_input **lst, char *value, t_InputType type)
@@ -81,14 +93,15 @@ int	set_types(t_vault *vault, t_input **lst)
 				tmp->type = PIPE;
 			else if (!ft_strcmp(tmp->value, ">")
 				&& !set_token_type(lst, tmp->value, REDIRECT_OUTPUT))
-				return ( 0);
+				return (0);
 			else if (!ft_strcmp(tmp->value, "<")
 				&& !set_token_type(lst, tmp->value, REDIRECT_INPUT))
 				return (0);
 			else if (tmp->next && !ft_strcmp(tmp->value, "$")
 				&& !set_token_type(lst, tmp->next->value, VARIABLE))
 				return (0);
-			else if (tmp->is_quoted == false && is_executable(vault, tmp->value))
+			else if (tmp->is_quoted == false
+				&& is_executable(vault, tmp->value))
 				tmp->type = COMMAND;
 		}
 		tmp = tmp->next;
@@ -107,7 +120,8 @@ int	set_quoted_types(t_vault *vault, t_input **lst)
 		{
 			if (tmp->is_variable && !set_variable_type(vault, lst))
 				return (0);
-			else if (tmp->is_quoted || tmp->is_doublequoted || !tmp->is_variable)
+			else if (tmp->is_quoted || tmp->is_doublequoted
+				|| !tmp->is_variable)
 			{
 				if (is_executable(vault, tmp->value))
 					tmp->type = COMMAND;
@@ -135,7 +149,8 @@ int	set_variable_type(t_vault *vault, t_input **lst)
 				tmp->next->type = REDIRECT_OUTPUT;
 			else if (!ft_strcmp(tmp->value, "<") && ft_strlen(tmp->value) == 1)
 				tmp->next->type = REDIRECT_INPUT;
-			else if (!ft_strcmp(tmp->value, "<< ") && ft_strlen(tmp->value) == 2)
+			else if (!ft_strcmp(tmp->value, "<< ")
+				&& ft_strlen(tmp->value) == 2)
 				tmp->next->type = HEREDOC;
 		}
 		else if (tmp->is_variable && tmp->type == VARIABLE)

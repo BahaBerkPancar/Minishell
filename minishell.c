@@ -1,10 +1,20 @@
-#include "../include/minishell.h"
-#include <stdlib.h>
-#include <string.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: skalkan <skalkan@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/23 23:30:48 by skalkan           #+#    #+#             */
+/*   Updated: 2025/08/23 23:35:44 by skalkan          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-t_vault *init_vault(char **envp, int count, int i)
+#include "../include/minishell.h"
+
+t_vault	*init_vault(char **envp, int count, int i)
 {
-	t_vault *vault;
+	t_vault	*vault;
 
 	vault = malloc(sizeof(t_vault));
 	if (!vault)
@@ -22,7 +32,7 @@ t_vault *init_vault(char **envp, int count, int i)
 	{
 		vault->envp[i] = strdup(envp[i]);
 		if (!vault->envp[i])
-			return(free_vault(vault), NULL);
+			return (free_vault(vault), NULL);
 	}
 	vault->envp[count] = NULL;
 	update_or_add_var("SHELL=minishell", vault);
@@ -43,20 +53,22 @@ t_parse	*start_parse(t_parse *parse)
 int	set_necesery_type(t_input **final, t_vault *vault)
 {
 	if (!set_types(vault, final))
-		return ((void)printf("SYNTAX ERROR\n"),free_input_list(final), set_exit_status(vault, 1), 0);
+		return ((void)printf("SYNTAX ERROR\n"), free_input_list(final),
+			set_exit_status(vault, 1), 0);
 	get_rid_of_dquotes(final);
 	replace_variables(final, vault);
 	get_rid_of_squotes(final);
 	if (!set_quoted_types(vault, final))
-		return ((void)printf("SYNTAX ERROR\n"),free_input_list(final), set_exit_status(vault, 1), 0);
+		return ((void)printf("SYNTAX ERROR\n"), free_input_list(final),
+			set_exit_status(vault, 1), 0);
 	return (1);
 }
 
-int main(int ac, char **av, char *envp[])
+int	main(int ac, char **av, char *envp[])
 {
-	char    *a;
-	t_input **final;
-	t_vault *vault;
+	char	*a;
+	t_input	**final;
+	t_vault	*vault;
 
 	if (ac != 1 || !av)
 		return ((void)printf("NO ARGUMENTS ALLOWED\n"), exit(0), 0);
@@ -68,27 +80,26 @@ int main(int ac, char **av, char *envp[])
 		g_signal_exit = 0;
 		a = readline("MINISHELL : ");
 		if (!a)
-			return(free(a), free_vault(vault), exit(0), 0);
+			return (free(a), free_vault(vault), exit(0), 0);
 		add_history(a);
 		if (dquote_count(a) % 2 == 1 || squote_count(a) % 2 == 1)
 		{
 			free(a);
 			printf("SYNTAX ERROR\n");
-			continue;
+			continue ;
 		}
 		final = parse(a, start_parse(NULL));
 		if (!final || !*final)
 		{
 			free_input_list(final);
-			continue;
+			continue ;
 		}
 		if (!set_necesery_type(final, vault))
-			continue;
+			continue ;
 		real_execute(final, vault);
-		if(final)
+		if (final)
 			free_input_list(final);
 	}
 	rl_clear_history();
-	return 0;
+	return (0);
 }
-

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   functions.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: skalkan <skalkan@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/24 00:01:50 by skalkan           #+#    #+#             */
+/*   Updated: 2025/08/24 00:01:59 by skalkan          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FUNCTIONS_H
 # define FUNCTIONS_H
 
@@ -28,7 +40,7 @@ int		find_char(char *input, char c);
 void	replace_variables(t_input **final, t_vault *vault);
 char	**sort_export(char **envp);
 int		is_valid_identifier(char *str);
-int	is_valid_identifier_export(char *str);
+int		is_valid_identifier_export(char *str);
 
 void	print_export(t_vault *vault);
 char	**add_to_export(char *var, t_vault *vault);
@@ -57,6 +69,7 @@ void	heredoc(char *delimiter, t_input **final, t_vault *vault, char **flags);
 
 void	closed(int fd, int fd1);
 void	set_exit_status(t_vault *vault, int exit_status);
+void	cleanup_and_exit(t_input **input, char **flags, t_vault *vault);
 
 int		pwd(void);
 int		cd(char *path, t_vault *vault);

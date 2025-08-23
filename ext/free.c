@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: skalkan <skalkan@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/23 23:51:55 by skalkan           #+#    #+#             */
+/*   Updated: 2025/08/24 00:14:30 by skalkan          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 void	free_input(t_input *input)
@@ -11,14 +23,6 @@ void	free_input(t_input *input)
 		free(input);
 		input = tmp;
 	}
-}
-
-void	free_input_list(t_input **list)
-{
-	if (!list)
-		return ;
-	free_input(*list);
-	free(list);
 }
 
 void	free_pointer(char **pointer)
@@ -71,8 +75,6 @@ void	free_vault(t_vault *vault)
 	if (vault->envp)
 		free_pointer(vault->envp);
 	free_export(vault);
-	// if (vault->home)
-	// 	free(vault->home);
 	if (vault->oldpwd)
 		free(vault->oldpwd);
 	if (vault->pwd)

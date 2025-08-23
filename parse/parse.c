@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: skalkan <skalkan@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/23 23:59:31 by skalkan           #+#    #+#             */
+/*   Updated: 2025/08/24 00:00:36 by skalkan          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 char	*handle_quotes(char *input, t_input **list, char *token)
@@ -22,7 +34,7 @@ char	*handle_quotes(char *input, t_input **list, char *token)
 		result = seperate_squotes(list, input, quoted);
 		free(quoted);
 	}
-	if(!result)
+	if (!result)
 		return (free(input), NULL);
 	return (result);
 }
@@ -76,7 +88,8 @@ t_input	**parse(char *input, t_parse *parse)
 	{
 		if (*input == ' ')
 			input++;
-		else if (*input == '>' || *input == '<' || *input == '|' || *input == '$')
+		else if (*input == '>' || *input == '<'
+			|| *input == '|' || *input == '$')
 			input += handle_tokens(input, list, parse);
 		else
 		{
@@ -92,7 +105,5 @@ t_input	**parse(char *input, t_parse *parse)
 		free(parse->token);
 		parse->token = NULL;
 	}
-	// if(input && !*input)
-	// 	free(input);//
 	return (free_parse(parse), list);
 }
