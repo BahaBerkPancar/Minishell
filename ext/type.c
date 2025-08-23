@@ -14,7 +14,7 @@ static int	set_token_type(t_input **lst, char *value, t_InputType type)
 			tmp->next->type = VARIABLE;
 			tmp->next->is_variable = true;
 		}
-		if (!ft_strcmp(tmp->value, value) && tmp->type == NONE)
+		if (!ft_strcmp(tmp->value, value) && tmp->type == NONE)/////
 		{
 			tmp->type = TOKEN;
 			if (tmp->next && !is_token(tmp->next->value)
@@ -28,7 +28,18 @@ static int	set_token_type(t_input **lst, char *value, t_InputType type)
 	return (1);
 }
 
-static int	set_types_helper(t_input **lst)
+int	type_check(t_input *lst)
+{
+	while (lst)
+	{
+		if (lst->type == NONE)
+			return (0);
+		lst = lst->next;
+	}
+	return (1);
+}
+
+static int	set_builtin_redirect_type(t_input **lst)
 {
 	t_input	*tmp;
 
@@ -41,20 +52,19 @@ static int	set_types_helper(t_input **lst)
 				tmp->type = BUILTIN;
 			else if (is_flag(tmp->value))
 				tmp->type = FLAG;
-			else if (!ft_strcmp(tmp->value, ">>"))
-			{
-				if (!set_token_type(lst, tmp->value, APPEND_OUTPUT))
-					return (0);
-			}
-			else if (!ft_strcmp(tmp->value, "<<"))
-			{
-				if (!set_token_type(lst, tmp->value, HEREDOC))
-					return (0);
-			}
+			else if (!ft_strcmp(tmp->value, ">>")
+				&& !set_token_type(lst, tmp->value, APPEND_OUTPUT))
+				return (0);
+			else if (!ft_strcmp(tmp->value, "<<")
+				&& !set_token_type(lst, tmp->value, HEREDOC))
+				return (0);
+			else if (!is_builtin(tmp->value) && ft_strcmp(tmp->value, "<<")
+				&& ft_strcmp(tmp->value, ">>") && ft_strcmp(tmp->value, "|"))
+				tmp->type = ARGUMENT;
 		}
 		tmp = tmp->next;
 	}
-	return (1);
+	return (type_check(*lst));
 }
 
 int	set_types(t_vault *vault, t_input **lst)
@@ -69,30 +79,21 @@ int	set_types(t_vault *vault, t_input **lst)
 			if (!ft_strcmp(tmp->value, "|") && tmp->next
 				&& ft_strcmp(tmp->next->value, "|"))
 				tmp->type = PIPE;
-			else if (!ft_strcmp(tmp->value, ">"))
-			{
-				if (!set_token_type(lst, tmp->value, REDIRECT_OUTPUT))
-					return (0);
-			}
-			else if (!ft_strcmp(tmp->value, "<"))
-			{
-				if (!set_token_type(lst, tmp->value, REDIRECT_INPUT))
-					return (0);
-			}
-			else if (tmp->next && !ft_strcmp(tmp->value, "$"))
-			{
-				if (!set_token_type(lst, tmp->next->value, VARIABLE))
-					return (0);
-			}
+			else if (!ft_strcmp(tmp->value, ">")
+				&& !set_token_type(lst, tmp->value, REDIRECT_OUTPUT))
+				return ((void)printf("44\n"),  0);
+			else if (!ft_strcmp(tmp->value, "<")
+				&& !set_token_type(lst, tmp->value, REDIRECT_INPUT))
+				return (0);
+			else if (tmp->next && !ft_strcmp(tmp->value, "$")
+				&& !set_token_type(lst, tmp->next->value, VARIABLE))
+				return (0);
 			else if (tmp->is_quoted == false && is_executable(vault, tmp->value))
 				tmp->type = COMMAND;
-			else if (!is_builtin(tmp->value) && ft_strcmp(tmp->value, "<<")
-				&& ft_strcmp(tmp->value, ">>"))
-				tmp->type = ARGUMENT;
 		}
 		tmp = tmp->next;
 	}
-	return (set_types_helper(lst));
+	return (set_builtin_redirect_type(lst));
 }
 
 int	set_quoted_types(t_vault *vault, t_input **lst)

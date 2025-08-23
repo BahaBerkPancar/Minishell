@@ -1,6 +1,6 @@
 #include "../include/minishell.h"
 
-static int	is_valid_identifier(char *str)
+int	is_valid_identifier(char *str)
 {
 	if (!str || !*str)
 		return (0);
@@ -76,4 +76,26 @@ int	unset(t_input **final, t_vault *vault)
 		tmp = tmp->next;
 	}
 	return (status);
+}
+
+void	env_to_export(t_vault *vault)
+{
+	int		i;
+	char	**new_export;
+
+	i = 0;
+	while (vault->envp[i])
+	{
+		if (ft_strchr(vault->envp[i], '='))
+		{
+			new_export = add_to_export(vault->envp[i], vault);
+			if (new_export)
+			{
+				if (vault->export)
+					free_export(vault);
+				vault->export = sort_export(new_export);
+			}
+		}
+		i++;
+	}
 }

@@ -1,0 +1,13 @@
+b
+built_ins
+env
+execute
+ext
+include
+libft
+Makefile
+minishell
+minishell.c
+parse
+readline.supp
+signals.c

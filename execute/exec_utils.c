@@ -1,4 +1,5 @@
 #include "../include/minishell.h"
+#include <sys/stat.h>
 
 char	*ft_strjoin_free(char *s1, const char *s2)
 {
@@ -19,12 +20,12 @@ void	free_split(char **arr)
 	free(arr);
 }
 
-char *remove_slash(const char *path)
+char	*remove_slash(const char *path)
 {
 	int		len;
 	char	*copy;
 
-	if (!path)
+	if (!path || !*path)
 		return (NULL);
 	copy = ft_strdup(path);
 	if (!copy)
@@ -35,9 +36,7 @@ char *remove_slash(const char *path)
 	return (copy);
 }
 
-
-#include <sys/stat.h>
-bool is_executable(t_vault *vault, char *string)
+bool	is_executable(t_vault *vault, char *string)
 {
 	char		**paths;
 	char		*full_path;
@@ -46,16 +45,12 @@ bool is_executable(t_vault *vault, char *string)
 	struct stat	st;
 
 	i = -1;
-	if (!string || !*string)
-		return (false);
 	tmp = remove_slash(string);
 	if (!tmp)
 		return (false);
-	if (ft_strchr(tmp, '/'))
-	{
-		if (stat(tmp, &st) == 0 && S_ISREG(st.st_mode) && access(tmp, X_OK) == 0)
-			return (free(tmp), true);
-	}
+	if (ft_strchr(tmp, '/') && stat(tmp, &st) == 0
+		&& S_ISREG(st.st_mode) && access(tmp, X_OK) == 0)
+		return (free(tmp), true);
 	paths = get_path(vault);
 	if (!paths)
 		return (free(tmp), false);
@@ -65,9 +60,18 @@ bool is_executable(t_vault *vault, char *string)
 		full_path = ft_strjoin_free(full_path, tmp);
 		if (!full_path)
 			return (free_split(paths), free(tmp), false);
-		if (stat(full_path, &st) == 0 && S_ISREG(st.st_mode) && access(full_path, X_OK) == 0)
+		if (stat(full_path, &st) == 0 && S_ISREG(st.st_mode)
+			&& access(full_path, X_OK) == 0)
 			return (free(tmp), free_split(paths), free(full_path), true);
 		free(full_path);
 	}
 	return (free_split(paths), free(tmp), false);
+}
+
+bool	is_main_builtin(const char *cmd)
+{
+	return (ft_strcmp(cmd, "cd") == 0
+		|| ft_strcmp(cmd, "export") == 0
+		|| ft_strcmp(cmd, "unset") == 0
+		|| ft_strcmp(cmd, "exit") == 0);
 }

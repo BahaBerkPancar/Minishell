@@ -15,16 +15,23 @@ void	print_to_env(t_vault *vault, char *var);
 void	exit_ms(t_vault *vault, int exit_status);
 int		update_or_add_var(char *var, t_vault *vault);
 int		real_execute(t_input **input, t_vault *vault);
-void	tmp_execute(t_input **input, t_vault *vault, int execute);
+void	redir_execute(t_input **input, t_vault *vault, int x);
 void	execute(char *path, char **flags, t_vault *vault);
 void	execute_command(t_input **input, char **flags, t_vault *vault);
 bool	execute_builtin_in_main(t_input **input, t_vault *vault);
-
+char	**get_flags(t_input **input, char *cmd);
+bool	has_next_pipe(t_input *node);
+bool	has_command_until_pipe(t_input *node);
 int		count_args(t_input *input);
 int		pipe_count(t_input **input);
 int		find_char(char *input, char c);
 void	replace_variables(t_input **final, t_vault *vault);
+char	**sort_export(char **envp);
+int		is_valid_identifier(char *str);
+int	is_valid_identifier_export(char *str);
 
+void	print_export(t_vault *vault);
+char	**add_to_export(char *var, t_vault *vault);
 t_input	**parse(char *input, t_parse *parse);
 t_input	*lstlast(t_input *lst);
 t_input	*new_node(char *content);
@@ -73,7 +80,6 @@ void	free_input(t_input *input);
 void	free_export(t_vault *vault);
 void	free_pointer(char **pointer);
 
-int		signal_handler(int sig);
 void	handle_sigint(int sig);
 
 #endif
