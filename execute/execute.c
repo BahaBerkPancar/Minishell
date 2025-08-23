@@ -46,7 +46,7 @@ void	child_process(t_input **input, t_input *tmp, t_vault *vault, int prev_read_
 	char	**flags;
 
 	flags = NULL;
-	if (!has_command_until_pipe(tmp))
+	if (!has_command_until_pipe(tmp) || tmp->type == ARGUMENT)
 	{
 		printf("command not found\n");
 		redir_execute(&tmp, vault, 0);
@@ -119,7 +119,18 @@ int	real_execute(t_input **input, t_vault *vault)
 	{
 		pid = fork();
 		if (pid == 0)
+		{
+			if (!has_command_until_pipe(*input) || (*input)->type == ARGUMENT)
+			{
+				printf("command not found\n");
+				redir_execute(input, vault, 0);
+				free_input_list(input);
+				set_exit_status(vault, 127);
+				free_vault(vault);
+				exit(127);
+			}
 			redir_execute(input, vault, 1);
+		}
 		else
 			waitpid(pid, NULL, 0);
 	}

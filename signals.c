@@ -24,10 +24,7 @@ void	handle_sigint(int sig)
 		rl_on_new_line();
 	}
 	else if (g_signal_exit == 1)
-	{
-		
 		exit(0);
-	}
 	// set_exit_status_code(130);
 	g_signal_exit = 130;
 }

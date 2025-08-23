@@ -10,8 +10,8 @@ void	execute_command(t_input **input, char **flags, t_vault *vault)
 	{
 		free_pointer(flags);
 		free_input_list(input);
+		set_exit_status(vault, 127);
 		free_vault(vault);
-		printf("Command not found\n");
 		exit(127);
 	}
 }
@@ -75,7 +75,7 @@ bool	has_command_until_pipe(t_input *node)
 	{
 		if (node->value && node->value[0] == '|')
 			break ;
-		if (node->value && node->type == COMMAND)
+		if (node->value && (node->type == COMMAND || node->type == BUILTIN))
 			return (true);
 		node = node->next;
 	}

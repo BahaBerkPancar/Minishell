@@ -46,7 +46,6 @@ int	set_necesery_type(t_input **final, t_vault *vault)
 		return ((void)printf("SYNTAX ERROR\n"),free_input_list(final), set_exit_status(vault, 1), 0);
 	get_rid_of_dquotes(final);
 	replace_variables(final, vault);
-	ft_lstprint(*final);
 	get_rid_of_squotes(final);
 	if (!set_quoted_types(vault, final))
 		return ((void)printf("SYNTAX ERROR\n"),free_input_list(final), set_exit_status(vault, 1), 0);
@@ -71,7 +70,7 @@ int main(int ac, char **av, char *envp[])
 		if (!a)
 			return(free(a), free_vault(vault), exit(0), 0);
 		add_history(a);
-		if (dquote_count(a) % 2 == 1)
+		if (dquote_count(a) % 2 == 1 || squote_count(a) % 2 == 1)
 		{
 			free(a);
 			printf("SYNTAX ERROR\n");

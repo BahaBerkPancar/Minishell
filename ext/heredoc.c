@@ -57,26 +57,16 @@ void	heredoc(char *delimiter, t_input **final, t_vault *vault, char **flags)
 
 	pipe(fd);
 	pid = fork();
-	(void)final;
 	if (pid == 0)
 	{
 		str = cpy_heredock(delimiter);
 		g_signal_exit = 1;
 		close(fd[0]);
 		if(heredoc_read_write(&fd[1], str, 0) == -1)
-		{
-			free(str);
-			free_pointer(flags);
-			free_vault(vault);
-			// free_input_list(final);
-			exit(0);
-		}
-		free_vault(vault);
-		free(str);
-		close(fd[1]);
-		free_pointer(flags);
-		// free_input_list(final);
-		exit(0);
+			return((void)close(fd[1]), free(str), free_vault(vault),
+				free_input_list(final), free_pointer(flags), exit(0));
+		return((void)close(fd[1]),free_vault(vault), free(str),
+			free_input_list(final), free_pointer(flags), exit(0));
 	}
 	else
 	{

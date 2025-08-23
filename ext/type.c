@@ -14,7 +14,7 @@ static int	set_token_type(t_input **lst, char *value, t_InputType type)
 			tmp->next->type = VARIABLE;
 			tmp->next->is_variable = true;
 		}
-		if (!ft_strcmp(tmp->value, value) && tmp->type == NONE)/////
+		if (!ft_strcmp(tmp->value, value) && tmp->type == NONE)
 		{
 			tmp->type = TOKEN;
 			if (tmp->next && !is_token(tmp->next->value)
@@ -81,7 +81,7 @@ int	set_types(t_vault *vault, t_input **lst)
 				tmp->type = PIPE;
 			else if (!ft_strcmp(tmp->value, ">")
 				&& !set_token_type(lst, tmp->value, REDIRECT_OUTPUT))
-				return ((void)printf("44\n"),  0);
+				return ( 0);
 			else if (!ft_strcmp(tmp->value, "<")
 				&& !set_token_type(lst, tmp->value, REDIRECT_INPUT))
 				return (0);

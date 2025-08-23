@@ -38,6 +38,22 @@ static void	cleanup_and_exit(t_input **input, char **flags, t_vault *vault)
 	exit(0);
 }
 
+int is_number(const char *str)
+{
+	if (*str == '-' || *str == '+')
+		str++;
+	if (*str == '\0')
+		return (0);
+	while (*str)
+	{
+		if (!ft_isdigit((unsigned char)*str))
+			return (0);
+		str++;
+	}
+	return (1);
+}
+
+
 void	builtin(t_input **input, char **flags, t_vault *vault, int x)
 {
 	if (ft_strcmp(flags[0], "echo") == 0 && ft_strlen(flags[0]) == 4)
@@ -54,7 +70,21 @@ void	builtin(t_input **input, char **flags, t_vault *vault, int x)
 		&& !flags[1])
 		handle_env(vault);
 	else if (ft_strcmp(flags[0], "exit") == 0 && ft_strlen(flags[0]) == 4)
-		exit_ms(vault, 0);
+	{
+		if(flags[1] && flags[2])
+			printf("minishell: exit: too many arguments\n");
+		else if (flags[1] && !flags[2])
+		{
+			if (is_number(flags[1]))
+				exit_ms(vault, ft_atoi(flags[1]));
+			else
+			{
+				printf("minishell: exit: numeric argument required\n");
+				cleanup_and_exit(input, flags, vault);
+			}
+		}
+
+	}
 	if (x)
 		cleanup_and_exit(input, flags, vault);
 }

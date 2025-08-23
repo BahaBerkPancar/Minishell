@@ -59,7 +59,7 @@ int	cd(char *path, t_vault *vault)
 
 	owns_path = 0;
 	tmp = ft_strdup(path);
-	path = ft_strtrim(tmp, " /");
+	path = ft_strdup(tmp);
 	free(tmp);
 	owns_path = 1;
 	path = handle_home(path, vault, &owns_path);
