@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   temp.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skalkan <skalkan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 00:01:24 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/24 00:01:25 by skalkan          ###   ########.fr       */
+/*   Updated: 2025/08/24 00:46:08 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,38 @@ int	dollar_count(t_input **input)
 		if (ft_strcmp(tmp->value, "$") == 0)
 			count++;
 		tmp = tmp->next;
+	}
+	return (count);
+}
+
+int	dquote_count(char *input)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (input[i])
+	{
+		if (input[i] == '\"')
+			count++;
+		i++;
+	}
+	return (count);
+}
+
+int	squote_count(char *input)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (input[i])
+	{
+		if (input[i] == '\'')
+			count++;
+		i++;
 	}
 	return (count);
 }

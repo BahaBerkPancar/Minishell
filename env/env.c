@@ -3,64 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skalkan <skalkan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:44:33 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/23 23:46:16 by skalkan          ###   ########.fr       */
+/*   Updated: 2025/08/24 01:07:35 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-static char	*get_env_value(const char *name, char **envp)
-{
-	int	len;
-	int	i;
-
-	i = 0;
-	len = ft_strlen(name);
-	while (envp[i])
-	{
-		if (ft_strncmp(envp[i], name, len) == 0 && envp[i][len] == '=')
-			return (envp[i] + len + 1);
-		i++;
-	}
-	return (NULL);
-}
-
-static void	handle_variable(t_input **final, t_input **tmp, t_vault *vault)
-{
-	char		*env_value;
-	t_input		*to_delete;
-
-	if (ft_strcmp((*tmp)->value, "$") == 0 && ft_strlen((*tmp)->value) == 1
-		&& ft_strcmp((*tmp)->next->value, "?") == 0
-		&& ft_strlen((*tmp)->next->value) == 1)
-	{
-		free((*tmp)->next->value);
-		(*tmp)->next->value = ft_itoa(vault->exit_status);
-		to_delete = *tmp;
-		*tmp = (*tmp)->next;
-		delete_node(final, to_delete);
-	}
-	else if (ft_strcmp((*tmp)->value, "$") == 0
-		&& ft_strlen((*tmp)->value) == 1)
-	{
-		env_value = get_env_value((*tmp)->next->value, vault->envp);
-		if (env_value)
-		{
-			free((*tmp)->next->value);
-			(*tmp)->next->value = ft_strdup(env_value);
-		}
-		else
-			delete_node(final, (*tmp)->next);
-		to_delete = *tmp;
-		*tmp = (*tmp)->next;
-		delete_node(final, to_delete);
-	}
-	else
-		*tmp = (*tmp)->next;
-}
 
 void	replace_variables(t_input **final, t_vault *vault)
 {
@@ -82,4 +32,14 @@ void	replace_variables(t_input **final, t_vault *vault)
 		else
 			tmp = tmp->next;
 	}
+}
+
+void	cleanup_and_exit(t_input **input, char **flags, t_vault *vault,
+	int exit_status)
+{
+	free_pointer(flags);
+	free_input_list(input);
+	free_vault(vault);
+	set_exit_status_code(exit_status);
+	exit(*get_exit_status_code());
 }

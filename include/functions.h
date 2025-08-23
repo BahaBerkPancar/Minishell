@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skalkan <skalkan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/24 00:01:50 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/24 00:01:59 by skalkan          ###   ########.fr       */
+/*   Created: 2025/08/24 00:38:10 by bpancar           #+#    #+#             */
+/*   Updated: 2025/08/24 01:12:13 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ t_input	*get_rid_of_dquotes(t_input **list);
 t_input	*get_rid_of_squotes(t_input **list);
 void	add_after(t_input *head, t_input *new);
 void	print_to_env(t_vault *vault, char *var);
-void	exit_ms(t_vault *vault, int exit_status);
 int		update_or_add_var(char *var, t_vault *vault);
 int		real_execute(t_input **input, t_vault *vault);
 void	redir_execute(t_input **input, t_vault *vault, int x);
@@ -52,7 +51,7 @@ void	last_node(t_input **lst, t_input *new);
 void	delete_node(t_input **head, t_input *to_delete);
 
 char	**get_path(t_vault *vault);
-int		set_types(t_vault *vault, t_input **lst);
+int		set_types(t_vault *vault, t_input **lst, t_input *tmp);
 int		set_quoted_types(t_vault *vault, t_input **lst);
 void	free_input_list(t_input **list);
 
@@ -63,14 +62,16 @@ bool	is_token(char *string);
 bool	is_flag(const char *arg);
 bool	is_builtin(char *string);
 bool	is_executable(t_vault *vault, char *string);
-
+int		type_check(t_input *lst);
 int		ft_strcmp(const char *s1, const char *s2);
 void	heredoc(char *delimiter, t_input **final, t_vault *vault, char **flags);
 
 void	closed(int fd, int fd1);
-void	set_exit_status(t_vault *vault, int exit_status);
-void	cleanup_and_exit(t_input **input, char **flags, t_vault *vault);
+void	set_exit_status_code(int exit_code);
+int		*get_exit_status_code(void);
 
+void	cleanup_and_exit(t_input **input, char **flags, t_vault *vault,
+			int exit_status);
 int		pwd(void);
 int		cd(char *path, t_vault *vault);
 void	echo(char **flags);
@@ -87,6 +88,8 @@ int		find_squote_location(char *input);
 char	*seperate_dquotes(t_input **list, char *input, char *quoted);
 char	*seperate_squotes(t_input **list, char *input, char *quoted);
 
+void	handle_variable(t_input **final, t_input **tmp, t_vault *vault);
+
 void	free_parse(t_parse *parse);
 void	free_vault(t_vault *vault);
 void	free_input(t_input *input);
@@ -94,5 +97,7 @@ void	free_export(t_vault *vault);
 void	free_pointer(char **pointer);
 
 void	handle_sigint(int sig);
+int		wait_child(pid_t pid);
+int		is_number(const char *str);
 
 #endif

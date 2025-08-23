@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skalkan <skalkan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:59:31 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/24 00:00:36 by skalkan          ###   ########.fr       */
+/*   Updated: 2025/08/24 01:16:13 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,12 +78,22 @@ int	get_input(char *input, t_parse *parse)
 	return (len);
 }
 
-t_input	**parse(char *input, t_parse *parse)
+t_input	**init_input_list(void)
 {
 	t_input	**list;
 
 	list = malloc(sizeof(t_input *));
+	if (!list)
+		return (NULL);
 	*list = NULL;
+	return (list);
+}
+
+t_input	**parse(char *input, t_parse *parse)
+{
+	t_input	**list;
+
+	list = init_input_list();
 	while (*input)
 	{
 		if (*input == ' ')

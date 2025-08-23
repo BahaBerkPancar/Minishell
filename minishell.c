@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skalkan <skalkan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:30:48 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/23 23:35:44 by skalkan          ###   ########.fr       */
+/*   Updated: 2025/08/24 01:09:57 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,15 +52,15 @@ t_parse	*start_parse(t_parse *parse)
 
 int	set_necesery_type(t_input **final, t_vault *vault)
 {
-	if (!set_types(vault, final))
+	if (!set_types(vault, final, *final))
 		return ((void)printf("SYNTAX ERROR\n"), free_input_list(final),
-			set_exit_status(vault, 1), 0);
+			set_exit_status_code(2), 0);
 	get_rid_of_dquotes(final);
 	replace_variables(final, vault);
 	get_rid_of_squotes(final);
 	if (!set_quoted_types(vault, final))
 		return ((void)printf("SYNTAX ERROR\n"), free_input_list(final),
-			set_exit_status(vault, 1), 0);
+			set_exit_status_code(2), 0);
 	return (1);
 }
 
@@ -86,6 +86,7 @@ int	main(int ac, char **av, char *envp[])
 		{
 			free(a);
 			printf("SYNTAX ERROR\n");
+			set_exit_status_code(2);
 			continue ;
 		}
 		final = parse(a, start_parse(NULL));

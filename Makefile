@@ -18,9 +18,9 @@ LIBFT = libft/libft.a
 
 SRCS = parse/parse.c minishell.c ext/new_node.c ext/ft_lstprint.c ext/find_char.c execute/exec_utils.c\
 	ext/last_node.c ext/type.c ext/checks.c ext/ft_strcmp.c built_ins/pwd.c  execute/execute_helper.c\
-	parse/doubleqoute.c parse/singlequote.c ext/free.c parse/temp.c execute/execute.c env/set_path.c \
+	parse/doubleqoute.c parse/singlequote.c ext/free.c parse/count.c execute/execute.c env/set_path.c \
 	env/env.c ext/delete_node.c built_ins/export.c built_ins/unset.c ext/exit.c ext/heredoc.c \
-	built_ins/builtin.c built_ins/echo.c execute/execute_requirements.c ext/count_args.c signals.c built_ins/cd.c built_ins/export_utils.c
+	built_ins/builtin.c built_ins/echo.c execute/execute_requirements.c ext/count_args.c signals.c built_ins/cd.c built_ins/export_utils.c env/handle_variable.c
 
 OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)
 

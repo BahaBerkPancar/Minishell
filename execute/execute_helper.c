@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_helper.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skalkan <skalkan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:48:57 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/23 23:49:08 by skalkan          ###   ########.fr       */
+/*   Updated: 2025/08/24 00:41:24 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,7 @@ void	execute_command(t_input **input, char **flags, t_vault *vault)
 	else if (flags && is_executable(vault, flags[0]) && !is_builtin(flags[0]))
 		execute(set_path(vault, flags[0]), flags, vault);
 	else
-	{
-		free_pointer(flags);
-		free_input_list(input);
-		set_exit_status(vault, 127);
-		free_vault(vault);
-		exit(127);
-	}
+		cleanup_and_exit(input, NULL, vault, 127);
 }
 
 bool	execute_builtin_in_main(t_input **input, t_vault *vault)

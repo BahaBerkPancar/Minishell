@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skalkan <skalkan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:52:56 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/23 23:53:33 by skalkan          ###   ########.fr       */
+/*   Updated: 2025/08/24 00:42:39 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,20 +46,20 @@ static char	*cpy_heredock(char *str)
 	return (delimiter);
 }
 
-int	wait_child(pid_t pid, t_vault *vault)
+int	wait_child(pid_t pid)
 {
 	int		status;
 	pid_t	ended_pid;
 
-	set_exit_status(vault, 0);
+	set_exit_status_code(0);
 	ended_pid = wait(&status);
 	while (ended_pid > 0)
 	{
 		if (ended_pid == pid && WIFEXITED(status))
-			set_exit_status(vault, WEXITSTATUS(status));
+			set_exit_status_code(WEXITSTATUS(status));
 		ended_pid = wait(&status);
 	}
-	return (0);
+	return (*get_exit_status_code());
 }
 
 void	heredoc(char *delimiter, t_input **final, t_vault *vault, char **flags)
@@ -84,7 +84,7 @@ void	heredoc(char *delimiter, t_input **final, t_vault *vault, char **flags)
 	else
 	{
 		close(fd[1]);
-		if (wait_child(pid, vault) == 130)
+		if (wait_child(pid) == 130)
 			return (free_pointer(flags));
 		dup2(fd[0], STDIN_FILENO);
 	}

@@ -3,22 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   singlequote.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skalkan <skalkan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 00:00:44 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/24 00:01:05 by skalkan          ###   ########.fr       */
+/*   Updated: 2025/08/24 01:13:59 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static char	*remove_single_quotes(char *str)
+static char	*remove_single_quotes(char *str, int i)
 {
 	char	*final;
 	char	*remaining;
 	char	*temp;
 	char	*joined;
-	int		i;
 
 	final = ft_strdup("");
 	remaining = str;
@@ -53,7 +52,7 @@ t_input	*get_rid_of_squotes(t_input **list)
 		if (ft_strchr(tmp->value, '\'')
 			&& tmp->is_quoted && !tmp->is_doublequoted)
 		{
-			new_value = remove_single_quotes(tmp->value);
+			new_value = remove_single_quotes(tmp->value, 0);
 			tmp->value = ft_strdup(new_value);
 			free(new_value);
 		}
@@ -84,22 +83,6 @@ char	*seperate_squotes(t_input **list, char *input, char *quoted)
 	else
 		result = ft_strdup(input);
 	return (result);
-}
-
-int	squote_count(char *input)
-{
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	while (input[i])
-	{
-		if (input[i] == '\'')
-			count++;
-		i++;
-	}
-	return (count);
 }
 
 int	find_squote_location(char *input)

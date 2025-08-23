@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_char.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skalkan <skalkan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:51:46 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/23 23:51:47 by skalkan          ###   ########.fr       */
+/*   Updated: 2025/08/24 01:12:09 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,15 @@ int	find_char(char *input, char c)
 		i++;
 	}
 	return (i);
+}
+
+int	type_check(t_input *lst)
+{
+	while (lst)
+	{
+		if (lst->type == NONE)
+			return (0);
+		lst = lst->next;
+	}
+	return (1);
 }

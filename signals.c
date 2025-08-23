@@ -3,24 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skalkan <skalkan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:37:25 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/23 23:38:25 by skalkan          ###   ########.fr       */
+/*   Updated: 2025/08/24 00:43:09 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 int		g_signal_exit = 0;
-
-int	*get_exit_status_code(void)
-{
-	static int	exit_status_code;
-
-	exit_status_code = 0;
-	return (&exit_status_code);
-}
 
 void	handle_sigint(int sig)
 {

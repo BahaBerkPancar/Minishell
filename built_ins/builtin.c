@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skalkan <skalkan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:39:06 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/23 23:41:56 by skalkan          ###   ########.fr       */
+/*   Updated: 2025/08/24 00:47:57 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,19 +42,27 @@ static void	handle_env(t_vault *vault)
 	}
 }
 
-int	is_number(const char *str)
+void	handle_exit(char **flags, t_input **input, t_vault *vault)
 {
-	if (*str == '-' || *str == '+')
-		str++;
-	if (*str == '\0')
-		return (0);
-	while (*str)
+	printf("exit\n");
+	if (flags[1] && flags[2])
 	{
-		if (!ft_isdigit((unsigned char)*str))
-			return (0);
-		str++;
+		printf("minishell: exit: too many arguments\n");
+		set_exit_status_code(1);
+		return ;
 	}
-	return (1);
+	else if (flags[1])
+	{
+		if (is_number(flags[1]))
+			cleanup_and_exit(input, flags, vault, ft_atoi(flags[1]) % 256);
+		else
+		{
+			printf("minishell: exit: numeric argument required\n");
+			cleanup_and_exit(input, flags, vault, 255);
+		}
+	}
+	else
+		cleanup_and_exit(input, flags, vault, *get_exit_status_code());
 }
 
 void	builtin(t_input **input, char **flags, t_vault *vault, int x)
@@ -73,20 +81,7 @@ void	builtin(t_input **input, char **flags, t_vault *vault, int x)
 		&& !flags[1])
 		handle_env(vault);
 	else if (ft_strcmp(flags[0], "exit") == 0 && ft_strlen(flags[0]) == 4)
-	{
-		if (flags[1] && flags[2])
-			printf("minishell: exit: too many arguments\n");
-		else if (flags[1] && !flags[2])
-		{
-			if (is_number(flags[1]))
-				exit_ms(vault, ft_atoi(flags[1]));
-			else
-			{
-				printf("minishell: exit: numeric argument required\n");
-				cleanup_and_exit(input, flags, vault);
-			}
-		}
-	}
+		handle_exit(flags, input, vault);
 	if (x)
-		cleanup_and_exit(input, flags, vault);
+		cleanup_and_exit(input, flags, vault, 0);
 }

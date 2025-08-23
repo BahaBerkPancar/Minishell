@@ -3,33 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skalkan <skalkan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:49:48 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/23 23:49:49 by skalkan          ###   ########.fr       */
+/*   Updated: 2025/08/24 00:59:20 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	execute(char *path, char **flags, t_vault *vault)
+char	**build_argv_until_pipe(t_input **node, t_input *tmp, int i, int count)
 {
-	if (execve(path, flags, vault->envp) == -1)
-	{
-		free_pointer(flags);
-		printf("Command not found\n");
-		exit_ms(vault, 127);
-	}
-	exit(1);
-}
-
-char	**build_argv_until_pipe(t_input **node, int i, int count)
-{
-	t_input	*tmp;
 	t_input	*tmp1;
 	char	**argv;
 
-	tmp = *node;
 	tmp1 = tmp;
 	while (tmp1 && tmp1->type != PIPE)
 	{
@@ -74,7 +61,7 @@ void	child_process(t_input **input, t_input *tmp, t_vault *vault, int prev_read_
 	close(pipe_fds[0]);
 	close(pipe_fds[1]);
 	redir_execute(&tmp, vault, 0);
-	flags = build_argv_until_pipe(&tmp, 0, 0);
+	flags = build_argv_until_pipe(&tmp, tmp, 0, 0);
 	execute_command(input, flags, vault);
 	free_pointer(flags);
 }
@@ -108,6 +95,26 @@ int	execute_pipe(t_input **input, t_vault *vault, t_input *tmp,
 	return (0);
 }
 
+int	one_command_execute(t_input **input, t_vault *vault)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		if (!has_command_until_pipe(*input) || (*input)->type == ARGUMENT)
+		{
+			printf("command not found\n");
+			redir_execute(input, vault, 0);
+			cleanup_and_exit(input, NULL, vault, 127);
+		}
+		redir_execute(input, vault, 1);
+	}
+	else if (pid > 0)
+		wait_child(pid);
+	return (1);
+}
+
 int	real_execute(t_input **input, t_vault *vault)
 {
 	pid_t	pid;
@@ -120,31 +127,12 @@ int	real_execute(t_input **input, t_vault *vault)
 		if (pid == 0)
 		{
 			execute_pipe(input, vault, *input, -1);
-			free_input_list(input);
-			free_vault(vault);
-			exit(127);
+			cleanup_and_exit(input, NULL, vault, 127);
 		}
 		else
-			waitpid(pid, NULL, 0);
+			wait_child(pid);
 	}
 	else if (pipe_count(input) == 0)
-	{
-		pid = fork();
-		if (pid == 0)
-		{
-			if (!has_command_until_pipe(*input) || (*input)->type == ARGUMENT)
-			{
-				printf("command not found\n");
-				redir_execute(input, vault, 0);
-				free_input_list(input);
-				set_exit_status(vault, 127);
-				free_vault(vault);
-				exit(127);
-			}
-			redir_execute(input, vault, 1);
-		}
-		else
-			waitpid(pid, NULL, 0);
-	}
+		one_command_execute(input, vault);
 	return (1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   type.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skalkan <skalkan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:54:15 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/23 23:55:49 by skalkan          ###   ########.fr       */
+/*   Updated: 2025/08/24 01:10:53 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,6 @@ static int	set_token_type(t_input **lst, char *value, t_InputType type)
 	return (1);
 }
 
-int	type_check(t_input *lst)
-{
-	while (lst)
-	{
-		if (lst->type == NONE)
-			return (0);
-		lst = lst->next;
-	}
-	return (1);
-}
-
 static int	set_builtin_redirect_type(t_input **lst)
 {
 	t_input	*tmp;
@@ -79,11 +68,8 @@ static int	set_builtin_redirect_type(t_input **lst)
 	return (type_check(*lst));
 }
 
-int	set_types(t_vault *vault, t_input **lst)
+int	set_types(t_vault *vault, t_input **lst, t_input *tmp)
 {
-	t_input	*tmp;
-
-	tmp = *lst;
 	while (tmp)
 	{
 		if (tmp->type == NONE)
