@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skalkan <skalkan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:48:04 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/23 23:48:19 by skalkan          ###   ########.fr       */
+/*   Updated: 2025/08/24 03:47:18 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,12 @@ char	*remove_slash(const char *path)
 	return (copy);
 }
 
-bool	is_executable(t_vault *vault, char *string)
+bool	is_executable(t_vault *vault, char *string, char *full_path, int i)
 {
 	char		**paths;
-	char		*full_path;
 	char		*tmp;
-	int			i;
 	struct stat	st;
 
-	i = -1;
 	tmp = remove_slash(string);
 	if (!tmp)
 		return (false);

@@ -6,7 +6,7 @@
 /*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:51:46 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/24 01:12:09 by bpancar          ###   ########.fr       */
+/*   Updated: 2025/08/24 04:39:29 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,18 @@ int	type_check(t_input *lst)
 		if (lst->type == NONE)
 			return (0);
 		lst = lst->next;
+	}
+	return (1);
+}
+
+int	check_syntax(char *a)
+{
+	if (dquote_count(a) % 2 == 1 || squote_count(a) % 2 == 1)
+	{
+		free(a);
+		printf("SYNTAX ERROR\n");
+		set_exit_status_code(2);
+		return (0);
 	}
 	return (1);
 }

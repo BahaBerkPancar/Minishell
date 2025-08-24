@@ -6,7 +6,7 @@
 /*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 00:38:10 by bpancar           #+#    #+#             */
-/*   Updated: 2025/08/24 01:12:13 by bpancar          ###   ########.fr       */
+/*   Updated: 2025/08/24 03:56:14 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	add_after(t_input *head, t_input *new);
 void	print_to_env(t_vault *vault, char *var);
 int		update_or_add_var(char *var, t_vault *vault);
 int		real_execute(t_input **input, t_vault *vault);
-void	redir_execute(t_input **input, t_vault *vault, int x);
+void	redir_execute(t_input **input, t_vault *vault, int flag, int x);
 void	execute(char *path, char **flags, t_vault *vault);
 void	execute_command(t_input **input, char **flags, t_vault *vault);
 bool	execute_builtin_in_main(t_input **input, t_vault *vault);
@@ -56,12 +56,13 @@ int		set_quoted_types(t_vault *vault, t_input **lst);
 void	free_input_list(t_input **list);
 
 char	*vault_getenv(t_vault *vault, const char *name);
+void	signal_init(void);
 
 bool	is_main_builtin(const char *cmd);
 bool	is_token(char *string);
 bool	is_flag(const char *arg);
 bool	is_builtin(char *string);
-bool	is_executable(t_vault *vault, char *string);
+bool	is_executable(t_vault *vault, char *string, char *full_path, int i);
 int		type_check(t_input *lst);
 int		ft_strcmp(const char *s1, const char *s2);
 void	heredoc(char *delimiter, t_input **final, t_vault *vault, char **flags);

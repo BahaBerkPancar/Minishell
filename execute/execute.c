@@ -6,7 +6,7 @@
 /*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:49:48 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/24 01:54:37 by bpancar          ###   ########.fr       */
+/*   Updated: 2025/08/24 03:42:49 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ char	**build_argv_until_pipe(t_input **node, t_input *tmp, int i, int count)
 	return (argv);
 }
 
-void	child_process(t_input **input, t_input *tmp, t_vault *vault, int prev_read_end, int pipe_fds[2])
+void	child_process(t_input **input, t_input *tmp, t_vault *vault,
+		int pipe_fds[2])
 {
 	char	**flags;
 
@@ -48,26 +49,23 @@ void	child_process(t_input **input, t_input *tmp, t_vault *vault, int prev_read_
 	if (!has_command_until_pipe(tmp) || tmp->type == ARGUMENT)
 	{
 		printf("command not found\n");
-		redir_execute(&tmp, vault, 0);
-		free_input_list(input);
-		free_vault(vault);
+		redir_execute(&tmp, vault, 0, 0);
 		close(pipe_fds[0]);
 		close(pipe_fds[1]);
-		exit(127);
+		cleanup_and_exit(input, NULL, vault, 127);
 	}
-	closed(prev_read_end, 0);
+	closed(vault->prev_read_end, 0);
 	if (has_next_pipe(tmp))
 		dup2(pipe_fds[1], 1);
 	close(pipe_fds[0]);
 	close(pipe_fds[1]);
-	redir_execute(&tmp, vault, 0);
+	redir_execute(&tmp, vault, 0, 0);
 	flags = build_argv_until_pipe(&tmp, tmp, 0, 0);
 	execute_command(input, flags, vault);
 	free_pointer(flags);
 }
 
-int	execute_pipe(t_input **input, t_vault *vault, t_input *tmp,
-	int prev_read_end)
+int	execute_pipe(t_input **input, t_vault *vault, t_input *tmp)
 {
 	pid_t	pid;
 	int		pipe_fds[2];
@@ -78,12 +76,12 @@ int	execute_pipe(t_input **input, t_vault *vault, t_input *tmp,
 		pipe(pipe_fds);
 		pid = fork();
 		if (pid == 0)
-			child_process(input, tmp, vault, prev_read_end, pipe_fds);
+			child_process(input, tmp, vault, pipe_fds);
 		else if (pid > 0)
 		{
 			close(pipe_fds[1]);
-			closed(prev_read_end, -1);
-			prev_read_end = pipe_fds[0];
+			closed(vault->prev_read_end, -1);
+			vault->prev_read_end = pipe_fds[0];
 			while (tmp && tmp->type != PIPE)
 				tmp = tmp->next;
 			if (tmp)
@@ -105,10 +103,10 @@ int	one_command_execute(t_input **input, t_vault *vault)
 		if (!has_command_until_pipe(*input) || (*input)->type == ARGUMENT)
 		{
 			printf("command not found\n");
-			redir_execute(input, vault, 0);
+			redir_execute(input, vault, 0, 0);
 			cleanup_and_exit(input, NULL, vault, 127);
 		}
-		redir_execute(input, vault, 1);
+		redir_execute(input, vault, 1, 1);
 	}
 	else if (pid > 0)
 		wait_child(pid);
@@ -126,7 +124,7 @@ int	real_execute(t_input **input, t_vault *vault)
 		pid = fork();
 		if (pid == 0)
 		{
-			execute_pipe(input, vault, *input, -1);
+			execute_pipe(input, vault, *input);
 			cleanup_and_exit(input, NULL, vault, 127);
 		}
 		else

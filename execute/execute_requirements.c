@@ -6,7 +6,7 @@
 /*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:49:21 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/24 01:55:08 by bpancar          ###   ########.fr       */
+/*   Updated: 2025/08/24 03:42:36 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,14 +78,12 @@ static int	handle_output_redirect(t_input **input, t_input *tmp,
 	return (1);
 }
 
-void	redir_execute(t_input **input, t_vault *vault, int x)
+void	redir_execute(t_input **input, t_vault *vault, int flag, int x)
 {
 	t_input	*tmp;
-	int		flag;
 	char	**flags;
 
 	tmp = *input;
-	flag = 1;
 	flags = NULL;
 	while (tmp && tmp->type != PIPE)
 	{
@@ -94,12 +92,14 @@ void	redir_execute(t_input **input, t_vault *vault, int x)
 		else if ((tmp->type == REDIRECT_OUTPUT || tmp->type == APPEND_OUTPUT)
 			&& !handle_output_redirect(input, tmp, vault, flags))
 			return ;
-		else if (tmp->type == TOKEN && ft_strcmp(tmp->value, "<<") == 0 && ft_strlen(tmp->value) == 2)
+		else if (tmp->type == TOKEN && ft_strcmp(tmp->value, "<<") == 0
+			&& ft_strlen(tmp->value) == 2)
 		{
 			heredoc(tmp->next->value, input, vault, flags);
 			tmp = tmp->next;
 		}
-		else if ((tmp->type == COMMAND || tmp->type == BUILTIN) && flag-- && x)
+		else if ((tmp->type == COMMAND || tmp->type == BUILTIN)
+			&& flag == 1 && flag-- && x)
 			flags = get_flags(input, tmp->value);
 		tmp = tmp->next;
 	}

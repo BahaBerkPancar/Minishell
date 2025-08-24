@@ -6,7 +6,7 @@
 /*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 00:00:44 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/24 02:47:41 by bpancar          ###   ########.fr       */
+/*   Updated: 2025/08/24 04:35:04 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ t_input	*get_rid_of_squotes(t_input **list)
 			&& !tmp->is_doublequoted)
 		{
 			new_value = remove_single_quotes(tmp->value, 0);
-			free(tmp->value);
-			tmp->value = new_value;
+			tmp->value = ft_strdup(new_value);
+			free(new_value);
 		}
 		tmp = tmp->next;
 	}

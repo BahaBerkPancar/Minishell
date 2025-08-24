@@ -6,7 +6,7 @@
 /*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:54:15 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/24 01:10:53 by bpancar          ###   ########.fr       */
+/*   Updated: 2025/08/24 03:48:07 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	set_types(t_vault *vault, t_input **lst, t_input *tmp)
 				&& !set_token_type(lst, tmp->next->value, VARIABLE))
 				return (0);
 			else if (tmp->is_quoted == false
-				&& is_executable(vault, tmp->value))
+				&& is_executable(vault, tmp->value, NULL, -1))
 				tmp->type = COMMAND;
 		}
 		tmp = tmp->next;
@@ -109,7 +109,7 @@ int	set_quoted_types(t_vault *vault, t_input **lst)
 			else if (tmp->is_quoted || tmp->is_doublequoted
 				|| !tmp->is_variable)
 			{
-				if (is_executable(vault, tmp->value))
+				if (is_executable(vault, tmp->value, NULL, -1))
 					tmp->type = COMMAND;
 				else
 					tmp->type = ARGUMENT;
@@ -141,7 +141,7 @@ int	set_variable_type(t_vault *vault, t_input **lst)
 		}
 		else if (tmp->is_variable && tmp->type == VARIABLE)
 		{
-			if (is_executable(vault, tmp->value) && !tmp->is_quoted)
+			if (is_executable(vault, tmp->value, NULL, -1) && !tmp->is_quoted)
 				tmp->type = COMMAND;
 			else
 				tmp->type = ARGUMENT;

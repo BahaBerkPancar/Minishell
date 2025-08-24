@@ -6,7 +6,7 @@
 /*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:30:48 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/24 02:20:38 by bpancar          ###   ########.fr       */
+/*   Updated: 2025/08/24 04:39:07 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_vault	*init_vault(char **envp, int count, int i)
 	vault->envp[count] = NULL;
 	update_or_add_var("SHELL=minishell", vault);
 	env_to_export(vault);
-	vault->exit_status = 0;
+	vault->prev_read_end = -1;
 	return (vault);
 }
 
@@ -64,17 +64,8 @@ int	set_necesery_type(t_input **final, t_vault *vault)
 	return (1);
 }
 
-int	main(int ac, char **av, char *envp[])
+int	minishell_loop(t_vault *vault, char *a, t_input **final)
 {
-	char	*a;
-	t_input	**final;
-	t_vault	*vault;
-
-	if (ac != 1 || !av)
-		return ((void)printf("NO ARGUMENTS ALLOWED\n"), exit(0), 0);
-	vault = init_vault(envp, 0, -1);
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, handle_sigint);
 	while (1)
 	{
 		g_signal_exit = 0;
@@ -82,13 +73,8 @@ int	main(int ac, char **av, char *envp[])
 		if (!a)
 			return (free(a), free_vault(vault), exit(0), 0);
 		add_history(a);
-		if (dquote_count(a) % 2 == 1 || squote_count(a) % 2 == 1)
-		{
-			free(a);
-			printf("SYNTAX ERROR\n");
-			set_exit_status_code(2);
+		if (!check_syntax(a))
 			continue ;
-		}
 		final = parse(a, start_parse(NULL));
 		if (!final || !*final)
 		{
@@ -97,11 +83,25 @@ int	main(int ac, char **av, char *envp[])
 		}
 		if (!set_necesery_type(final, vault))
 			continue ;
-		ft_lstprint(*final);
 		real_execute(final, vault);
 		if (final)
 			free_input_list(final);
 	}
-	rl_clear_history();
-	return (0);
+}
+
+int	main(int ac, char **av, char *envp[])
+{
+	char	*a;
+	t_input	**final;
+	t_vault	*vault;
+
+	if (ac != 1 || !av)
+		return ((void)printf("NO ARGUMENTS ALLOWED\n"), exit(0), 0);
+	final = NULL;
+	a = NULL;
+	vault = init_vault(envp, 0, -1);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, handle_sigint);
+	minishell_loop(vault, a, final);
+	return (rl_clear_history(), 0);
 }

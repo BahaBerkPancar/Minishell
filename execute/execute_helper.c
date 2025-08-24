@@ -6,7 +6,7 @@
 /*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:48:57 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/24 00:41:24 by bpancar          ###   ########.fr       */
+/*   Updated: 2025/08/24 03:48:54 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ void	execute_command(t_input **input, char **flags, t_vault *vault)
 {
 	if (flags && is_builtin(flags[0]))
 		builtin(input, flags, vault, 1);
-	else if (flags && is_executable(vault, flags[0]) && !is_builtin(flags[0]))
+	else if (flags && is_executable(vault, flags[0], NULL, -1)
+		&& !is_builtin(flags[0]))
 		execute(set_path(vault, flags[0]), flags, vault);
 	else
 		cleanup_and_exit(input, NULL, vault, 127);
@@ -41,7 +42,7 @@ bool	execute_builtin_in_main(t_input **input, t_vault *vault)
 		return (false);
 	stdin_copy = dup(STDIN_FILENO);
 	stdout_copy = dup(STDOUT_FILENO);
-	redir_execute(input, vault, 0);
+	redir_execute(input, vault, 0, 0);
 	builtin(input, flags, vault, 0);
 	dup2(stdin_copy, STDIN_FILENO);
 	dup2(stdout_copy, STDOUT_FILENO);

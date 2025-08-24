@@ -6,7 +6,7 @@
 /*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:37:25 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/24 01:45:07 by bpancar          ###   ########.fr       */
+/*   Updated: 2025/08/24 04:35:46 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,10 @@ void	handle_sigint(int sig)
 	else if (g_signal_exit == 1)
 		exit(0);
 	g_signal_exit = 130;
+}
+
+void	signal_init(void)
+{
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
 }

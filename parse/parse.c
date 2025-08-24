@@ -6,7 +6,7 @@
 /*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:59:31 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/24 02:47:21 by bpancar          ###   ########.fr       */
+/*   Updated: 2025/08/24 04:36:12 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ char	*handle_quotes(char *input, t_input **list, char *token)
 	char	*quoted;
 	char	*next;
 
-	quoted = (NULL);
-	next = (NULL);
-	if ((token[0] == '\"' && token[ft_strlen(token)-1] == '\"'))
+	quoted = NULL;
+	next = NULL;
+	if (ft_strchr(token, '\"'))
 	{
 		quoted = doublequote_check(ft_strdup(input));
 		if (!quoted)
@@ -27,7 +27,7 @@ char	*handle_quotes(char *input, t_input **list, char *token)
 		next = seperate_dquotes(list, input, quoted);
 		free(quoted);
 	}
-	else if ((token[0] == '\'' && token[ft_strlen(token)-1] == '\''))
+	else if (ft_strchr(token, '\''))
 	{
 		quoted = singlequote_check(ft_strdup(input));
 		if (!quoted)
@@ -36,7 +36,7 @@ char	*handle_quotes(char *input, t_input **list, char *token)
 		free(quoted);
 	}
 	else
-		return (input);
+		return (free(input), NULL);
 	return (next);
 }
 

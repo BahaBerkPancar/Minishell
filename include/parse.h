@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skalkan <skalkan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 00:02:32 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/24 00:02:33 by skalkan          ###   ########.fr       */
+/*   Updated: 2025/08/24 03:39:16 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,13 @@ typedef struct s_vault
 	char	*oldpwd;
 	char	*pwd;
 	char	*home;
-	int		exit_status;
+	int		prev_read_end;
 }	t_vault;
+
+typedef struct s_exec
+{
+	int	pipe_fds[2];
+	int	prev_read_end;
+}	t_exec;
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 23:52:56 by skalkan           #+#    #+#             */
-/*   Updated: 2025/08/24 01:51:14 by bpancar          ###   ########.fr       */
+/*   Updated: 2025/08/24 03:42:12 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	heredoc_read_write(int *fd, char *delimiter, int heredoc_status)
 
 	while (1)
 	{
-		input = readline("> burdayim");
+		input = readline("> ");
 		if (!input)
 		{
 			heredoc_status = -1;
@@ -76,10 +76,10 @@ void	heredoc(char *delimiter, t_input **final, t_vault *vault, char **flags)
 		g_signal_exit = 1;
 		close(fd[0]);
 		if (heredoc_read_write(&fd[1], str, 0) == -1)
-			return ((void)close(fd[1]), free(str), free_vault(vault),
-				free_input_list(final), free_pointer(flags), exit(0));
-		return ((void)close(fd[1]), free_vault(vault), free(str),
-			free_input_list(final), free_pointer(flags), exit(0));
+			return ((void)close(fd[1]), free(str),
+				cleanup_and_exit(final, flags, vault, 130));
+		return ((void)close(fd[1]), free(str),
+			cleanup_and_exit(final, flags, vault, 0));
 	}
 	else
 	{
