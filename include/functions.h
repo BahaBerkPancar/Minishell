@@ -6,7 +6,7 @@
 /*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 00:38:10 by bpancar           #+#    #+#             */
-/*   Updated: 2025/08/24 03:56:14 by bpancar          ###   ########.fr       */
+/*   Updated: 2025/08/24 04:40:39 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void	heredoc(char *delimiter, t_input **final, t_vault *vault, char **flags);
 void	closed(int fd, int fd1);
 void	set_exit_status_code(int exit_code);
 int		*get_exit_status_code(void);
+int		check_syntax(char *a);
 
 void	cleanup_and_exit(t_input **input, char **flags, t_vault *vault,
 			int exit_status);
