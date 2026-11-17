@@ -4,8 +4,17 @@ CFLAGS =  -Wall -Wextra -Werror -Ilibft
 
 OS := $(shell uname)
 
+READLINE_PREFIX := $(shell brew --prefix readline 2>/dev/null)
+
 ifeq ($(OS), Darwin)
-	READLINEFLAGS = -L/opt/homebrew/opt/readline/lib -I/opt/homebrew/opt/readline/include -lreadline
+	ifeq ($(READLINE_PREFIX),)
+		READLINE_PREFIX = /opt/homebrew/opt/readline
+	endif
+endif
+
+ifneq ($(READLINE_PREFIX),)
+	CFLAGS += -I$(READLINE_PREFIX)/include
+	READLINEFLAGS = -L$(READLINE_PREFIX)/lib -lreadline
 else
 	READLINEFLAGS = -lreadline
 endif
@@ -13,7 +22,7 @@ endif
 INCLUDES = -Iincludes
 
 OBJDIR = .obj
-GITLIBFT = git@github.com:BahaBerkPancar/Libft-42.git
+GITLIBFT = https://github.com/BahaBerkPancar/Libft-42.git
 LIBFT = libft/libft.a
 
 SRCS = parse/parse.c minishell.c ext/new_node.c ext/ft_lstprint.c ext/find_char.c execute/exec_utils.c\
@@ -63,7 +72,7 @@ clean:
 
 clone:
 	@echo "$(COLOR_GREEN)@ Cloning libft...$(COLOR_RESET)"
-	@git clone $(GITLIBFT) libftq
+	@git clone $(GITLIBFT) libft
 	@$(MAKE) -C libft > /dev/null 2>&1
 	@$(MAKE) bonus -C libft > /dev/null 2>&1
 	@echo "$(COLOR_GREEN)@ Cloned libft ✅$(COLOR_RESET)"

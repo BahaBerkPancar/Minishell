@@ -34,9 +34,9 @@ MINISHELL : cat < out.txt
 HELLO
 ```
 
-Needs the readline library. On macOS install it with Homebrew (`brew install readline`); the Makefile links against `/opt/homebrew/opt/readline`.
+Needs the readline library. On macOS install it with Homebrew (`brew install readline`); the Makefile picks it up automatically.
 
-macOS note: the Makefile only passes the Homebrew readline include path at link time, so on a Mac the compile step picks up Apple's libedit header and fails on `rl_clear_history`. Passing the include path fixes it: `make CFLAGS="-Wall -Wextra -Werror -Ilibft -I/opt/homebrew/opt/readline/include"`. On Linux a plain `make` is the intended use.
+macOS note: the Makefile finds Homebrew readline with `brew --prefix readline` (falling back to `/opt/homebrew/opt/readline`) and passes its include path at compile time and its lib path at link time, so a plain `make` works. On Linux it just links `-lreadline`.
 
 ## How it works
 
